@@ -307,6 +307,12 @@ legs:
     options:
       - { mode: car, hours: 1.75, status: running }
       - { mode: bus, hours: 3, status: running, note: Via Siyambalanduwa to Pottuvil. }
+  - from: colombo
+    to: arugam-bay
+    distanceKm: 320
+    options:
+      - { mode: car, hours: 7, status: running }
+      - { mode: bus, hours: 10, status: running, note: Mostly overnight buses to Pottuvil, then a short tuk tuk. }
   - from: arugam-bay
     to: ella
     distanceKm: 130

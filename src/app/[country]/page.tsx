@@ -27,8 +27,14 @@ export default async function CountryPage({ params }: PageProps<"/[country]">) {
             <p className="mt-3 text-lg text-muted">{country.tagline}</p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link
-                href={`/${country.slug}/guide`}
+                href={`/${country.slug}/plan`}
                 className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-on-accent hover:opacity-90"
+              >
+                Plan my route
+              </Link>
+              <Link
+                href={`/${country.slug}/guide`}
+                className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-sunken"
               >
                 Practical guide
               </Link>

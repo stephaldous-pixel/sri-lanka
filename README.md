@@ -41,9 +41,14 @@ build runs the same check, so a mistake can't go live.
 
 Write everything in your own words. Guidebooks can be used to check facts, but never copy their text.
 
+## Tests
+
+`npm test` runs the route-generator tests (`src/planner/engine.test.ts`): trips always fill the right number of days, requested regions are included, seasons are respected and suspended trains are never used.
+
 ## Where things live
 
 - `src/lib/site.ts`: site name and tagline (change the name here)
 - `src/content/`: the content format (`schema.ts`) and loader (`load.ts`)
+- `src/planner/`: the route generator (`engine.ts`) and journey times (`graph.ts`)
 - `src/lib/site-access.ts` and `src/proxy.ts`: the password gate
 - `src/app/`: pages

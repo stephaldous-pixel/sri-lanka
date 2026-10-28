@@ -12,9 +12,15 @@ export default function Home() {
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{SITE_TAGLINE}</h1>
         <p className="mt-4 text-lg text-muted">
           Guides written for people travelling alone: where it&apos;s easy to meet others, how to get
-          around safely, and what things really cost for one. Soon you&apos;ll be able to tell us what
-          you love doing and get a route you can make your own.
+          around safely, and what things really cost for one. Tell us what you love doing and
+          we&apos;ll suggest a route that fits the season.
         </p>
+        <Link
+          href="/sri-lanka/plan"
+          className="mt-6 inline-block rounded-lg bg-accent px-5 py-3 font-medium text-on-accent hover:opacity-90"
+        >
+          Plan a Sri Lanka trip
+        </Link>
       </section>
 
       <section className="mt-12" aria-labelledby="countries-heading">

@@ -16,6 +16,9 @@ export function SiteHeader() {
             <span className="sm:hidden">Guide</span>
             <span className="hidden sm:inline">Practical guide</span>
           </Link>
+          <Link href="/sri-lanka/plan" className="rounded-md bg-accent px-3 py-1.5 font-medium text-on-accent hover:opacity-90">
+            Plan a trip
+          </Link>
         </nav>
       </div>
     </header>

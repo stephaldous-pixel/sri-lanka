@@ -97,7 +97,7 @@ Each phase ends with something you can see and try.
 | 0 | **Setup:** project, GitHub, Vercel, Supabase, shared-password page | A placeholder site live on the web, behind your password |
 | 1 | **Research:** Sri Lanka content and travel-time table | Content files for you to review and edit |
 | 2 ✅ | **Guides:** home, country, region and destination pages, plus a theme for each country | A site you can browse |
-| 3 | **Route generator:** questionnaire and the rules that build the route | Answer questions and get a route (saved in the browser) |
+| 3 ✅ | **Route generator:** questionnaire and the rules that build the route | Answer questions and get a route (saved in the browser) |
 | 4 | **Itinerary editor:** map, drag to reorder, travel times, costs, currency | A fully editable trip |
 | 5 | **Accounts:** sign-in, saving trips, "My trips" | Your trips on any device |
 | 6 | **Gallery:** publish, browse, copy, report, admin review page | Shared trips from other travellers |

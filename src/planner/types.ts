@@ -27,7 +27,7 @@ export type PlannerData = {
     slug: string;
     name: string;
     currency: { code: string; symbol: string };
-    gateways: { destination: string; name: string; code: string }[];
+    gateways: { destination: string; name: string; shortName: string; code: string; coordinates: { lat: number; lng: number } }[];
   };
   interests: Interest[];
   regions: Pick<Region, "id" | "name" | "months">[];
@@ -71,6 +71,8 @@ export type PlanDay = {
 };
 
 export type PlanResult = {
+  /** The journey from the arrival airport to the first stop (not an overnight stay). */
+  startHop: Hop;
   stops: PlannedStop[];
   /** hops[i] connects stops[i] → stops[i + 1]; the last hop goes to the departure airport. */
   hops: Hop[];

@@ -59,7 +59,10 @@ export const CountrySchema = z.object({
       z.object({
         destination: slug,
         name: z.string(),
+        /** Everyday name, e.g. "Colombo airport". */
+        shortName: z.string(),
         code: z.string(),
+        coordinates: z.object({ lat: z.number(), lng: z.number() }),
         note: z.string(),
       }),
     )

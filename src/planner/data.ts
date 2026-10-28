@@ -10,7 +10,7 @@ export function toPlannerData(content: CountryContent, interests: Interest[]): P
       slug: country.slug,
       name: country.name,
       currency: country.currency,
-      gateways: country.gateways.map(({ destination, name, code }) => ({ destination, name, code })),
+      gateways: country.gateways.map(({ destination, name, shortName, code, coordinates }) => ({ destination, name, shortName, code, coordinates })),
     },
     interests,
     regions: regions.map(({ id, name, months }) => ({ id, name, months })),

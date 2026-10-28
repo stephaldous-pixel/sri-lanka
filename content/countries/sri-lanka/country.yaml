@@ -15,12 +15,16 @@ gateways:
   - destination: negombo
     name: Bandaranaike International Airport
     code: CMB
+    shortName: Colombo airport
+    coordinates: { lat: 7.1808, lng: 79.8841 }
     note: >-
       The main international airport, 10km from Negombo and about an hour from
       central Colombo. Most routes start and end here.
   - destination: jaffna
     name: Jaffna International Airport
     code: JAF
+    shortName: Jaffna airport
+    coordinates: { lat: 9.7924, lng: 80.0700 }
     note: >-
       Small airport with a few flights from South India. Handy if combining Sri
       Lanka with India, but not a typical arrival point.

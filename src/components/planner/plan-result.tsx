@@ -8,7 +8,7 @@ import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
-import { NightsStepper } from "./controls";
+import { AirportRow, NightsStepper } from "./controls";
 import { RouteMap } from "./route-map";
 
 const BUDGET_LABELS = { budget: "budget", mid: "mid-range", comfort: "comfort" } as const;
@@ -40,7 +40,8 @@ export function PlanResultView({
   const names = new Map(data.destinations.map((d) => [d.slug, d.name]));
   const places = plan.stops.filter((s) => s.role === "stop").length;
   const stopWarnings = plan.stops.reduce((n, s) => n + s.warnings.length, 0);
-  const hopWarnings = [...new Set(plan.hops.flatMap((h) => h.warnings))];
+  const hopWarnings = [...new Set([plan.startHop, ...plan.hops].flatMap((h) => h.warnings))];
+  const airport = data.country.gateways[0];
   const notes = plan.warnings.length + stopWarnings + hopWarnings.length;
 
   const [tab, setTab] = useState<Tab>("route");
@@ -137,6 +138,10 @@ export function PlanResultView({
                 {notice}
               </p>
               <ol>
+                <li>
+                  <AirportRow label={`${airport.shortName} (${airport.code})`} note="Day 1 · Start" />
+                  <HopLine hop={plan.startHop} names={names} final={false} />
+                </li>
                 {plan.stops.map((stop, i) => (
                   <li key={`${stop.destination.slug}-${i}`}>
                     <StopCard
@@ -151,7 +156,7 @@ export function PlanResultView({
                   <span className="flex size-6 items-center justify-center rounded-full bg-foreground text-xs text-background" aria-hidden="true">
                     ✈
                   </span>
-                  Fly home · Day {plan.days.length}
+                  Fly home from {airport.shortName} · Day {plan.days.length}
                 </li>
               </ol>
             </>
@@ -307,7 +312,10 @@ function HopLine({ hop, names, final }: { hop: Hop; names: Map<string, string>; 
   return (
     <div className="ml-[1.9rem] border-l-2 border-dotted border-line py-3 pl-5 text-xs text-muted sm:ml-[2.15rem]">
       {modes.length === 0 ? (
-        <span>{final ? "Short transfer to the airport" : "Short transfer"}</span>
+        <span>
+          {final ? "Short transfer to the airport" : "Short transfer"}
+          {hop.hours > 0 && ` · about ${formatHours(hop.hours)}`}
+        </span>
       ) : (
         <span title={via.length ? `Via ${via.join(" → ")}` : undefined}>
           <span className="font-medium text-foreground">{formatHours(hop.hours)}</span> by {modes.join(" + ")}

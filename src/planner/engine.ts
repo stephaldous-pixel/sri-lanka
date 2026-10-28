@@ -449,7 +449,11 @@ function assemble(
   const stops: PlannedStop[] = [];
   let day = 1;
 
-  const fromAirport = graph.hours(gateway.slug, arrival.slug);
+  // The airport is ~10km from the gateway town, so journeys from it start there (≥ ~25 min).
+  const startHop = graph.hop(gateway.slug, arrival.slug);
+  startHop.from = "airport";
+  startHop.hours = Math.max(0.4, startHop.hours);
+  const fromAirport = startHop.hours;
   stops.push({
     destination: arrival,
     nights: arrivalNights,
@@ -458,7 +462,7 @@ function assemble(
     reasons:
       arrival.slug === gateway.slug
         ? [`Close to ${airport.name}, so an easy first night`]
-        : [`Your choice for the first night, about ${formatHours(Math.max(0.4, fromAirport))} from ${airport.name}`],
+        : [`Your choice for the first night, about ${formatHours(fromAirport)} from ${airport.shortName}`],
     warnings: arrival.slug === gateway.slug ? [] : seasonWarnings(data, arrival, input, day, arrivalNights, months),
   });
   day += arrivalNights;
@@ -494,7 +498,7 @@ function assemble(
   hops.push(finalHop);
 
   const names = new Map(data.destinations.map((d) => [d.slug, d.name]));
-  const days = buildDays(input, stops, hops, names, airport, arrival.slug === gateway.slug ? undefined : `about ${formatHours(Math.max(0.4, fromAirport))}`);
+  const days = buildDays(input, stops, hops, names, airport, startHop);
   const stay = stops.reduce((sum, s) => sum + s.nights * midpoint(s.destination.stay[input.budget]), 0);
   const daily = DAILY_SPEND[input.budget] * input.days;
 
@@ -508,14 +512,18 @@ function assemble(
   for (const hop of hops) {
     if (hop.hours > 6) warnings.push(`Long travel day: ${names.get(hop.from)} to ${names.get(hop.to)} takes about ${Math.round(hop.hours)} hours.`);
   }
+  if (startHop.hours > 6) {
+    warnings.push(`Long first day: ${airport.shortName} to ${arrival.name} takes about ${Math.round(startHop.hours)} hours after your flight.`);
+  }
 
   return {
+    startHop,
     stops,
     hops,
     days,
     totalNights: stops.reduce((sum, s) => sum + s.nights, 0),
     freeNights,
-    travelHours: hops.reduce((sum, h) => sum + h.hours, 0),
+    travelHours: startHop.hours + hops.reduce((sum, h) => sum + h.hours, 0),
     estimate: { stay, daily, total: stay + daily },
     warnings,
   };
@@ -550,8 +558,8 @@ function buildDays(
   stops: PlannedStop[],
   hops: PlanResult["hops"],
   names: Map<string, string>,
-  airport: { name: string; code: string },
-  firstNightTravel?: string,
+  airport: { name: string; shortName: string; code: string },
+  startHop: PlanResult["startHop"],
 ): PlanDay[] {
   const days: PlanDay[] = [];
   const dateFor = (day: number) => {
@@ -575,8 +583,8 @@ function buildDays(
           day,
           date: dateFor(day),
           stop: stop.destination.slug,
-          title: `Arrive at ${airport.name} (${airport.code})`,
-          detail: firstNightTravel ? `Head to ${name} for your first night (${firstNightTravel}).` : `Head to ${name} for your first night.`,
+          title: `Arrive at ${airport.shortName} (${airport.code}) and travel to ${name}`,
+          detail: startHop.modes.length === 0 ? `A short transfer of about ${formatHours(startHop.hours)}.` : travel(startHop),
         });
       } else if (n === 0) {
         days.push({ day, date: dateFor(day), stop: stop.destination.slug, title: `Travel to ${name}`, detail: travel(hops[i - 1]) });

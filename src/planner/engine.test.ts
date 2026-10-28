@@ -276,7 +276,8 @@ describe("choosing where to spend the first night", () => {
     expect(rebuilt.stops[0]).toMatchObject({ role: "arrival" });
     expect(rebuilt.stops[0].destination.slug).toBe("colombo");
     expect(rebuilt.stops[0].reasons[0]).toMatch(/Your choice/);
-    expect(rebuilt.days[0].detail).toMatch(/Colombo/);
+    expect(rebuilt.days[0].title).toMatch(/travel to Colombo/);
+    expect(rebuilt.days[0].detail).toMatch(/1 hr/);
     expect(rebuilt.days).toHaveLength(14);
   });
 
@@ -284,6 +285,29 @@ describe("choosing where to spend the first night", () => {
     const withGalle = fitToDays(data, base, { ...edits, arrivalSlug: "galle" })!;
     const rebuilt = planFromStops(data, base, withGalle);
     expect(rebuilt.stops.filter((s) => s.destination.slug === "galle")).toHaveLength(1);
+  });
+});
+
+describe("starting at the airport", () => {
+  it("begins every route with a journey from the airport, not a night there", () => {
+    const plan = generatePlan(data, base);
+    expect(plan.startHop.from).toBe("airport");
+    expect(plan.startHop.to).toBe(plan.stops[0].destination.slug);
+    expect(plan.days[0].title).toMatch(/^Arrive at Colombo airport \(CMB\)/);
+  });
+
+  it("goes straight from the airport to a far first stop, counting the travel", () => {
+    const edits = { arrivalSlug: "galle", arrivalNights: 3, stops: [{ slug: "mirissa", nights: 3 }] };
+    const plan = planFromStops(data, base, edits);
+    expect(plan.stops[0].destination.slug).toBe("galle");
+    expect(plan.startHop.hours).toBeGreaterThan(1.5);
+    expect(plan.startHop.modes.length).toBeGreaterThan(0);
+    expect(plan.travelHours).toBeGreaterThanOrEqual(plan.startHop.hours + plan.hops[0].hours);
+  });
+
+  it("warns about a very long first day", () => {
+    const plan = planFromStops(data, base, { arrivalSlug: "jaffna", arrivalNights: 3, stops: [] });
+    expect(plan.warnings.join(" ")).toMatch(/Long first day/);
   });
 });
 

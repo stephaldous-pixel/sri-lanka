@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Grip, NightsStepper } from "./controls";
+import { AirportRow, Grip, NightsStepper } from "./controls";
 import { SortableList } from "./sortable-list";
 import { Photo } from "@/components/photo";
 import { button, card } from "@/lib/ui";
@@ -115,8 +115,13 @@ export function RouteEditor({
         </div>
       </div>
       <p className="text-sm text-muted">
-        Drag <Grip /> to reorder, or focus it and use the ↑ ↓ keys. The top stop is your first night. Your trip stays {days} days: changing one stop moves nights to or from the others. We&apos;ll add a night near the airport if your last stop is far away.
+        Your trip starts at the airport. Drag <Grip /> to reorder, or focus it and use the ↑ ↓ keys; the top stop is your first night. Your trip stays {days} days: changing one stop moves nights to or from the others. We&apos;ll add a night near the airport if your last stop is far away.
       </p>
+
+      <AirportRow
+        label={`${data.country.gateways[0].shortName} (${data.country.gateways[0].code})`}
+        note="Start · you travel on from here"
+      />
 
       <SortableList
         label="Stops, in order"

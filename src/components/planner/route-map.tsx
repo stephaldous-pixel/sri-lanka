@@ -23,14 +23,23 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
 
   const coords = new Map(data.destinations.map((d) => [d.slug, [d.coordinates.lng, d.coordinates.lat] as [number, number]]));
   // One marker per place; the airport town appears once even if it's also the last night.
-  const points: Point[] = [];
+  const airport = data.country.gateways[0];
+  const airportPoint: [number, number] = [airport.coordinates.lng, airport.coordinates.lat];
+  const points: Point[] = [{ slug: "airport", name: `${airport.shortName} (${airport.code})`, label: "✈", lng: airportPoint[0], lat: airportPoint[1] }];
   plan.stops.forEach((stop) => {
     const [lng, lat] = coords.get(stop.destination.slug)!;
-    const existing = points.find((p) => p.slug === stop.destination.slug);
-    if (existing) return;
-    points.push({ slug: stop.destination.slug, name: stop.destination.name, label: stop.role === "arrival" ? "✈" : String(points.length), lng, lat });
+    if (points.some((p) => p.slug === stop.destination.slug)) return;
+    points.push({ slug: stop.destination.slug, name: stop.destination.name, label: String(points.length), lng, lat });
   });
-  const line = plan.hops.flatMap((hop, i) => hop.path.slice(i === 0 ? 0 : 1).map((slug) => coords.get(slug)!));
+  // Airport → first stop → … → back to the airport. The gateway town stands in for the
+  // airport in journey paths, so swap it for the airport's own position at each end.
+  const pathCoords = (hop: (typeof plan.hops)[number]) => hop.path.map((slug) => coords.get(slug)!);
+  const line: [number, number][] = [
+    airportPoint,
+    ...pathCoords(plan.startHop).slice(1),
+    ...plan.hops.flatMap((hop) => pathCoords(hop).slice(1)),
+    airportPoint,
+  ];
   const routeKey = JSON.stringify([points, line]);
 
   useEffect(() => {

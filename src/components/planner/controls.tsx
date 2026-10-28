@@ -29,3 +29,17 @@ export function Grip() {
   );
 }
 
+/** The airport at the start of the route: a starting point, not a stay. */
+export function AirportRow({ label, note }: { label: string; note: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-dashed border-line px-3 py-3">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground text-sm text-background" aria-hidden="true">
+        ✈
+      </span>
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-muted">{note}</p>
+        <p className="font-semibold">{label}</p>
+      </div>
+    </div>
+  );
+}

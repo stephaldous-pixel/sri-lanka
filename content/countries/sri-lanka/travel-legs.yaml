@@ -10,6 +10,7 @@ sources:
   - https://www.dailyexcelsior.com/sri-lanka-resumes-train-service-on-colombo-kandy-line-after-10-months/
   - https://byc.lk/colombo-kandy-ella-train-status-2026
   - https://newsfirst.lk/2026/04/24/special-bus-services-deployed-as-coastal-train-services-remain-disrupted
+  - https://pickyourtrail.com/blog/sri-lanka-train-travel
   - https://goasia.cc/en/sri-lanka/ella-to-arugam-bay
   - https://www.geckoroutes.com/sri-lanka/arugam-bay-things-to-do-and-how-to-get-there/
 legs:
@@ -44,7 +45,7 @@ legs:
     distanceKm: 65
     options:
       - { mode: car, hours: 1.25, status: running }
-      - { mode: train, hours: 1.75, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+      - { mode: train, hours: 1.75, status: running, note: Coastal line reported running normally again (October 2026); check the Sri Lanka Railways timetable before travelling. }
       - { mode: bus, hours: 2, status: running }
   - from: bentota
     to: hikkaduwa
@@ -52,21 +53,21 @@ legs:
     options:
       - { mode: car, hours: 0.75, status: running }
       - { mode: bus, hours: 1, status: running }
-      - { mode: train, hours: 0.75, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+      - { mode: train, hours: 0.75, status: running, note: Coastal line reported running normally again (October 2026); check the Sri Lanka Railways timetable before travelling. }
   - from: hikkaduwa
     to: galle
     distanceKm: 18
     options:
       - { mode: bus, hours: 0.5, status: running }
       - { mode: tuk-tuk, hours: 0.5, status: running }
-      - { mode: train, hours: 0.5, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+      - { mode: train, hours: 0.5, status: running, note: Coastal line reported running normally again (October 2026); check the Sri Lanka Railways timetable before travelling. }
   - from: colombo
     to: galle
     distanceKm: 120
     options:
       - { mode: car, hours: 1.75, status: running, note: Via the Southern Expressway. }
       - { mode: bus, hours: 2.25, status: running, note: Air-con expressway buses from Colombo and Makumbura. }
-      - { mode: train, hours: 3, status: disrupted, note: Scenic coastal line; partial closures reported in 2026. }
+      - { mode: train, hours: 3, status: running, note: Scenic coastal line, reported running normally again (October 2026); check the Sri Lanka Railways timetable before travelling. }
   - from: negombo
     to: galle
     distanceKm: 150
@@ -87,7 +88,7 @@ legs:
     options:
       - { mode: car, hours: 0.6, status: running }
       - { mode: bus, hours: 0.75, status: running }
-      - { mode: train, hours: 0.6, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+      - { mode: train, hours: 0.6, status: running, note: Coastal line reported running normally again (October 2026); check the Sri Lanka Railways timetable before travelling. }
   - from: weligama
     to: mirissa
     distanceKm: 6

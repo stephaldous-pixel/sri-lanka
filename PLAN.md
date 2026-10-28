@@ -1,5 +1,7 @@
 # Build Plan: Solo Travel Planner (working name TBC)
 
+> This is the build plan (*how*). For *what* the product does and *why*, see [PRD.md](PRD.md).
+
 A public website that helps solo travellers plan a trip. They tell it what they like doing and where they want to go, and it builds a route they can edit, save and share. Sri Lanka is the first country, and the site is designed so more countries can be added later by adding content, not code.
 
 ---
@@ -94,8 +96,8 @@ Each phase ends with something you can see and try.
 
 | # | Phase | What you'll be able to see |
 |---|---|---|
-| 0 | **Setup:** project, GitHub, Vercel, Supabase, shared-password page | A placeholder site live on the web, behind your password |
-| 1 | **Research:** Sri Lanka content and travel-time table | Content files for you to review and edit |
+| 0 ✅ | **Setup:** project, GitHub, Vercel, Supabase, shared-password page | A placeholder site live on the web, behind your password |
+| 1 ✅ | **Research:** Sri Lanka content and travel-time table | Content files for you to review and edit |
 | 2 ✅ | **Guides:** home, country, region and destination pages, plus a theme for each country | A site you can browse |
 | 3 ✅ | **Route generator:** questionnaire and the rules that build the route | Answer questions and get a route (saved in the browser) |
 | 4 ✅ | **Itinerary editor:** map, drag to reorder, travel times, costs, currency | A fully editable trip |

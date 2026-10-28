@@ -1,6 +1,6 @@
 # Solo Planner (working name)
 
-A trip planner for solo travellers. Sri Lanka first; more countries later. See [PLAN.md](PLAN.md) for the full build plan.
+A trip planner for solo travellers. Sri Lanka first; more countries later. See [PRD.md](PRD.md) for what the product does and why, and [PLAN.md](PLAN.md) for how it's being built.
 
 ## Running it on this Mac
 

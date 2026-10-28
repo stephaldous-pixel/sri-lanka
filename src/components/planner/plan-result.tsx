@@ -363,8 +363,14 @@ function HopLine({ hop, names, final }: { hop: Hop; names: Map<string, string>; 
     <div className="ml-[1.9rem] border-l-2 border-dotted border-line py-3 pl-5 text-xs text-muted sm:ml-[2.15rem]">
       {modes.length === 0 ? (
         <span>
-          {final ? "Short transfer to the airport" : "Short transfer"}
-          {hop.hours > 0 && ` · about ${formatHours(hop.hours)}`}
+          <span className="font-medium text-foreground">
+            About {formatHours(Math.max(hop.hours, hop.from === "airport" || final ? 0.4 : 0.25))}
+          </span>
+          {hop.from === "airport"
+            ? " from the airport by taxi, bus or tuk tuk"
+            : final
+              ? " to the airport by taxi, bus or tuk tuk"
+              : " · short transfer"}
         </span>
       ) : (
         <span title={via.length ? `Via ${via.join(" → ")}` : undefined}>

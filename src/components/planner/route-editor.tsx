@@ -6,7 +6,8 @@ import { SortableList } from "./sortable-list";
 import { Photo } from "@/components/photo";
 import { button, card } from "@/lib/ui";
 import { bestPositionFor, fromStopList, suggestedNights, toStopList, type EditedRoute, type ListStop } from "@/planner/engine";
-import type { PlannerData, PlannerDestination, PlannerInput } from "@/planner/types";
+import type { PlannerData, PlannerDestination, PlannerInput, PlanResult } from "@/planner/types";
+import { formatHours } from "@/lib/format";
 
 /** Drag to reorder, change nights, remove and add places. Changes apply straight away. */
 export function RouteEditor({
@@ -14,6 +15,7 @@ export function RouteEditor({
   input,
   edits,
   days,
+  plan,
   onChange,
   onDone,
   onReset,
@@ -23,6 +25,8 @@ export function RouteEditor({
   edits: EditedRoute;
   /** Trip length with these edits, including any last night near the airport. */
   days: number;
+  /** The plan these edits produce, for travel times between stops. */
+  plan: PlanResult;
   /**
    * Apply a change. The trip length stays fixed, so nights are moved between
    * other stops; `protect` (a slug or ARRIVAL) keeps the nights it was given.
@@ -37,6 +41,14 @@ export function RouteEditor({
   const list = toStopList(data, edits);
   const [message, setMessage] = useState<string | null>(null);
   const name = (slug: string | number) => bySlug.get(String(slug))?.name ?? String(slug);
+
+  /** "3 hr 30 min from the airport" / "1 hr from Galle" for the stop at list index i. */
+  const travelTo = (i: number): string | undefined => {
+    const hop = i === 0 ? plan.startHop : plan.hops[i - 1];
+    if (!hop) return undefined;
+    const from = i === 0 ? "the airport" : name(list[i - 1].slug);
+    return `${formatHours(Math.max(hop.hours, 0.25))} from ${from}`;
+  };
 
   const tooFew = "Every other stop is already down to 1 night. Remove a stop to make room, or change your dates.";
 
@@ -133,7 +145,11 @@ export function RouteEditor({
           return (
             <>
               {handle(`Move ${destination.name}`)}
-              <StopLabel destination={destination} note={i === 0 ? "First night" : undefined} />
+              <StopLabel
+                destination={destination}
+                note={i === 0 ? "First night" : undefined}
+                travel={travelTo(i)}
+              />
               <NightsStepper nights={stop.nights} name={destination.name} onChange={(n) => setNights(slug, n)} />
               <button
                 type="button"
@@ -157,13 +173,14 @@ export function RouteEditor({
   );
 }
 
-function StopLabel({ destination, note }: { destination: PlannerDestination; note?: string }) {
+function StopLabel({ destination, note, travel }: { destination: PlannerDestination; note?: string; travel?: string }) {
   return (
     <div className="flex min-w-0 flex-1 items-center gap-3">
       <Photo photo={destination.photo} sizes="48px" showCredit={false} className="hidden size-12 shrink-0 rounded-lg sm:block" />
       <div className="min-w-0">
-        {note && <p className="text-xs text-muted">{note}</p>}
+        {note && <p className="text-xs font-medium text-accent">{note}</p>}
         <p className="truncate font-medium">{destination.name}</p>
+        {travel && <p className="truncate text-xs text-muted">{travel}</p>}
       </div>
     </div>
   );

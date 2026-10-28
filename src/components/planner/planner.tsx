@@ -158,6 +158,7 @@ export function Planner({ data }: { data: PlannerData }) {
         editor={
           editing ? (
             <RouteEditor
+              plan={plan}
               data={data}
               input={input}
               edits={edits ?? toEditedRoute(plan)}

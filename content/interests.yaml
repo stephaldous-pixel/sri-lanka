@@ -1,0 +1,53 @@
+# Interests travellers can pick in the route generator. Shared by every country.
+interests:
+  - id: beaches
+    name: Beaches
+    description: Swimming, lazing on the sand and sunsets by the sea.
+  - id: surfing
+    name: Surfing
+    description: Lessons for first-timers through to reef and point breaks.
+  - id: diving-snorkelling
+    name: Diving & snorkelling
+    description: Reefs, wrecks and marine life.
+  - id: wildlife
+    name: Wildlife & safaris
+    description: National parks, elephants, leopards, whales and more.
+  - id: birdwatching
+    name: Birdwatching
+    description: Rainforest endemics, wetlands and migratory flocks.
+  - id: hiking
+    name: Hiking
+    description: Day hikes, summit climbs and multi-day trails.
+  - id: scenery
+    name: Scenery & viewpoints
+    description: Mountains, waterfalls and big views.
+  - id: train-journeys
+    name: Train journeys
+    description: Slow, scenic rail travel as part of the trip.
+  - id: history
+    name: History & ruins
+    description: Ancient cities, forts and museums.
+  - id: temples-spirituality
+    name: Temples & spirituality
+    description: Living temples, pilgrimages, ceremonies and meditation.
+  - id: food
+    name: Food
+    description: Street food, markets, cooking classes and great restaurants.
+  - id: nightlife
+    name: Nightlife & social
+    description: Bars, beach parties and places where it's easy to meet people.
+  - id: wellness
+    name: Wellness & yoga
+    description: Yoga, retreats, ayurveda and slowing down.
+  - id: adventure-sports
+    name: Adventure sports
+    description: Rafting, kitesurfing, canyoning and other adrenaline.
+  - id: tea-and-plantations
+    name: Tea & plantations
+    description: Tea estates, factories and spice gardens.
+  - id: architecture-design
+    name: Architecture & design
+    description: Colonial buildings, modernist icons and design-led stays.
+  - id: off-the-beaten-path
+    name: Off the beaten path
+    description: Quieter places with fewer tourists and more local life.

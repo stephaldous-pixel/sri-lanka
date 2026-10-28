@@ -1,0 +1,49 @@
+slug: sinharaja
+name: Sinharaja Rainforest
+region: hill-country
+coordinates: { lat: 6.41, lng: 80.45 }
+summary: UNESCO-listed lowland rainforest and Sri Lanka's best birdwatching. Remote, humid and wonderfully quiet.
+description: |
+  Sinharaja protects the last large tract of lowland rainforest in Sri Lanka, and
+  it's full of species found nowhere else: endemic birds, frogs, lizards and
+  plants. Guided walks follow forest trails in search of **mixed-species bird
+  flocks**, blue magpies and, with luck, purple-faced langurs.
+
+  It's hard to reach and very wet, so it attracts few visitors, which is a large
+  part of its charm.
+interests:
+  birdwatching: 3
+  wildlife: 2
+  hiking: 2
+  off-the-beaten-path: 3
+nights: { min: 1, ideal: 2, max: 3 }
+months: [great, great, great, mixed, poor, poor, mixed, good, good, poor, poor, mixed]
+monthsNote: Rain falls year-round. The driest spells, January to March and August to September, are best.
+highlights:
+  - name: Guided rainforest walk
+    summary: Half-day walk with a (mandatory) local guide looking for endemic birds and wildlife.
+    interests: [birdwatching, hiking]
+    cost: [4000, 6000]
+    costNote: Around Rs 1,500 entry plus Rs 3,000 for a guide.
+  - name: Waterfalls & river pools
+    summary: Forest streams and falls along the trails.
+    interests: [scenery]
+solo:
+  social: 1
+  socialNotes: >-
+    Very few travellers. Eco-lodges serve communal meals, which can be sociable.
+  safety:
+    - Guides are compulsory inside the reserve.
+    - Leeches are everywhere in the wet. Wear leech socks.
+  tips:
+    - The Deniyaya (south) entrance is easier by public transport. The Kudawa (north-west) entrance needs your own wheels.
+stay:
+  budget: [3500, 7000]
+  mid: [9000, 18000]
+  comfort: [20000, 40000]
+gettingAround: >-
+  Buses to Deniyaya via Matara or Akuressa. Lodges arrange transport to the
+  gates.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

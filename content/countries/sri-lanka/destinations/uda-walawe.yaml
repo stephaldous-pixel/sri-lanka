@@ -1,0 +1,47 @@
+slug: uda-walawe
+name: Uda Walawe National Park
+region: hill-country
+coordinates: { lat: 6.474, lng: 80.888 }
+summary: The most reliable place in Sri Lanka to see herds of wild elephants up close.
+description: |
+  Uda Walawe's open grassland around a huge reservoir is home to around 600
+  wild elephants, so sightings on a jeep safari are close to guaranteed. You'll
+  often see whole family herds with calves, plus water buffalo, crocodiles and
+  plenty of birds of prey.
+
+  It sits conveniently between the Hill Country and the south coast, so many
+  travellers safari here on their way between the two.
+interests:
+  wildlife: 3
+  birdwatching: 2
+nights: { min: 0, ideal: 1, max: 2 }
+months: [great, great, great, good, good, good, good, good, good, mixed, mixed, good]
+monthsNote: Good year-round. Elephant-spotting is best in the dry spells, December to March and May to September.
+highlights:
+  - name: Elephant safari
+    summary: Morning or afternoon jeep safari among the park's herds.
+    interests: [wildlife]
+    cost: [10000, 18000]
+    costNote: Park entry about US$25 plus your share of the jeep (around Rs 10,000).
+  - name: Elephant Transit Home
+    summary: Watch orphaned baby elephants being fed before release back into the wild.
+    interests: [wildlife]
+solo:
+  social: 1
+  socialNotes: >-
+    Few stay overnight. Guesthouses can match you with others to share a jeep.
+  safety:
+    - Elephants cross the roads around the park. Don't walk or cycle there at dusk.
+  tips:
+    - Stay the night to safari at dawn, when animals are most active and jeeps fewer.
+    - Many people do it as a stop on the drive between Ella and the coast.
+stay:
+  budget: [3500, 7000]
+  mid: [9000, 18000]
+  comfort: [25000, 50000]
+gettingAround: >-
+  Buses via Embilipitiya. Most people arrive with a driver and safari between
+  destinations.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

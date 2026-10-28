@@ -1,0 +1,50 @@
+slug: tangalle
+name: Tangalle & Hiriketiya
+region: south
+coordinates: { lat: 6.024, lng: 80.794 }
+summary: Wild, empty beaches and nesting turtles, plus Hiriketiya's small surf bay nearby.
+description: |
+  East of the surf towns, the coast gets wilder. Tangalle's long, wave-lashed
+  beaches are for walking and switching off rather than swimming, with nesting
+  turtles at **Rekawa** and bird-filled lagoons behind the sand.
+
+  Just west, horseshoe-shaped **Hiriketiya** has become a small, stylish surf
+  spot with a friendly crowd. Inland, the 500 steps up to the **Mulkirigala rock
+  temples** lead to painted caves and big views.
+interests:
+  beaches: 3
+  wildlife: 2
+  surfing: 2
+  temples-spirituality: 1
+  off-the-beaten-path: 2
+nights: { min: 1, ideal: 2, max: 4 }
+highlights:
+  - name: Rekawa turtle watch
+    summary: Night visits to see turtles nesting, run by a community conservation project.
+    interests: [wildlife]
+  - name: Hiriketiya bay
+    summary: Small, sheltered surf bay with a sociable café scene.
+    interests: [surfing, beaches]
+  - name: Mulkirigala rock temples
+    summary: Climb to cave temples with 18th-century murals.
+    interests: [temples-spirituality, history]
+solo:
+  social: 2
+  socialNotes: >-
+    Tangalle itself is quiet and spread out; Hiriketiya has a small, friendly
+    surf crowd.
+  safety:
+    - Tangalle's beaches have steep drops, strong currents and heavy shore breaks. Swimming is dangerous.
+    - Only join turtle watches that keep lights off and keep visitors back.
+  tips:
+    - Hire a scooter or tuk tuk to explore the unmarked beach turn-offs.
+stay:
+  budget: [3000, 7000]
+  mid: [10000, 20000]
+  comfort: [25000, 60000]
+gettingAround: >-
+  Frequent buses along the coast and express buses to Colombo. The nearest
+  railway station is Beliatta.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

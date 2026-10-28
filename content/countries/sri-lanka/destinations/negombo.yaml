@@ -1,0 +1,51 @@
+slug: negombo
+name: Negombo
+region: west-coast
+coordinates: { lat: 7.2083, lng: 79.8358 }
+summary: Beach town 20 minutes from the airport. An easy first or last night, with a fantastic fish market.
+description: |
+  Negombo's closeness to the airport makes it the natural place to recover from a
+  long flight, but it rewards a full day too. Get up at dawn (jet lag helps) for
+  the **fish auction at Lellama market**, where tuna and mahi-mahi change hands
+  at speed, then see the catch laid out to dry near the old Dutch fort.
+
+  In the afternoon, take a boat around the **lagoon and Dutch-era Hamilton Canal**,
+  past fishing villages and outrigger canoes, and finish with sunset on the beach.
+  It's a strongly Catholic town, with grand pastel churches.
+interests:
+  beaches: 1
+  food: 2
+  history: 1
+  off-the-beaten-path: 1
+nights: { min: 1, ideal: 1, max: 2 }
+highlights:
+  - name: Lellama fish market
+    summary: Dawn auction of the night's catch. Closed Sundays and Catholic holidays.
+    interests: [food, off-the-beaten-path]
+  - name: Lagoon & Hamilton Canal boat trip
+    summary: Two hours past fishing communities and mangroves, best at sunset.
+    interests: [scenery, birdwatching]
+  - name: St Mary's Church
+    summary: Negombo's largest church, with a colourful painted ceiling.
+    interests: [history, architecture-design]
+solo:
+  social: 2
+  socialNotes: >-
+    A steady flow of travellers arriving and leaving, so hostels are a good place
+    to find people to share a driver with for the first leg.
+  safety:
+    - The main beach strip is touristy; touts are persistent but harmless.
+    - Rip currents can be strong. Swim only where locals do.
+  tips:
+    - Book your first night before landing and ask for an airport pickup.
+    - Negombo is a popular place to rent a tuk tuk if you want to drive yourself.
+stay:
+  budget: [2500, 6000]
+  mid: [9000, 18000]
+  comfort: [25000, 50000]
+gettingAround: >-
+  Tuk tuks and ride-hailing apps work well. Frequent buses and trains run to
+  Colombo.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

@@ -1,0 +1,54 @@
+slug: nuwara-eliya
+name: Nuwara Eliya & Horton Plains
+region: hill-country
+coordinates: { lat: 6.9497, lng: 80.7891 }
+summary: Sri Lanka's highest town. Tea estates, colonial "Little England" and the dawn hike to World's End.
+description: |
+  At almost 1,900m, Nuwara Eliya is cool, often misty and surrounded by the most
+  productive tea country on the island. The British left behind red-brick
+  post offices, rose gardens and a golf course, and high tea is still a ritual.
+
+  The big draw nearby is **Horton Plains National Park**, a high plateau of
+  grassland and cloud forest. Its 9km loop leads to **World's End**, a sheer
+  cliff dropping almost 900m. Arrive at 7am, before the mist rolls in.
+interests:
+  tea-and-plantations: 3
+  hiking: 2
+  scenery: 3
+  history: 1
+  train-journeys: 2
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Horton Plains & World's End
+    summary: Early-morning 9km loop to a dramatic escarpment and Baker's Falls.
+    interests: [hiking, scenery, wildlife]
+    cost: [9000, 15000]
+    costNote: Park entry about US$25 plus transport; tours from town are common.
+  - name: Tea country drive
+    summary: Visit tea factories and waterfalls by tuk tuk or with a driver.
+    interests: [tea-and-plantations, scenery]
+  - name: High tea
+    summary: Scones and Ceylon tea in a colonial-era hotel.
+    interests: [food, history]
+solo:
+  social: 1
+  socialNotes: >-
+    More domestic tourists and couples than backpackers. Join a shared Horton
+    Plains tour to meet people.
+  safety:
+    - It gets cold at night, sometimes near freezing in January. Bring warm layers.
+    - Roads to Kandy were damaged in the 2025 cyclone; check conditions in the rainy season.
+  tips:
+    - The railway station is Nanu Oya, 9km away; many guesthouses offer pickups.
+    - April is local holiday season here and prices spike.
+stay:
+  budget: [3500, 7000]
+  mid: [10000, 22000]
+  comfort: [30000, 70000]
+gettingAround: >-
+  Trains from Nanu Oya towards Ella are running. Buses to Kandy, Hatton and
+  Bandarawela. Tuk tuks or drivers for tea country.
+sources:
+  - https://byc.lk/colombo-kandy-ella-train-status-2026
+  - https://www.gov.uk/foreign-travel-advice/sri-lanka/natural-disasters
+lastChecked: "2026-10-28"

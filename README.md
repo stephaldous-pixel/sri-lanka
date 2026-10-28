@@ -25,8 +25,25 @@ Vercel → Project → Settings → Environment Variables:
 
 After changing either one, redeploy (Vercel → Deployments → ⋯ → Redeploy) for it to take effect.
 
+## Editing the travel content
+
+All destination information lives in plain-text files in `content/`:
+
+- `content/interests.yaml`: the interests travellers can pick (shared by every country)
+- `content/countries/sri-lanka/country.yaml`: currency, airports and the practical guide (visas, safety, money…)
+- `content/countries/sri-lanka/regions.yaml`: regions and their month-by-month weather ratings
+- `content/countries/sri-lanka/destinations/*.yaml`: one file per destination
+- `content/countries/sri-lanka/travel-legs.yaml`: journey times between neighbouring places, with train status
+
+To add a country, copy the `sri-lanka` folder and change the details. After editing, run
+`npm run check:content`: it spots typos, missing fields and broken links between files. The
+build runs the same check, so a mistake can't go live.
+
+Write everything in your own words. Guidebooks can be used to check facts, but never copy their text.
+
 ## Where things live
 
 - `src/lib/site.ts`: site name and tagline (change the name here)
+- `src/content/`: the content format (`schema.ts`) and loader (`load.ts`)
 - `src/lib/site-access.ts` and `src/proxy.ts`: the password gate
 - `src/app/`: pages

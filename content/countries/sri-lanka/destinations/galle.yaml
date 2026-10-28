@@ -1,0 +1,51 @@
+slug: galle
+name: Galle
+region: south
+coordinates: { lat: 6.0267, lng: 80.217 }
+summary: A walled colonial fort town of boutiques, churches and sunset ramparts. The south's cultural highlight.
+description: |
+  Galle Fort is a UNESCO-listed town inside 17th-century Dutch walls, built on a
+  headland that Portuguese, Dutch and British traders all fought over. Inside are
+  quiet lanes of colonial villas, churches, mosques, galleries and some of the
+  most stylish shops and cafés in the country.
+
+  The best time is late afternoon, when locals, couples and travellers stroll the
+  **3km of ramparts** to watch the sun set over the ocean. Look for turtles off
+  Neptune Bastion and the daredevil divers at Flag Rock.
+interests:
+  history: 3
+  architecture-design: 3
+  food: 2
+  beaches: 1
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Sunset on the ramparts
+    summary: Walk the fort walls from the lighthouse to Sun Bastion as the day cools.
+    interests: [history, scenery]
+  - name: Fort backstreets
+    summary: Colonial mansions, the Dutch Reformed Church and the Maritime Museum.
+    interests: [history, architecture-design]
+  - name: High tea or an arrack sour
+    summary: Treat yourself in a restored heritage hotel bar. Happy hours make it affordable.
+    interests: [food]
+solo:
+  social: 2
+  socialNotes: >-
+    Calm and very safe to wander. A few hostels, but more couples than
+    backpackers. Walking tours are a good way to meet people.
+  safety:
+    - Very relaxed and safe, including after dark inside the fort.
+    - Tuk tuks waiting at the fort entrance charge more than app-booked rides.
+  tips:
+    - Explore early or late; it's very hot at midday and many shops open around 10am.
+    - Stay just outside the fort for better value, or in it for atmosphere.
+stay:
+  budget: [3500, 7000]
+  mid: [12000, 25000]
+  comfort: [35000, 90000]
+gettingAround: >-
+  The fort is small and best explored on foot. Buses and tuk tuks run along the
+  coast to Unawatuna and beyond.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

@@ -1,0 +1,58 @@
+slug: jaffna
+name: Jaffna & the islands
+region: north
+coordinates: { lat: 9.6615, lng: 80.0255 }
+summary: The heart of Tamil Sri Lanka. Ornate temples, spicy crab curry, palmyra palms and remote islands.
+description: |
+  Jaffna feels like a different country. Recovering from nearly three decades of
+  war, the Tamil north has its own language, cuisine and festivals, and very few
+  tourists. Visit the golden **Nallur Kandaswamy Kovil**, explore the star-shaped
+  Dutch **fort**, and eat: **crab curry**, *odiyal kool* seafood stew, dosas and
+  sweet Jaffna mangoes.
+
+  Ferries hop to the peninsula's islands, including **Nainativu**, with its
+  Hindu and Buddhist shrines, and wild **Delft**, with its wild ponies and coral
+  walls.
+interests:
+  food: 3
+  temples-spirituality: 3
+  history: 2
+  off-the-beaten-path: 3
+  birdwatching: 1
+nights: { min: 2, ideal: 3, max: 4 }
+highlights:
+  - name: Nallur Kandaswamy Kovil
+    summary: Jaffna's grandest Hindu temple. Men remove shirts to enter.
+    interests: [temples-spirituality]
+  - name: Jaffna food trail
+    summary: Crab curry, dosas, palmyra snacks and ice cream at the old Rio parlour.
+    interests: [food]
+  - name: Island-hopping to Nainativu & Delft
+    summary: Navy-run ferries to temple islands and the windswept outpost of Delft.
+    interests: [off-the-beaten-path, history]
+  - name: Jaffna Fort
+    summary: Dutch-built star fort with ramparts for sunset.
+    interests: [history]
+solo:
+  social: 1
+  socialNotes: >-
+    Few travellers, but homestays are very welcoming and locals are curious and
+    friendly.
+  safety:
+    - Landmines remain in a few rural areas. Stay on roads and paths and heed warning signs.
+    - Dress conservatively; this is a traditional region.
+    - Ferries to the islands stop in bad weather.
+  tips:
+    - Take cash before visiting villages and islands; ATMs are scarce outside town.
+    - The 25-day Nallur festival around August is spectacular but books out early.
+stay:
+  budget: [3000, 6500]
+  mid: [9000, 18000]
+  comfort: [20000, 45000]
+gettingAround: >-
+  Bicycles, tuk tuks and PickMe/Uber in town. Buses to the ferry jetty at
+  Kurikadduwan. Trains and buses south to Anuradhapura and Colombo.
+sources:
+  - https://www.seat61.com/SriLanka
+  - https://blog.wego.com/is-sri-lanka-safe-to-travel/
+lastChecked: "2026-10-28"

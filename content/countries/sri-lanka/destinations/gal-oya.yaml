@@ -1,0 +1,47 @@
+slug: gal-oya
+name: Gal Oya National Park
+region: east
+coordinates: { lat: 7.22, lng: 81.53 }
+summary: The only place in Sri Lanka to see elephants swimming between islands, from a boat.
+description: |
+  Gal Oya surrounds **Senanayake Samudra**, Sri Lanka's largest lake, ringed by
+  forested hills and granite peaks. Its unique experience is a **boat safari**:
+  with luck you'll watch herds of elephants swim between islands, trunks raised
+  like snorkels.
+
+  It sees very few visitors. Lodges also offer jeep safaris, walks with the
+  indigenous Vedda community and excellent birding.
+interests:
+  wildlife: 3
+  birdwatching: 2
+  off-the-beaten-path: 3
+  scenery: 2
+nights: { min: 1, ideal: 2, max: 2 }
+months: [mixed, good, good, great, great, great, great, good, good, mixed, poor, poor]
+monthsNote: Swimming elephants are most likely March to July. Birding is best November to April.
+highlights:
+  - name: Boat safari
+    summary: Look for elephants swimming between islands on the reservoir.
+    interests: [wildlife, scenery]
+  - name: Jeep safari & birding
+    summary: Forest and grassland drives with very few other vehicles.
+    interests: [wildlife, birdwatching]
+solo:
+  social: 1
+  socialNotes: >-
+    Remote and quiet. Small lodges with shared meals; few other travellers.
+  safety:
+    - Remote area. Arrange transport and safaris in advance.
+  tips:
+    - Accommodation is limited and pricey. Book ahead and ask about shared safaris.
+stay:
+  budget: [5000, 9000]
+  mid: [12000, 25000]
+  comfort: [35000, 70000]
+  note: Few budget options.
+gettingAround: >-
+  Bus to Ampara, then a tuk tuk to Inginiyagala, the entrance village. Lodges
+  arrange pickups.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

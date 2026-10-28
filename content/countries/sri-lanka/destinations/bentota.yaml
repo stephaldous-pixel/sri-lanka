@@ -1,0 +1,51 @@
+slug: bentota
+name: Bentota
+region: west-coast
+coordinates: { lat: 6.421, lng: 79.998 }
+summary: Wide beaches, river safaris and Geoffrey Bawa's gardens. Stylish and calm rather than social.
+description: |
+  Bentota is where the west coast gets polished. It's home to some of Sri Lanka's
+  most celebrated design hotels, and to **Lunuganga**, the country estate where
+  architect Geoffrey Bawa spent four decades shaping a garden around a lake.
+  Nearby is **Brief Garden**, the quirkier home of his brother Bevis.
+
+  Between the gardens, take a boat up the **Madu Ganga** mangroves to island
+  temples and cinnamon peelers, or simply enjoy the broad, golden beach.
+interests:
+  architecture-design: 3
+  beaches: 2
+  wellness: 2
+  scenery: 1
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Lunuganga
+    summary: Guided tour of Bawa's garden estate, a landmark of tropical modernism.
+    interests: [architecture-design, scenery]
+    cost: [6000, 7000]
+    costNote: About US$20.
+  - name: Brief Garden
+    summary: Bevis Bawa's playful garden full of sculptures, murals and hidden corners.
+    interests: [architecture-design]
+  - name: Madu Ganga boat trip
+    summary: Mangrove channels, island temples and a cinnamon-peeling demonstration.
+    interests: [scenery, temples-spirituality]
+solo:
+  social: 1
+  socialNotes: >-
+    Mostly resorts and couples. Lovely for a quiet treat, but few hostels and
+    little nightlife.
+  safety:
+    - Sea can be rough outside November to April; heed the beach flags.
+  tips:
+    - Tour a Bawa hotel, or stay in one for a night, as a splurge.
+    - Hikkaduwa, 45 minutes south, is much more sociable.
+stay:
+  budget: [4000, 8000]
+  mid: [12000, 25000]
+  comfort: [35000, 90000]
+gettingAround: >-
+  On the coastal train line and bus route. Tuk tuks for the gardens, which are
+  inland.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

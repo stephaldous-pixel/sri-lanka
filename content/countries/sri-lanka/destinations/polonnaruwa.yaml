@@ -1,0 +1,47 @@
+slug: polonnaruwa
+name: Polonnaruwa
+region: ancient-cities
+coordinates: { lat: 7.9403, lng: 81.0188 }
+summary: A compact medieval capital of palaces, stupas and serene rock-cut Buddhas, best explored by bike.
+description: |
+  Polonnaruwa was Sri Lanka's capital from the 11th to 13th centuries, and its
+  ruins sit close together in parkland beside a vast ancient reservoir. Cycle
+  between the royal palace, the tightly packed **Quadrangle** of temples, and
+  **Gal Vihara**, where four Buddha figures, seated, standing and reclining, are
+  carved from a single slab of granite.
+
+  It's smaller and easier to cover than Anuradhapura, and a good day trip from
+  Sigiriya.
+interests:
+  history: 3
+  temples-spirituality: 2
+  architecture-design: 2
+nights: { min: 0, ideal: 1, max: 2 }
+highlights:
+  - name: Cycle the ancient city
+    summary: Rent a bicycle and ride between the main ruins in a morning.
+    interests: [history]
+    cost: [8000, 10000]
+    costNote: About US$25–30 entry.
+  - name: Gal Vihara
+    summary: Four magnificent Buddha figures carved into a granite face.
+    interests: [temples-spirituality, history]
+solo:
+  social: 1
+  socialNotes: >-
+    Mostly visited as a day trip. Budget guesthouses are friendly but quiet.
+  safety:
+    - Start early; there's little shade and midday heat is fierce.
+  tips:
+    - Buy your ticket at the museum before going to the ruins.
+    - Bring socks for walking barefoot on hot stone at temples.
+stay:
+  budget: [3000, 6000]
+  mid: [8000, 16000]
+  comfort: [20000, 40000]
+gettingAround: >-
+  Bicycles and tuk tuks around the site. Buses to Habarana, Dambulla and
+  Batticaloa; trains to Colombo and Batticaloa.
+sources:
+  - https://induwara.lk/tools/sri-lanka-cultural-triangle-entry-fee-calculator
+lastChecked: "2026-10-28"

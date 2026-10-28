@@ -1,0 +1,54 @@
+slug: weligama
+name: Weligama & Ahangama
+region: south
+coordinates: { lat: 5.975, lng: 80.429 }
+summary: The best place to learn to surf, with a sociable hostel and café scene and digital-nomad hubs.
+description: |
+  Weligama's long, sandy bay has gentle, consistent waves, which makes it Sri
+  Lanka's favourite place to **stand up on a surfboard for the first time**. Surf
+  schools line the beach, and lessons are cheap.
+
+  Neighbouring **Ahangama** and **Midigama** have more advanced reef breaks,
+  surf-and-yoga camps, coworking spaces and some of the island's best cafés. It's
+  also the stretch where you'll see the famous **stilt fishermen**.
+interests:
+  surfing: 3
+  nightlife: 2
+  wellness: 2
+  food: 2
+  beaches: 2
+nights: { min: 2, ideal: 3, max: 7 }
+highlights:
+  - name: First surf lesson
+    summary: Soft sandy-bottom waves in Weligama Bay, perfect for beginners.
+    interests: [surfing]
+    cost: [4500, 6000]
+    costNote: Around Rs 5,000 for a lesson.
+  - name: Surf & yoga camp
+    summary: Week-long packages with daily lessons, yoga and meals, popular with solo travellers.
+    interests: [surfing, wellness]
+  - name: Ahangama café crawl
+    summary: Smoothie bowls, specialty coffee and creative Sri Lankan fusion food.
+    interests: [food]
+solo:
+  social: 3
+  socialNotes: >-
+    One of the most sociable places in the country. Surf camps and hostels run
+    group dinners and trips, and many people stay for weeks.
+  safety:
+    - Reef breaks in Ahangama and Midigama are for experienced surfers only.
+    - Watch your drink at parties.
+    - Stilt fishermen often expect payment for photos.
+  tips:
+    - A surf camp is the easiest way to meet people if you're arriving alone.
+    - Go south from December to April; the waves and weather are best then.
+stay:
+  budget: [2500, 6000]
+  mid: [9000, 20000]
+  comfort: [25000, 60000]
+gettingAround: >-
+  Coastal buses every few minutes; tuk tuks carry surfboards. Weligama has a
+  train station.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

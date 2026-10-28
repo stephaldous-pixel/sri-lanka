@@ -1,0 +1,44 @@
+slug: dambulla
+name: Dambulla
+region: ancient-cities
+coordinates: { lat: 7.8567, lng: 80.649 }
+summary: Five painted cave temples high on a rock, among Sri Lanka's greatest artistic treasures.
+description: |
+  Inside a granite outcrop above Dambulla town, five caves have been turned into
+  temples over two thousand years. Every surface is covered in **murals** of
+  Buddhas, deities and scenes from the Buddha's lives, and the caves hold more
+  than 150 statues, including a 14m reclining Buddha.
+
+  It's a short, steep walk up with views over the plains. Most travellers visit
+  on a half-day trip from Sigiriya, but Dambulla is also a major bus hub.
+interests:
+  temples-spirituality: 3
+  history: 3
+  architecture-design: 1
+nights: { min: 0, ideal: 1, max: 1 }
+highlights:
+  - name: Cave Temple
+    summary: Five caves of murals and statues, a UNESCO World Heritage Site.
+    interests: [temples-spirituality, history]
+  - name: Dambulla market
+    summary: The wholesale fruit and vegetable market that supplies much of the island.
+    interests: [food, off-the-beaten-path]
+solo:
+  social: 1
+  socialNotes: >-
+    A transport hub more than a hangout. Most people stay in Sigiriya instead.
+  safety:
+    - Monkeys at the cave steps grab food and bags.
+  tips:
+    - Cover shoulders and knees; sarongs can be borrowed at the entrance.
+    - Shoes are left at the entrance and the rock gets hot. Bring socks.
+stay:
+  budget: [3000, 6000]
+  mid: [8000, 16000]
+  comfort: [25000, 60000]
+gettingAround: >-
+  Major bus junction with frequent services to Kandy, Sigiriya, Anuradhapura,
+  Polonnaruwa and Trincomalee.
+sources:
+  - https://slvoyo.com/complete-guide-to-sri-lanka-entrance-fees-for-foreign-tourists-2026-updated-prices/
+lastChecked: "2026-10-28"

@@ -1,0 +1,50 @@
+# Regions and their month-by-month ratings (January → December).
+# great = ideal, good = fine, mixed = some rain or rough seas, poor = monsoon / avoid.
+regions:
+  - id: colombo
+    name: Colombo
+    summary: The capital's markets, street food, galleries and colonial streets.
+    months: [great, great, great, good, mixed, mixed, mixed, mixed, mixed, poor, poor, good]
+    monthsNote: Driest December to March. October and November are the wettest months.
+
+  - id: west-coast
+    name: West Coast
+    summary: Easy beaches near the airport, design hotels, kitesurfing and a wild national park.
+    months: [great, great, great, good, poor, mixed, mixed, mixed, mixed, poor, mixed, great]
+    monthsNote: Beach season is November to April. The far north-west (Kalpitiya, Wilpattu) has its own seasons.
+
+  - id: south
+    name: Galle & the South
+    summary: Galle's fort, surf towns, whale-watching, wild beaches and leopards in Yala.
+    months: [great, great, great, great, poor, poor, mixed, mixed, mixed, mixed, good, great]
+    monthsNote: High season mid-December to April. May to October brings rain and rough seas.
+
+  - id: hill-country
+    name: Hill Country
+    summary: Tea estates, cool air, waterfalls, hiking and the famous train line.
+    months: [great, great, great, good, mixed, mixed, mixed, mixed, mixed, poor, poor, good]
+    monthsNote: January to April is dry and clear. October and November bring the heaviest rain and landslide risk.
+
+  - id: kandy
+    name: Kandy & around
+    summary: The Temple of the Tooth, the hill capital's lake and the Knuckles mountains.
+    months: [great, great, great, good, mixed, mixed, good, good, mixed, poor, poor, good]
+    monthsNote: Driest December to April. The Esala Perahera festival fills Kandy in July or August.
+
+  - id: ancient-cities
+    name: Ancient Cities
+    summary: Sigiriya, cave temples, ruined capitals and the elephant gathering.
+    months: [good, great, great, great, good, good, great, great, great, good, poor, mixed]
+    monthsNote: Dry for most of the year. Rain mainly November to January. Elephants gather at Minneriya from July to September.
+
+  - id: east
+    name: The East
+    summary: Calm summer beaches, Arugam Bay's surf and quiet national parks.
+    months: [poor, mixed, good, great, great, great, great, great, great, mixed, poor, poor]
+    monthsNote: In season April to September, when the south-west has its monsoon. October to January is rainy and many places close.
+
+  - id: north
+    name: The North
+    summary: Tamil culture, temples, islands and some of the best food in the country.
+    months: [great, great, great, good, good, good, good, great, good, poor, poor, mixed]
+    monthsNote: January to March is ideal. October and November are rainy. The Nallur festival in Jaffna runs for 25 days around August.

@@ -37,6 +37,8 @@ There's no paid map or routing service. Travel times come from a table we resear
 
 Sources: the Lonely Planet *Experience Sri Lanka* ebook (used for facts only) and current web sources, cross-checked. **All text on the site will be written from scratch.** Photos will be free licensed ones from Unsplash or Wikimedia Commons, with credits.
 
+**Status:** Phase 1 done on 28 Oct 2026. There are 29 destinations in 8 regions, plus 46 travel legs with train status, all in `content/`.
+
 **Regions and proposed destinations (about 28, so we can trim):**
 
 - **Colombo:** Colombo

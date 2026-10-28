@@ -1,0 +1,52 @@
+slug: wilpattu
+name: Wilpattu National Park
+region: west-coast
+coordinates: { lat: 8.4569, lng: 80.0144 }
+summary: Sri Lanka's largest, quietest national park, known for leopards and sloth bears without the jeep crowds.
+description: |
+  Wilpattu was closed for much of the civil war, and it still feels wild. Its
+  forests surround dozens of sand-rimmed lakes (*villu*), where **leopards,
+  sloth bears, elephants and crocodiles** come to drink, and it sees a fraction
+  of the jeeps you'd find in Yala.
+
+  It suits patient wildlife-watchers: plan a full-day safari, enter when the gate
+  opens at 6am, and bring binoculars. It also makes a natural stop between
+  Kalpitiya and Anuradhapura.
+interests:
+  wildlife: 3
+  birdwatching: 2
+  off-the-beaten-path: 3
+nights: { min: 1, ideal: 1, max: 2 }
+months: [mixed, good, good, good, good, great, great, great, great, good, poor, poor]
+monthsNote: Best in the dry season, June to September. Some tracks become impassable in the rains.
+highlights:
+  - name: Full-day jeep safari
+    summary: Explore the central lakes, where leopard sightings are most likely.
+    interests: [wildlife]
+    cost: [20000, 33000]
+    costNote: About US$60–100 per person including park fees, less if you share a jeep.
+  - name: Birdlife
+    summary: Over 100 species, from hornbills to painted storks.
+    interests: [birdwatching]
+solo:
+  social: 1
+  socialNotes: >-
+    Very quiet. Ask your guesthouse about sharing a jeep with other guests to cut
+    the cost.
+  safety:
+    - Stay in your vehicle in the park and follow your driver's instructions.
+    - Wild elephants cross roads around the park, especially at dusk.
+  tips:
+    - Book a good guide in advance; it makes a big difference to sightings.
+    - The main Hunuwilagama gate is easiest to reach without your own transport.
+stay:
+  budget: [4000, 8000]
+  mid: [10000, 20000]
+  comfort: [35000, 90000]
+  note: Includes luxury tented safari camps at the top end.
+gettingAround: >-
+  Buses between Puttalam and Anuradhapura pass near the main gate. Safaris are
+  arranged by your accommodation.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

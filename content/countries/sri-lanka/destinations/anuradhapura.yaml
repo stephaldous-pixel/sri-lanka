@@ -1,0 +1,52 @@
+slug: anuradhapura
+name: Anuradhapura & Mihintale
+region: ancient-cities
+coordinates: { lat: 8.3114, lng: 80.4037 }
+summary: Sri Lanka's first great capital, with colossal stupas, a sacred 2,000-year-old tree and living pilgrimage.
+description: |
+  For over a thousand years Anuradhapura was one of South Asia's great cities.
+  Its brick **dagobas** (stupas) are among the largest structures of the ancient
+  world, and they're still places of worship. Pilgrims dressed in white bring
+  offerings to the **Sri Maha Bodhi**, grown from a cutting of the tree under
+  which the Buddha found enlightenment.
+
+  Nearby **Mihintale** is where Buddhism arrived in Sri Lanka in the 3rd century
+  BCE. Climb its hilltop shrines at sunset.
+interests:
+  history: 3
+  temples-spirituality: 3
+  off-the-beaten-path: 1
+nights: { min: 1, ideal: 2, max: 2 }
+highlights:
+  - name: Ancient city by bike
+    summary: Cycle between the giant dagobas, monasteries and royal baths.
+    interests: [history]
+    cost: [8000, 10000]
+    costNote: About US$25–30 for the main sites.
+  - name: Sri Maha Bodhi at dusk
+    summary: Join pilgrims at the sacred fig tree for evening offerings. Free entry.
+    interests: [temples-spirituality]
+  - name: Mihintale
+    summary: Hilltop shrines where Buddhism was introduced to the island.
+    interests: [temples-spirituality, history, hiking]
+solo:
+  social: 1
+  socialNotes: >-
+    Fewer backpackers than Sigiriya. Guesthouses are welcoming and can arrange
+    bikes and guides.
+  safety:
+    - Very hot and exposed. Carry water and start at dawn.
+    - Dress modestly; the whole area is a sacred site.
+  tips:
+    - Poya (full moon) days, especially Poson in June, bring huge crowds of pilgrims.
+    - Wear white to blend in with pilgrims at the sacred tree.
+stay:
+  budget: [3000, 6000]
+  mid: [8000, 16000]
+  comfort: [20000, 45000]
+gettingAround: >-
+  Bicycles and tuk tuks around the sites. Trains to Colombo and Jaffna; buses to
+  Dambulla, Trincomalee and Puttalam.
+sources:
+  - https://induwara.lk/tools/sri-lanka-cultural-triangle-entry-fee-calculator
+lastChecked: "2026-10-28"

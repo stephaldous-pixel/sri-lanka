@@ -1,0 +1,58 @@
+slug: ella
+name: Ella
+region: hill-country
+coordinates: { lat: 6.8667, lng: 81.0466 }
+summary: The hill country's backpacker hub. Easy hikes, tea views, Nine Arches Bridge and the end of the scenic railway.
+description: |
+  Ella is a small village in a gap in the hills, with views down to the plains
+  and an easy, social atmosphere. Most people come for the short hikes: up
+  **Little Adam's Peak** for sunrise, through tea and forest to **Ella Rock**, and
+  along the tracks to the much-photographed **Nine Arches Bridge** as a train
+  rolls over.
+
+  The scenic train from Nanu Oya ends its most famous stretch here. That section
+  reopened in June 2026 after cyclone repairs.
+interests:
+  hiking: 3
+  scenery: 3
+  train-journeys: 3
+  tea-and-plantations: 2
+  nightlife: 2
+  food: 1
+nights: { min: 2, ideal: 3, max: 5 }
+highlights:
+  - name: Little Adam's Peak
+    summary: Gentle walk through tea gardens to a ridge-top viewpoint. Great at sunrise.
+    interests: [hiking, scenery]
+  - name: Ella Rock
+    summary: Half-day hike with big views over the gap. Go early, before the cloud.
+    interests: [hiking, scenery]
+  - name: Nine Arches Bridge
+    summary: Colonial-era stone viaduct in the jungle. Check train times to see one cross.
+    interests: [scenery, train-journeys]
+  - name: Tea factory tour
+    summary: See how leaves become black tea, then taste it overlooking the estates.
+    interests: [tea-and-plantations]
+solo:
+  social: 3
+  socialNotes: >-
+    Full of hostels, cafés and bars, and very easy to find hiking companions.
+    Many people meet travel buddies here.
+  safety:
+    - Don't walk on the railway tracks when a train is due, and never hang out of train doors.
+    - Some Ella Rock "guides" mislead hikers onto paid paths. Use a downloaded map.
+    - Paths get slippery and landslide-prone in heavy rain.
+  tips:
+    - Book the Nanu Oya–Ella train seats as soon as booking opens (30 days ahead).
+    - Start hikes by 7am to beat the heat, the crowds and the afternoon cloud.
+stay:
+  budget: [2500, 6000]
+  mid: [9000, 20000]
+  comfort: [25000, 60000]
+gettingAround: >-
+  Walkable village. Trains towards Haputale and Nanu Oya, buses to Wellawaya
+  for the south and east. Tuk tuks for viewpoints and waterfalls.
+sources:
+  - https://byc.lk/colombo-kandy-ella-train-status-2026
+  - https://www.thecommonwanderer.com/blog/things-to-do-ella-sri-lanka
+lastChecked: "2026-10-28"

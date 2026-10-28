@@ -1,0 +1,315 @@
+# Direct connections between neighbouring destinations. The route generator
+# chains these together to work out travel time between any two places.
+#
+# hours = typical door-to-door time. "car" means a hired car with driver or a
+# ride-hailing car. Rail status changes often after Cyclone Ditwah (Nov 2025);
+# re-check every "disrupted" or "suspended" option before launch.
+lastChecked: "2026-10-28"
+sources:
+  - https://www.seat61.com/SriLanka
+  - https://www.dailyexcelsior.com/sri-lanka-resumes-train-service-on-colombo-kandy-line-after-10-months/
+  - https://byc.lk/colombo-kandy-ella-train-status-2026
+  - https://newsfirst.lk/2026/04/24/special-bus-services-deployed-as-coastal-train-services-remain-disrupted
+  - https://goasia.cc/en/sri-lanka/ella-to-arugam-bay
+  - https://www.geckoroutes.com/sri-lanka/arugam-bay-things-to-do-and-how-to-get-there/
+legs:
+  # Airport, Colombo and the west coast
+  - from: negombo
+    to: colombo
+    distanceKm: 35
+    options:
+      - { mode: car, hours: 0.75, status: running }
+      - { mode: bus, hours: 1.25, status: running }
+      - { mode: train, hours: 1.25, status: running }
+  - from: negombo
+    to: kalpitiya
+    distanceKm: 130
+    options:
+      - { mode: car, hours: 2.75, status: running }
+      - { mode: bus, hours: 4, status: running, note: Change at Palavi or Puttalam for Kalpitiya. }
+  - from: kalpitiya
+    to: wilpattu
+    distanceKm: 80
+    options:
+      - { mode: car, hours: 2, status: running }
+      - { mode: bus, hours: 3, status: running, note: Bus to Puttalam, then towards Anuradhapura; tuk tuk from the junction to the gate. }
+  - from: wilpattu
+    to: anuradhapura
+    distanceKm: 45
+    options:
+      - { mode: car, hours: 1, status: running }
+      - { mode: bus, hours: 1.5, status: running }
+  - from: colombo
+    to: bentota
+    distanceKm: 65
+    options:
+      - { mode: car, hours: 1.25, status: running }
+      - { mode: train, hours: 1.75, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+      - { mode: bus, hours: 2, status: running }
+  - from: bentota
+    to: hikkaduwa
+    distanceKm: 35
+    options:
+      - { mode: car, hours: 0.75, status: running }
+      - { mode: bus, hours: 1, status: running }
+      - { mode: train, hours: 0.75, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+  - from: hikkaduwa
+    to: galle
+    distanceKm: 18
+    options:
+      - { mode: bus, hours: 0.5, status: running }
+      - { mode: tuk-tuk, hours: 0.5, status: running }
+      - { mode: train, hours: 0.5, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+  - from: colombo
+    to: galle
+    distanceKm: 120
+    options:
+      - { mode: car, hours: 1.75, status: running, note: Via the Southern Expressway. }
+      - { mode: bus, hours: 2.25, status: running, note: Air-con expressway buses from Colombo and Makumbura. }
+      - { mode: train, hours: 3, status: disrupted, note: Scenic coastal line; partial closures reported in 2026. }
+  - from: negombo
+    to: galle
+    distanceKm: 150
+    options:
+      - { mode: car, hours: 2.5, status: running, note: Airport-to-south-coast via the expressways, skipping central Colombo. }
+      - { mode: bus, hours: 3.5, status: running, note: Airport expressway coach to Makumbura, then an expressway bus. }
+
+  # South coast
+  - from: galle
+    to: unawatuna
+    distanceKm: 6
+    options:
+      - { mode: tuk-tuk, hours: 0.25, status: running }
+      - { mode: bus, hours: 0.25, status: running }
+  - from: unawatuna
+    to: weligama
+    distanceKm: 25
+    options:
+      - { mode: car, hours: 0.6, status: running }
+      - { mode: bus, hours: 0.75, status: running }
+      - { mode: train, hours: 0.6, status: disrupted, note: Coastal line had partial closures in 2026; check before travelling. }
+  - from: weligama
+    to: mirissa
+    distanceKm: 6
+    options:
+      - { mode: tuk-tuk, hours: 0.25, status: running }
+      - { mode: bus, hours: 0.25, status: running }
+  - from: mirissa
+    to: tangalle
+    distanceKm: 50
+    options:
+      - { mode: car, hours: 1, status: running }
+      - { mode: bus, hours: 1.5, status: running }
+  - from: tangalle
+    to: yala
+    distanceKm: 60
+    options:
+      - { mode: car, hours: 1.25, status: running }
+      - { mode: bus, hours: 2, status: running }
+  - from: galle
+    to: sinharaja
+    distanceKm: 100
+    options:
+      - { mode: car, hours: 2.5, status: running, note: To the Deniyaya (southern) entrance. }
+      - { mode: bus, hours: 3.5, status: running, note: Via Matara or Akuressa to Deniyaya. }
+
+  # South to the hills
+  - from: yala
+    to: ella
+    distanceKm: 85
+    options:
+      - { mode: car, hours: 2, status: running }
+      - { mode: bus, hours: 3, status: running, note: Change at Wellawaya. }
+  - from: yala
+    to: uda-walawe
+    distanceKm: 70
+    options:
+      - { mode: car, hours: 1.5, status: running }
+      - { mode: bus, hours: 2.5, status: running, note: Change at Embilipitiya. }
+  - from: tangalle
+    to: uda-walawe
+    distanceKm: 70
+    options:
+      - { mode: car, hours: 1.5, status: running }
+      - { mode: bus, hours: 2.25, status: running, note: Change at Embilipitiya. }
+  - from: uda-walawe
+    to: ella
+    distanceKm: 90
+    options:
+      - { mode: car, hours: 2.25, status: running }
+      - { mode: bus, hours: 3.5, status: running, note: Change at Wellawaya. }
+  - from: sinharaja
+    to: uda-walawe
+    distanceKm: 75
+    options:
+      - { mode: car, hours: 2.5, status: running }
+      - { mode: bus, hours: 4, status: running, note: Several changes; a driver is far easier. }
+
+  # Hill Country
+  - from: ella
+    to: haputale
+    distanceKm: 25
+    options:
+      - { mode: train, hours: 1, status: running, note: Nanu Oya–Badulla section reopened June 2026. }
+      - { mode: bus, hours: 1, status: running }
+      - { mode: car, hours: 0.75, status: running }
+  - from: haputale
+    to: nuwara-eliya
+    distanceKm: 45
+    options:
+      - { mode: train, hours: 2, status: running, note: To Nanu Oya station, 9km from Nuwara Eliya. }
+      - { mode: car, hours: 1.75, status: running }
+      - { mode: bus, hours: 2.5, status: running }
+  - from: nuwara-eliya
+    to: ella
+    distanceKm: 60
+    options:
+      - { mode: train, hours: 3.25, status: running, note: From Nanu Oya. One of the world's great train rides; book seats ahead. }
+      - { mode: car, hours: 2.25, status: running }
+      - { mode: bus, hours: 3, status: running }
+  - from: nuwara-eliya
+    to: kandy
+    distanceKm: 75
+    options:
+      - { mode: car, hours: 2.5, status: running }
+      - { mode: bus, hours: 3, status: running }
+      - { mode: train, hours: 4, status: suspended, note: Kandy–Nanu Oya section still closed after cyclone damage; reopening expected late 2026 or early 2027. }
+  - from: nuwara-eliya
+    to: sri-pada
+    distanceKm: 75
+    options:
+      - { mode: car, hours: 2.5, status: running }
+      - { mode: bus, hours: 3.5, status: running, note: Via Hatton. }
+  - from: sri-pada
+    to: kitulgala
+    distanceKm: 75
+    options:
+      - { mode: car, hours: 2.25, status: running }
+      - { mode: bus, hours: 3, status: running, note: Via Hatton. }
+  - from: sri-pada
+    to: kandy
+    distanceKm: 110
+    options:
+      - { mode: car, hours: 3, status: running }
+      - { mode: bus, hours: 4, status: running, note: Via Hatton. }
+  - from: kitulgala
+    to: colombo
+    distanceKm: 85
+    options:
+      - { mode: car, hours: 2.5, status: running }
+      - { mode: bus, hours: 3, status: running }
+  - from: kandy
+    to: ella
+    distanceKm: 140
+    options:
+      - { mode: car, hours: 4, status: running }
+      - { mode: bus, hours: 6, status: running }
+      - { mode: train, hours: 7, status: suspended, note: Kandy–Nanu Oya section still closed; take a car or bus to Nanu Oya and the train from there. }
+
+  # Kandy and the Ancient Cities
+  - from: colombo
+    to: kandy
+    distanceKm: 115
+    options:
+      - { mode: car, hours: 3, status: running }
+      - { mode: bus, hours: 3.5, status: running }
+      - { mode: train, hours: 3.25, status: disrupted, note: Trains stop at Peradeniya, 6km short of Kandy, until a bridge is rebuilt. Finish by bus or tuk tuk. }
+  - from: negombo
+    to: kandy
+    distanceKm: 105
+    options:
+      - { mode: car, hours: 2.75, status: running }
+      - { mode: bus, hours: 4, status: running, note: Change in Colombo or at Kadawatha. }
+  - from: kandy
+    to: knuckles
+    distanceKm: 45
+    options:
+      - { mode: car, hours: 1.5, status: running }
+      - { mode: bus, hours: 2.5, status: running }
+  - from: kandy
+    to: dambulla
+    distanceKm: 72
+    options:
+      - { mode: car, hours: 1.75, status: running }
+      - { mode: bus, hours: 2.5, status: running }
+  - from: dambulla
+    to: sigiriya
+    distanceKm: 20
+    options:
+      - { mode: tuk-tuk, hours: 0.5, status: running }
+      - { mode: bus, hours: 0.75, status: running }
+  - from: sigiriya
+    to: polonnaruwa
+    distanceKm: 65
+    options:
+      - { mode: car, hours: 1.25, status: running }
+      - { mode: bus, hours: 2, status: running, note: Change at Habarana. }
+  - from: dambulla
+    to: anuradhapura
+    distanceKm: 65
+    options:
+      - { mode: car, hours: 1.5, status: running }
+      - { mode: bus, hours: 2, status: running }
+  - from: negombo
+    to: dambulla
+    distanceKm: 130
+    options:
+      - { mode: car, hours: 3, status: running, note: Popular first leg straight from the airport. }
+      - { mode: bus, hours: 4, status: running }
+
+  # North and East
+  - from: anuradhapura
+    to: jaffna
+    distanceKm: 195
+    options:
+      - { mode: train, hours: 3.5, status: running, note: Northern line reopened in October 2026 after repairs; check timetables. }
+      - { mode: car, hours: 4, status: running }
+      - { mode: bus, hours: 5, status: running }
+  - from: colombo
+    to: jaffna
+    distanceKm: 400
+    options:
+      - { mode: train, hours: 7, status: running, note: Yal Devi and intercity services resumed October 2026; check timetables. }
+      - { mode: bus, hours: 9, status: running, note: Overnight air-con coaches. }
+  - from: anuradhapura
+    to: trincomalee
+    distanceKm: 105
+    options:
+      - { mode: car, hours: 2.25, status: running }
+      - { mode: bus, hours: 3, status: running }
+  - from: sigiriya
+    to: trincomalee
+    distanceKm: 100
+    options:
+      - { mode: car, hours: 2, status: running }
+      - { mode: bus, hours: 3, status: running, note: Change at Habarana. }
+  - from: jaffna
+    to: trincomalee
+    distanceKm: 235
+    options:
+      - { mode: car, hours: 4.5, status: running }
+      - { mode: bus, hours: 6.5, status: running }
+  - from: trincomalee
+    to: arugam-bay
+    distanceKm: 230
+    options:
+      - { mode: car, hours: 5, status: running }
+      - { mode: bus, hours: 8, status: running, note: Several changes, usually at Batticaloa and Kalmunai/Akkaraipattu. }
+  - from: polonnaruwa
+    to: gal-oya
+    distanceKm: 120
+    options:
+      - { mode: car, hours: 2.5, status: running }
+      - { mode: bus, hours: 4, status: running, note: Via Batticaloa or Mahiyangana to Ampara, then a tuk tuk. }
+  - from: gal-oya
+    to: arugam-bay
+    distanceKm: 75
+    options:
+      - { mode: car, hours: 1.75, status: running }
+      - { mode: bus, hours: 3, status: running, note: Via Siyambalanduwa to Pottuvil. }
+  - from: arugam-bay
+    to: ella
+    distanceKm: 130
+    options:
+      - { mode: car, hours: 3, status: running }
+      - { mode: bus, hours: 5, status: running, note: Via Monaragala and Wellawaya; tuk tuk from Pottuvil. }

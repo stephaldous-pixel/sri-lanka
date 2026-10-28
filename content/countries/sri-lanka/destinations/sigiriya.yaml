@@ -1,0 +1,57 @@
+slug: sigiriya
+name: Sigiriya
+region: ancient-cities
+coordinates: { lat: 7.957, lng: 80.7603 }
+summary: A 5th-century palace on top of a 180m rock, plus sunrise from neighbouring Pidurangala.
+description: |
+  Sigiriya is Sri Lanka's most dramatic sight: a sheer granite rock rising from
+  the plains, crowned by the ruins of a king's palace. The climb passes water
+  gardens, ancient frescoes of celestial maidens, and a staircase between two
+  giant stone lion's paws.
+
+  For the classic view *of* Sigiriya, climb **Pidurangala** next door at dawn,
+  through an old monastery to a boulder-top summit. Sigiriya village is also the
+  best base for the cave temples at Dambulla and the elephant safaris at
+  **Minneriya**.
+interests:
+  history: 3
+  scenery: 3
+  hiking: 2
+  wildlife: 2
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Sigiriya Rock
+    summary: Climb through gardens and frescoes to the palace ruins on the summit.
+    interests: [history, scenery]
+    cost: [11000, 12000]
+    costNote: About US$35.
+  - name: Pidurangala at sunrise
+    summary: Short, steep scramble with the best view of Sigiriya.
+    interests: [hiking, scenery]
+    cost: [1000, 1500]
+  - name: Minneriya or Kaudulla safari
+    summary: Afternoon safari to see elephants gathering at the reservoirs (peak July to October).
+    interests: [wildlife]
+    cost: [12000, 20000]
+solo:
+  social: 2
+  socialNotes: >-
+    A busy stop on most routes with plenty of guesthouses. Easy to team up for
+    safaris and the Pidurangala sunrise.
+  safety:
+    - Wild elephants roam around the village. Don't walk or cycle on unlit roads after dark.
+    - Hornets' nests on the rock occasionally cause closures; follow staff instructions.
+  tips:
+    - The site opens at 5am. Go early to beat the heat and crowds.
+    - Bring water and a hat; there's no shade on top.
+stay:
+  budget: [3000, 6500]
+  mid: [9000, 20000]
+  comfort: [30000, 80000]
+gettingAround: >-
+  Buses from Dambulla (via Inamaluwa junction). Tuk tuks for Pidurangala,
+  safaris and day trips.
+sources:
+  - https://slvoyo.com/complete-guide-to-sri-lanka-entrance-fees-for-foreign-tourists-2026-updated-prices/
+  - https://www.findingtheuniverse.com/two-weeks-in-sri-lanka-itinerary-and/
+lastChecked: "2026-10-28"

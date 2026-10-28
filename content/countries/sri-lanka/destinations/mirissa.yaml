@@ -1,0 +1,52 @@
+slug: mirissa
+name: Mirissa
+region: south
+coordinates: { lat: 5.9483, lng: 80.4716 }
+summary: Palm-fringed party beach and Sri Lanka's whale-watching capital. Blue whales offshore.
+description: |
+  Mirissa is the south coast's most lively beach town, with a pretty bay,
+  seafood barbecues and late nights. It's also the starting point for one of the
+  world's best chances to see **blue whales**, the largest animal ever to have
+  lived. Boats leave at dawn for the deep water off Dondra Head.
+
+  By day, climb **Coconut Tree Hill** for the classic photo, or wade out to
+  Parrot Rock at low tide. Quieter **Secret Beach** is a short tuk tuk ride away.
+interests:
+  wildlife: 3
+  beaches: 3
+  nightlife: 3
+  surfing: 1
+nights: { min: 1, ideal: 2, max: 4 }
+highlights:
+  - name: Whale-watching
+    summary: Half-day dawn boat trip for blue whales, plus sperm whales and spinner dolphins.
+    interests: [wildlife]
+    cost: [18000, 22000]
+    costNote: About US$60. Choose an operator that keeps its distance from the whales.
+  - name: Coconut Tree Hill
+    summary: Palm-covered headland with the town's most photographed view.
+    interests: [scenery]
+  - name: Secret Beach
+    summary: Small, sheltered cove away from the main strip.
+    interests: [beaches]
+solo:
+  social: 3
+  socialNotes: >-
+    Busy with backpackers, and the beach bars and parties make it easy to meet
+    people.
+  safety:
+    - Drink spiking has been reported in south-coast party spots. Keep your drink with you.
+    - Seas are rough from May to July, so avoid whale trips and swimming then.
+  tips:
+    - Stay in the back lanes to avoid noise from the main road.
+    - Seasickness is common on whale trips. Take tablets beforehand.
+stay:
+  budget: [2500, 6500]
+  mid: [9000, 20000]
+  comfort: [25000, 55000]
+gettingAround: >-
+  Coastal buses to Galle and Matara. Weligama's station, 10 minutes away, has
+  more trains.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

@@ -1,0 +1,58 @@
+slug: arugam-bay
+name: Arugam Bay
+region: east
+coordinates: { lat: 6.8406, lng: 81.836 }
+summary: World-class point breaks, surf camps and a laid-back summer scene on the east coast.
+description: |
+  Arugam Bay is Sri Lanka's most famous surf destination. A string of point
+  breaks along the headlands gives **long, peeling waves** for everyone, from
+  beginners at Baby Point and Whiskey Point to experts at Main Point.
+
+  Beyond the surf, take a jeep to **Kumana National Park** for elephants and
+  birdlife, or visit the ancient forest monastery of **Kudumbigala**. In season
+  the village buzzes with cafés, yoga and beach parties.
+interests:
+  surfing: 3
+  beaches: 2
+  nightlife: 2
+  wildlife: 2
+  wellness: 2
+nights: { min: 2, ideal: 4, max: 10 }
+months: [poor, poor, mixed, good, great, great, great, great, great, good, poor, poor]
+monthsNote: Surf season is April to September, with the biggest swells in July and August. Much of the village closes from November to February.
+highlights:
+  - name: Surf lessons & camps
+    summary: Lessons for all levels; week-long surf-and-yoga camps are popular with solo travellers.
+    interests: [surfing, wellness]
+    cost: [5000, 9000]
+    costNote: Around Rs 5,500 for a 75-minute lesson.
+  - name: Kumana National Park safari
+    summary: Quiet park with elephants, crocodiles and huge bird colonies (May to July).
+    interests: [wildlife, birdwatching]
+    cost: [18000, 35000]
+    costNote: About US$60 for a half-day jeep.
+  - name: Kudumbigala monastery
+    summary: Ancient hermitage among rock outcrops in the jungle, with a summit viewpoint.
+    interests: [temples-spirituality, history]
+solo:
+  social: 3
+  socialNotes: >-
+    Very sociable in season: surf camps, hostels and beach bars make it easy to
+    meet people, and many travellers stay for weeks.
+  safety:
+    - Watch your drink at parties and take care with your belongings in hostels.
+    - The main road through the village is busy with tuk tuks and buses at night.
+  tips:
+    - Book surf camps early for July and August.
+    - Pair it with the hills. Ella is about three hours away by car.
+stay:
+  budget: [2000, 5500]
+  mid: [8000, 18000]
+  comfort: [20000, 45000]
+gettingAround: >-
+  Walkable village. Tuk tuks carry boards to the points. Buses run via Pottuvil
+  and Monaragala; many travellers share a car to Ella.
+sources:
+  - https://www.hostelz.com/backpacker-budget/sri-lanka
+  - https://goasia.cc/en/sri-lanka/ella-to-arugam-bay
+lastChecked: "2026-10-28"

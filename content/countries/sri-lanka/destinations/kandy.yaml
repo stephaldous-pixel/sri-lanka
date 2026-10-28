@@ -1,0 +1,57 @@
+slug: kandy
+name: Kandy
+region: kandy
+coordinates: { lat: 7.2906, lng: 80.6337 }
+summary: The last royal capital, around a lake, home to the Temple of the Tooth, the most sacred site in Sri Lankan Buddhism.
+description: |
+  Kandy was the seat of Sri Lanka's last kings, and it's still the island's
+  cultural heart. The gold-roofed **Temple of the Sacred Tooth Relic** holds a
+  tooth said to be the Buddha's; time a visit for one of the daily *pujas*, when
+  drums sound and worshippers file past with lotus flowers.
+
+  Walk around the lake, explore the hilltop **Udawattakele** forest, and take a
+  tuk tuk out to the **Peradeniya Botanical Gardens**. In July or August, the
+  ten-night **Esala Perahera** fills the streets with dancers, drummers and fire.
+interests:
+  temples-spirituality: 3
+  history: 3
+  food: 2
+  scenery: 1
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Temple of the Tooth
+    summary: Visit during one of the three daily pujas for drumming and ritual.
+    interests: [temples-spirituality, history]
+    cost: [2000, 3000]
+    costNote: Rs 2,000–3,000 for foreigners. Cover shoulders and knees.
+  - name: Peradeniya Botanical Gardens
+    summary: Huge gardens with an orchid house, giant bamboo and a fig-tree avenue.
+    interests: [scenery]
+  - name: Esala Perahera
+    summary: Ten-night procession in July or August; book rooms months ahead.
+    interests: [temples-spirituality, history]
+  - name: Kandyan dance show
+    summary: Evening performance of drumming, dance and fire-walking.
+    interests: [history]
+solo:
+  social: 2
+  socialNotes: >-
+    Several hostels and a steady flow of travellers between the coast and the
+    hills. Walking tours and cooking classes are good for meeting people.
+  safety:
+    - Touts around the lake and temple offer "free" guiding that ends in a shop. Politely decline.
+    - The town centre is busy and polluted at rush hour; walk early or late.
+  tips:
+    - Colombo trains currently end at Peradeniya, 6km away. Finish by bus or tuk tuk.
+    - The train from Kandy to Ella isn't running all the way yet; go by road to Nanu Oya and take the train from there.
+stay:
+  budget: [3000, 6500]
+  mid: [9000, 20000]
+  comfort: [25000, 60000]
+gettingAround: >-
+  The old town is walkable. Tuk tuks and ride-hailing for hotels in the hills.
+  Buses to everywhere from the Goods Shed and clock tower stands.
+sources:
+  - https://www.dailyexcelsior.com/sri-lanka-resumes-train-service-on-colombo-kandy-line-after-10-months/
+  - https://srilankatravelandtourism.com/temple-of-the-sacred-tooth-relic/
+lastChecked: "2026-10-28"

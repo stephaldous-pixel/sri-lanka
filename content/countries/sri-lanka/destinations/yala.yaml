@@ -1,0 +1,57 @@
+slug: yala
+name: Yala & Tissamaharama
+region: south
+coordinates: { lat: 6.2833, lng: 81.2833 }
+summary: Leopard country. Sri Lanka's most famous safari park, based in the old royal town of Tissa.
+description: |
+  Yala National Park has one of the world's highest densities of **leopards**,
+  plus elephants, sloth bears, crocodiles and over 200 bird species. Most
+  safaris leave from **Tissamaharama** (Tissa), a laid-back town of ancient white
+  stupas and lakes.
+
+  Yala is busy, and the main Block 1 gate has long queues of jeeps at dawn. For a
+  calmer experience, pay a little more to enter a quieter block, or visit nearby
+  **Bundala** for wetland birds.
+interests:
+  wildlife: 3
+  birdwatching: 2
+  history: 1
+nights: { min: 1, ideal: 2, max: 3 }
+months: [good, great, great, great, good, good, good, mixed, poor, poor, mixed, good]
+monthsNote: >-
+  Best February to July. Part of the park usually closes for a few weeks around
+  September and October; check dates before planning.
+highlights:
+  - name: Yala jeep safari
+    summary: Half- or full-day safari looking for leopards and elephants.
+    interests: [wildlife]
+    cost: [12000, 25000]
+    costNote: Park fees around US$30–40 plus your share of the jeep.
+  - name: Bundala National Park
+    summary: Quiet wetland park, excellent for birders early in the morning.
+    interests: [birdwatching]
+  - name: Tissa Wewa at sunset
+    summary: Watch bats and egrets come in to roost over the ancient reservoir.
+    interests: [scenery, history]
+solo:
+  social: 2
+  socialNotes: >-
+    Guesthouses in Tissa are used to solo travellers and can put you in a shared
+    jeep, which is the easiest way to cut costs and meet people.
+  safety:
+    - Choose a driver who keeps a respectful distance from animals and doesn't race other jeeps.
+    - Elephants roam the roads around Tissa. Don't cycle or walk after dark.
+  tips:
+    - Ask for a shared jeep the evening before; morning safaris start around 5am.
+stay:
+  budget: [3000, 7000]
+  mid: [10000, 20000]
+  comfort: [40000, 100000]
+  note: Luxury tented camps on the park edge at the top end.
+gettingAround: >-
+  Buses from Matara and Tangalle. For Ella, change at Wellawaya. Safaris are
+  arranged by guesthouses.
+sources:
+  - https://www.seat61.com/SriLanka
+  - https://slvoyo.com/complete-guide-to-sri-lanka-entrance-fees-for-foreign-tourists-2026-updated-prices/
+lastChecked: "2026-10-28"

@@ -1,0 +1,52 @@
+slug: trincomalee
+name: Trincomalee, Uppuveli & Nilaveli
+region: east
+coordinates: { lat: 8.605, lng: 81.22 }
+summary: Calm summer beaches, the best coral on the island at Pigeon Island, and a clifftop Hindu temple.
+description: |
+  When the south-west is in monsoon, the east coast is at its best. North of the
+  historic port of **Trincomalee**, the long white beaches of **Uppuveli** and
+  **Nilaveli** have calm, clear water from April to September.
+
+  Take a boat to **Pigeon Island**, which has Sri Lanka's healthiest coral,
+  reef sharks and turtles for snorkellers. In town, walk through Fort Frederick
+  to **Koneswaram Temple**, perched on Swami Rock 120m above the sea.
+interests:
+  beaches: 3
+  diving-snorkelling: 3
+  temples-spirituality: 2
+  history: 2
+  wildlife: 1
+nights: { min: 2, ideal: 3, max: 5 }
+highlights:
+  - name: Pigeon Island snorkelling
+    summary: Boat trip to a marine national park with healthy coral and blacktip reef sharks.
+    interests: [diving-snorkelling, wildlife]
+  - name: Koneswaram Temple
+    summary: Important Hindu temple on a clifftop at the end of Fort Frederick.
+    interests: [temples-spirituality, history]
+  - name: Diving off Uppuveli
+    summary: Reefs and wrecks with dive schools running April to September.
+    interests: [diving-snorkelling]
+    cost: [28000, 33000]
+    costNote: About US$95 for two dives.
+solo:
+  social: 2
+  socialNotes: >-
+    A few hostels and beach restaurants in Uppuveli. Quieter and more
+    family-oriented than the south coast.
+  safety:
+    - Dress modestly away from the beach. This is a conservative, multi-faith region.
+    - Out of season (October to January) seas are rough and many places close.
+  tips:
+    - Stay in Uppuveli for the best mix of beach and restaurants.
+stay:
+  budget: [3500, 7000]
+  mid: [9000, 18000]
+  comfort: [25000, 55000]
+gettingAround: >-
+  Tuk tuks between Trinco town and the beaches. Buses to Anuradhapura, Habarana
+  and Batticaloa; an overnight train runs to Colombo.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

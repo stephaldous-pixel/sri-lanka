@@ -1,0 +1,48 @@
+slug: unawatuna
+name: Unawatuna
+region: south
+coordinates: { lat: 6.0098, lng: 80.2497 }
+summary: A sheltered, swimmable bay next to Galle, with snorkelling, diving and an easy-going backpacker scene.
+description: |
+  Unawatuna's curved bay is one of the calmest places to swim on the south coast,
+  just ten minutes from Galle Fort. It's a convenient base: snorkel the reef,
+  learn to dive at one of the many dive schools, or walk over the headland to
+  little **Jungle Beach**.
+
+  At sunset, climb up to the white **Japanese Peace Pagoda** on Rumassala hill.
+  Visitors can join the evening prayers.
+interests:
+  beaches: 3
+  diving-snorkelling: 2
+  nightlife: 2
+  wellness: 1
+nights: { min: 1, ideal: 2, max: 4 }
+highlights:
+  - name: Swim in the bay
+    summary: Sheltered water that's usually calm in season.
+    interests: [beaches]
+  - name: Learn to dive
+    summary: Discover-scuba and PADI courses on nearby reefs and wrecks.
+    interests: [diving-snorkelling]
+  - name: Jungle Beach & Peace Pagoda
+    summary: Walk over Rumassala headland to a small cove and a hilltop pagoda.
+    interests: [beaches, temples-spirituality, hiking]
+solo:
+  social: 3
+  socialNotes: >-
+    Plenty of hostels and beach bars, and close enough to Galle and the surf
+    towns to hop between them.
+  safety:
+    - Watch your drink in late-night bars.
+    - Don't walk the Jungle Beach path alone after dark.
+  tips:
+    - Base yourself here and visit Galle as a day or evening trip.
+stay:
+  budget: [2500, 6000]
+  mid: [8000, 18000]
+  comfort: [22000, 45000]
+gettingAround: >-
+  Buses and tuk tuks run along the coast road. Galle is 10–15 minutes away.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

@@ -1,0 +1,52 @@
+slug: haputale
+name: Haputale
+region: hill-country
+coordinates: { lat: 6.7656, lng: 80.9581 }
+summary: A ridge-top town with enormous views, sunrise at Lipton's Seat and quiet tea-estate walks.
+description: |
+  Haputale sits on a knife-edge ridge, with views south to the coast on clear
+  mornings. It's a quieter alternative to Ella: fewer cafés, more tea pickers
+  and buses than tourists.
+
+  Catch an early bus or tuk tuk to **Lipton's Seat**, where tea baron Thomas
+  Lipton surveyed his estates, then walk down through the **Dambatenne** tea
+  gardens. It's also a good base for **Horton Plains**.
+interests:
+  tea-and-plantations: 3
+  hiking: 3
+  scenery: 3
+  birdwatching: 1
+  off-the-beaten-path: 2
+nights: { min: 1, ideal: 2, max: 3 }
+highlights:
+  - name: Lipton's Seat at sunrise
+    summary: Panoramic viewpoint above a sea of tea, best before the mist rises.
+    interests: [scenery, tea-and-plantations]
+  - name: Dambatenne tea factory
+    summary: Historic factory founded by Lipton, with tours of the process.
+    interests: [tea-and-plantations, history]
+  - name: Pekoe Trail sections
+    summary: Walk waymarked stages of the long-distance tea trail between villages.
+    interests: [hiking]
+solo:
+  social: 1
+  socialNotes: >-
+    Quiet, with few travellers. Good for a peaceful stop, less so for meeting
+    people.
+  safety:
+    - Roads are narrow and winding. Take care walking along them.
+    - Mist can roll in fast on hikes; carry a layer and a downloaded map.
+  tips:
+    - Nights are cool; bring a warm layer.
+    - Few restaurants. Guesthouse home-cooked dinners are often the best option.
+stay:
+  budget: [3000, 6000]
+  mid: [8000, 16000]
+  comfort: [25000, 60000]
+  note: Includes historic tea-planter bungalows at the top end.
+gettingAround: >-
+  On the Hill Country railway (running Nanu Oya–Badulla). Buses to Ella,
+  Bandarawela and Wellawaya.
+sources:
+  - https://byc.lk/colombo-kandy-ella-train-status-2026
+lastChecked: "2026-10-28"

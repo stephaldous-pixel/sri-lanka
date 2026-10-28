@@ -1,0 +1,54 @@
+slug: sri-pada
+name: Sri Pada (Adam's Peak)
+region: hill-country
+coordinates: { lat: 6.833, lng: 80.5 }
+summary: An overnight pilgrimage climb of 5,500 steps to a sacred summit for sunrise.
+description: |
+  Sri Pada is sacred to Buddhists, Hindus, Muslims and Christians alike: each
+  faith links the "footprint" at the top to a different figure. In pilgrimage
+  season, people of every age climb through the night from **Dalhousie
+  (Nallathanniya)**, past tea stalls and shrines, to watch the sunrise and the
+  mountain's triangular shadow fall across the clouds.
+
+  It's a tough 2½–4 hour climb up steep steps, and an unforgettable shared
+  experience. Most people sleep a few hours, start around 2am and are back for a
+  late breakfast.
+interests:
+  hiking: 3
+  temples-spirituality: 3
+  scenery: 3
+  off-the-beaten-path: 1
+nights: { min: 1, ideal: 1, max: 2 }
+months: [great, great, great, great, good, poor, poor, poor, poor, poor, poor, good]
+monthsNote: >-
+  Pilgrimage season runs from the December full moon to the May full moon. In
+  the off-season the path is unlit, stalls are closed and weather is poor.
+highlights:
+  - name: Night climb to the summit
+    summary: Climb from Dalhousie in the dark to reach the top for sunrise.
+    interests: [hiking, temples-spirituality]
+  - name: Shadow of the peak
+    summary: At dawn the mountain casts a perfect triangle of shadow across the hills.
+    interests: [scenery]
+solo:
+  social: 2
+  socialNotes: >-
+    You're never alone on the path in season. Pilgrims and travellers climb
+    together, and guesthouses group up climbers.
+  safety:
+    - Avoid climbing in the off-season or in heavy rain. Steps are slippery and unlit.
+    - Weekends and full moon (poya) nights are extremely crowded.
+    - It's cold at the top before dawn; bring layers and a head torch.
+  tips:
+    - Climb on a weekday to avoid queues near the summit.
+    - Your legs will ache for days. Plan an easy day afterwards.
+stay:
+  budget: [3500, 7000]
+  mid: [8000, 16000]
+  comfort: [20000, 40000]
+gettingAround: >-
+  Buses run to Dalhousie from Hatton, the nearest railway town (Hatton is on
+  the Kandy–Nanu Oya section, which is still closed).
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

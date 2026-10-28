@@ -1,0 +1,54 @@
+slug: hikkaduwa
+name: Hikkaduwa
+region: west-coast
+coordinates: { lat: 6.1395, lng: 80.1063 }
+summary: Sri Lanka's original surf town. Beach breaks, turtles in the shallows, wreck dives and lively nights.
+description: |
+  Hikkaduwa put Sri Lanka on the surfing map in the 1970s. The scene has since
+  spread along the south coast, but it remains an easy, fun base. Beginners learn
+  on the sandy breaks around **Narigama**, **sea turtles** graze in the shallow
+  reef close to shore, and divers head out to century-old **shipwrecks**.
+
+  It has some of the island's biggest beach parties. Just north, the tsunami
+  memorial and museum at **Peraliya** is a moving reminder of 2004.
+interests:
+  surfing: 2
+  diving-snorkelling: 3
+  beaches: 2
+  nightlife: 3
+  wildlife: 1
+nights: { min: 1, ideal: 2, max: 4 }
+highlights:
+  - name: Surf lessons at Narigama
+    summary: Gentle beach breaks with plenty of schools and board rental.
+    interests: [surfing]
+  - name: Snorkel with turtles
+    summary: Green turtles feed on the reef just off the beach.
+    interests: [diving-snorkelling, wildlife]
+  - name: Wreck diving
+    summary: Dive the 19th-century Earl of Shaftesbury and other wrecks (November to April).
+    interests: [diving-snorkelling]
+  - name: Tsunami memorial, Peraliya
+    summary: Community-run museum and memorial to the 2004 tsunami.
+    interests: [history]
+solo:
+  social: 3
+  socialNotes: >-
+    Hostels, surf schools and beach bars make it very easy to meet people,
+    especially at weekends.
+  safety:
+    - Keep an eye on your drink at beach parties; spiking has been reported in south-coast party towns.
+    - The coast road is busy and fast. Take care walking along it at night.
+  tips:
+    - The quieter southern end of the beach has more space.
+    - Touching or feeding the turtles is harmful. Watch from a distance.
+stay:
+  budget: [2500, 6000]
+  mid: [9000, 18000]
+  comfort: [22000, 45000]
+gettingAround: >-
+  On the coastal bus and train route; Galle is 30 minutes away. Scooter rental
+  is common if you have a licence.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

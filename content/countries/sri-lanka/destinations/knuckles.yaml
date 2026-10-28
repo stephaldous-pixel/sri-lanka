@@ -1,0 +1,48 @@
+slug: knuckles
+name: Knuckles Range
+region: kandy
+coordinates: { lat: 7.45, lng: 80.79 }
+summary: Wild, misty mountains near Kandy for proper guided treks, remote villages and huge views.
+description: |
+  The Knuckles mountains, named for peaks that look like a clenched fist, are a
+  UNESCO-protected wilderness of cloud forest, grassland and terraced paddy. Trails
+  lead through villages such as **Meemure**, past waterfalls and up to ridges
+  with some of the most spectacular views in the country.
+
+  Hiking here is only allowed with a registered guide, which keeps it quiet and
+  makes it feel like a real adventure.
+interests:
+  hiking: 3
+  scenery: 3
+  off-the-beaten-path: 3
+  birdwatching: 1
+nights: { min: 1, ideal: 2, max: 3 }
+months: [great, great, great, good, mixed, mixed, mixed, good, good, mixed, poor, mixed]
+monthsNote: Best January to April and August to September. Some areas were closed after the 2025 cyclone; check with local guides.
+highlights:
+  - name: Guided day trek
+    summary: Ridge walks with views over cloud forest and valleys.
+    interests: [hiking, scenery]
+  - name: Village homestay in Meemure
+    summary: Stay in a remote village reached by a winding mountain road.
+    interests: [off-the-beaten-path]
+solo:
+  social: 2
+  socialNotes: >-
+    Guided group treks are the norm, so solo travellers can join others easily.
+  safety:
+    - A registered guide is required. Don't hike alone.
+    - Leeches are common and trails get slippery after rain. Bring leech socks.
+  tips:
+    - Bring snacks and water; there are no facilities on the trails.
+    - Arrange treks through Kandy guesthouses or local trekking outfits.
+stay:
+  budget: [3500, 7000]
+  mid: [9000, 18000]
+  comfort: [20000, 40000]
+gettingAround: >-
+  Infrequent buses from Kandy and Matale. Most trekkers arrange transport with
+  their guide.
+sources:
+  - https://www.ttgmedia.com/travel-industry-news/cyclone-ditwah-sri-lanka-stands-ready-welcome-agents-clients-wake-deadly-storm
+lastChecked: "2026-10-28"

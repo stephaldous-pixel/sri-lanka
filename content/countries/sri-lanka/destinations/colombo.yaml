@@ -1,0 +1,59 @@
+slug: colombo
+name: Colombo
+region: colombo
+coordinates: { lat: 6.9271, lng: 79.8612 }
+summary: A hot, busy capital with brilliant street food, galleries, markets and a seafront at sunset.
+description: |
+  Plenty of travellers rush through Colombo, but a day or two here is a great
+  introduction to modern Sri Lanka. **Pettah's** bazaars are a sensory overload
+  of spices, fabric and handcarts, while **Galle Face Green** fills with families,
+  kite-flyers and snack stalls as the sun goes down.
+
+  The leafier southern districts (Kollupitiya and Cinnamon Gardens) hold cafés,
+  boutiques and the work of architect **Geoffrey Bawa**, including his former
+  home, Number 11. Colombo is also the best place to try lamprais, a Dutch Burgher
+  speciality of rice and curry baked in a banana leaf.
+interests:
+  food: 3
+  architecture-design: 3
+  history: 2
+  nightlife: 2
+  temples-spirituality: 1
+nights: { min: 0, ideal: 1, max: 3 }
+highlights:
+  - name: Pettah markets
+    summary: Wander the crowded lanes of the old trading district, each street specialising in one thing.
+    interests: [food, off-the-beaten-path]
+  - name: Galle Face Green at sunset
+    summary: Seafront promenade with street-food carts, kites and locals out for the evening breeze.
+    interests: [food]
+  - name: Number 11 & Bawa's Colombo
+    summary: Tour Geoffrey Bawa's townhouse and see the Seema Malaka meditation hall on Beira Lake.
+    interests: [architecture-design, temples-spirituality]
+  - name: Gangaramaya Temple
+    summary: Eclectic, much-loved Buddhist temple packed with gifts from devotees.
+    interests: [temples-spirituality]
+solo:
+  social: 2
+  socialNotes: >-
+    A handful of hostels and plenty of bars and cafés, but most travellers pass
+    through quickly. Food tours and walking tours are an easy way to meet people.
+  safety:
+    - Ignore friendly strangers near Galle Face and Fort offering tuk tuk trips to a "special festival". It ends in a gem shop or an inflated fare.
+    - Use PickMe or Uber, or metered tuk tuks; Colombo is the only city where meters are normal.
+    - Pettah is very crowded; keep valuables zipped away.
+  tips:
+    - Do sightseeing early or late. Midday heat is intense.
+    - The free Beira Lake and Galle Face areas are lovely after dark and busy with families.
+stay:
+  budget: [3000, 7000]
+  mid: [12000, 25000]
+  comfort: [35000, 80000]
+  note: Pricier than the rest of the country.
+gettingAround: >-
+  Walkable in parts, but ride-hailing tuk tuks are cheap and easy. Trains and
+  long-distance buses leave from Colombo Fort.
+sources:
+  - https://www.seat61.com/SriLanka
+  - https://www.gov.uk/foreign-travel-advice/sri-lanka
+lastChecked: "2026-10-28"

@@ -1,0 +1,58 @@
+slug: kalpitiya
+name: Kalpitiya
+region: west-coast
+coordinates: { lat: 8.2297, lng: 79.7581 }
+summary: Remote peninsula with world-class kitesurfing, dolphin superpods and empty sand.
+description: |
+  At the end of a long, sandy peninsula north of Negombo, Kalpitiya has steady
+  wind for about eight months a year and shallow, flat lagoons. That makes it
+  one of the best places in Asia to **learn to kitesurf**. Kite camps line the
+  lagoon, and most beginners take a three-day course.
+
+  Outside kite season the draw is the ocean: between November and April, boats
+  head out to find **pods of hundreds of spinner dolphins**, and sometimes
+  whales. Bar Reef, Sri Lanka's largest reef, lies offshore.
+interests:
+  adventure-sports: 3
+  wildlife: 2
+  beaches: 2
+  diving-snorkelling: 1
+  off-the-beaten-path: 3
+nights: { min: 2, ideal: 3, max: 7 }
+months: [great, great, good, mixed, good, great, great, great, great, good, poor, good]
+monthsNote: >-
+  Kite seasons are May to October (strongest wind) and mid-December to March.
+  Dolphin trips run November to April.
+highlights:
+  - name: Learn to kitesurf
+    summary: Beginner courses on the flat Kalpitiya lagoon, usually about eight hours over three days.
+    interests: [adventure-sports]
+    cost: [140000, 170000]
+    costNote: Roughly US$420–520 for a beginner course with a private instructor.
+  - name: Dolphin-watching
+    summary: Early boat trips to find superpods of spinner dolphins (November to April).
+    interests: [wildlife]
+  - name: Bar Reef
+    summary: Sri Lanka's largest reef. The coral has suffered, but the fish life is good in calm months.
+    interests: [diving-snorkelling]
+solo:
+  social: 2
+  socialNotes: >-
+    Kite camps are sociable, with shared meals and lessons, and many people come
+    alone. Outside the camps it's very quiet.
+  safety:
+    - Remote, with few ATMs. Bring enough cash (most kite resorts take cards).
+    - Shops in town close on Friday afternoons and Sundays.
+  tips:
+    - Book a package with lessons, room and meals; it's simpler and good value.
+    - Avoid the very start and end of each kite season, when the wind is less reliable.
+stay:
+  budget: [4000, 8000]
+  mid: [12000, 25000]
+  comfort: [30000, 60000]
+gettingAround: >-
+  Buses run from Negombo and Colombo (often changing at Palavi or Puttalam).
+  Kite camps arrange airport transfers. Locally, tuk tuks and camp shuttles.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

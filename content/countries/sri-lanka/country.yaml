@@ -1,0 +1,211 @@
+# Sri Lanka: country-wide facts and practical guide.
+# All text is original. Facts were checked against the sources listed in each
+# section; re-check anything marked as changing (transport, fees, visas) before launch.
+slug: sri-lanka
+name: Sri Lanka
+tagline: Beaches, tea hills, ancient cities and wildlife on one compact island.
+currency:
+  code: LKR
+  symbol: Rs
+timezone: Asia/Colombo
+accent:
+  light: "#b8561b"
+  dark: "#f2a268"
+gateways:
+  - destination: negombo
+    name: Bandaranaike International Airport
+    code: CMB
+    note: >-
+      The main international airport, 10km from Negombo and about an hour from
+      central Colombo. Most routes start and end here.
+  - destination: jaffna
+    name: Jaffna International Airport
+    code: JAF
+    note: >-
+      Small airport with a few flights from South India. Handy if combining Sri
+      Lanka with India, but not a typical arrival point.
+lastChecked: "2026-10-28"
+guide:
+  - id: arriving
+    title: Arriving
+    summary: Most travellers land at Bandaranaike airport, a short ride from Negombo.
+    body: |
+      Bandaranaike International Airport (CMB) is the main way in. It's closer to
+      **Negombo** (about 20 minutes) than to Colombo (40–60 minutes on the
+      expressway), which is why many solo travellers spend their first and last
+      night in Negombo.
+
+      - **SIM cards** are sold in the arrivals hall; Dialog and Mobitel have the
+        widest coverage. An eSIM bought before you fly lets you book a ride the
+        moment you land.
+      - **Getting to Colombo:** ride-hailing apps (PickMe, Uber) are usually the
+        cheapest door-to-door option; the 24-hour air-con bus 187 runs to Colombo
+        Fort for a fraction of the price. Prepaid airport taxis cost more.
+      - **Cash:** ATMs and 24-hour exchange counters are in arrivals, but city
+        banks give better rates.
+    sources:
+      - https://www.gov.uk/foreign-travel-advice/sri-lanka
+      - https://www.seat61.com/SriLanka
+
+  - id: visas
+    title: Visas & ETA
+    summary: Apply for an Electronic Travel Authorisation online before you fly.
+    body: |
+      Almost every visitor needs an **Electronic Travel Authorisation (ETA)**,
+      applied for at the official site, **eta.gov.lk**. Avoid look-alike agency
+      sites that charge extra.
+
+      In 2026 the tourist ETA was made free for nationals of around 40 countries,
+      including the UK, US, Australia and India, for stays of up to 30 days. That
+      waiver has been extended before and its end date has changed, so **check the
+      current fee on eta.gov.lk** when you apply. Your passport should be valid for
+      at least six months from arrival.
+    sources:
+      - https://www.eta.gov.lk/
+      - https://dmcquote.com/destinations/srilanka/visa-requirements
+      - https://tripprof.com/en/blog/sri-lanka-free-tourist-eta-2026/
+
+  - id: getting-around
+    title: Getting around
+    summary: Buses go almost everywhere, trains are scenic, and tuk tuks fill the gaps.
+    body: |
+      - **Buses** link nearly every town, run often and cost very little. Long-haul
+        air-con coaches run from Colombo to Kandy, Jaffna and along the Southern
+        Expressway to Galle and Matara.
+      - **Trains** are slow but beautiful. Reserve seats (up to 30 days ahead at
+        seatreservation.railway.gov.lk) rather than squeezing into unreserved
+        carriages.
+      - **Tuk tuks** are everywhere. Use PickMe or Uber where they work; otherwise
+        agree the fare before you get in. They're only metered in Colombo.
+      - **Car and driver** is popular for covering more ground, and many solo
+        travellers share one with people they meet along the way.
+      - **Self-driving** is only for very confident drivers: roads are chaotic and
+        you need a temporary Sri Lankan permit from the airport.
+
+      **Rail disruption (as of October 2026).** Cyclone Ditwah in November 2025
+      badly damaged the railways. The famous Hill Country line has reopened
+      between **Nanu Oya and Badulla** (through Ella), but **not yet between Kandy
+      and Nanu Oya**. Colombo trains currently stop at **Peradeniya**, just outside
+      Kandy, while a bridge is rebuilt. Coastal and northern services have had
+      partial closures too. Always check the latest status before relying on a train.
+    sources:
+      - https://www.seat61.com/SriLanka
+      - https://www.dailyexcelsior.com/sri-lanka-resumes-train-service-on-colombo-kandy-line-after-10-months/
+      - https://byc.lk/colombo-kandy-ella-train-status-2026
+      - https://www.newswire.lk/2026/04/27/trains-to-kandy-deputy-minister-provides-expected-timeline/
+      - https://newsfirst.lk/2026/04/24/special-bus-services-deployed-as-coastal-train-services-remain-disrupted
+
+  - id: solo-safety
+    title: Staying safe on your own
+    summary: Generally safe and welcoming, with a few well-known scams and risks.
+    body: |
+      Sri Lanka is a friendly, generally safe country to travel alone, and solo
+      travellers are a common sight on the main routes. The usual precautions
+      apply, plus a few local ones:
+
+      - **Tuk tuk touts** in Colombo offer rides to a "special festival", spa or gem
+        shop. It ends in an inflated fare or a hard sell. Book rides through an app
+        or your accommodation instead.
+      - **App drivers vs ranks:** in some tourist towns, rank drivers push back
+        against PickMe and Uber. Walk a short distance away, or book to a café or
+        hotel.
+      - **Drink spiking** has been reported in south-coast party towns. Keep your
+        drink with you.
+      - **The sea:** many beaches have strong rips and shore breaks for part of the
+        year. Swim where locals do and ask before going in.
+      - **Monsoon landslides and floods** affect the hills. Follow local news
+        (Newswire publishes Disaster Management Centre alerts in English).
+      - **Landmines** still remain in a few remote parts of the north and east. Stay
+        on roads and well-used paths.
+
+      **Emergency numbers:** police **119**, free ambulance **1990**, tourist police
+      **1912**.
+    sources:
+      - https://www.gov.uk/foreign-travel-advice/sri-lanka
+      - https://blog.wego.com/is-sri-lanka-safe-to-travel/
+      - https://www.gov.uk/foreign-travel-advice/sri-lanka/natural-disasters
+
+  - id: women-travelling-solo
+    title: Women travelling solo
+    summary: Very doable, but street harassment happens, so plan your evenings.
+    body: |
+      Plenty of women travel Sri Lanka alone and love it. Harassment, from stares
+      and comments to groping on crowded transport, does happen, especially after
+      dark.
+
+      - Sit next to other women or families on buses and trains.
+      - Use app-booked rides or drivers your guesthouse recommends rather than
+        flagging tuk tuks in the street, particularly at night.
+      - Family-run homestays are a great choice: you're looked after, and hosts
+        are a good source of trusted drivers and guides.
+      - Dressing modestly away from the beach (shoulders and knees covered) means
+        less attention, and is required at temples anyway.
+      - Change tuk tuk if you feel uneasy about a driver. You don't owe anyone a
+        reason.
+    sources:
+      - https://www.gov.uk/foreign-travel-advice/sri-lanka
+      - https://www.reddottours.com/blog/is-sri-lanka-safe-for-women-travelling-alone
+
+  - id: money
+    title: Money & costs
+    summary: Carry cash. Budget solo travel is very affordable.
+    body: |
+      The currency is the **Sri Lankan rupee (Rs / LKR)**. Cards work in hotels,
+      mid-range restaurants and shops in tourist towns, but you'll need **cash** for
+      buses, tuk tuks, street food, temple fees and small guesthouses. ATMs are
+      common in towns but scarce in rural areas, so top up before heading
+      somewhere remote.
+
+      Rough daily budgets for one person (2026):
+
+      | Style | Per day |
+      |---|---|
+      | Budget (dorms, buses, local food) | Rs 8,000–12,000 |
+      | Mid-range (private rooms, some drivers and tours) | Rs 18,000–35,000 |
+      | Comfort (boutique hotels, private car) | Rs 50,000+ |
+
+      Big extras to plan for: **Sigiriya** (about US$35), the **Anuradhapura** and
+      **Polonnaruwa** tickets (about US$25–30 each), and **safaris** (US$40–100+
+      depending on the park and whether you share a jeep). Tipping around 10% is
+      appreciated if there's no service charge.
+    sources:
+      - https://www.hostelz.com/backpacker-budget/sri-lanka
+      - https://slvoyo.com/complete-guide-to-sri-lanka-entrance-fees-for-foreign-tourists-2026-updated-prices/
+      - https://induwara.lk/tools/sri-lanka-cultural-triangle-entry-fee-calculator
+
+  - id: weather
+    title: When to go
+    summary: Two monsoons mean somewhere is always in season.
+    body: |
+      Sri Lanka has two monsoons that hit opposite sides of the island:
+
+      - **December–April:** best for the **west and south coasts**, the **Hill
+        Country** and the **Ancient Cities**. This is peak season, so book ahead
+        around Christmas and New Year.
+      - **May–September:** best for the **east coast** (Trincomalee, Arugam Bay)
+        and the **north**, while the south-west gets rain and rough seas.
+      - **October–November:** the wettest, quietest time across much of the island,
+        with good prices and few crowds.
+
+      The route generator uses month-by-month ratings for every region and
+      destination, and warns you when part of a route is out of season.
+    sources:
+      - https://www.seat61.com/SriLanka
+
+  - id: responsible-travel
+    title: Respect & responsible travel
+    summary: Temple etiquette, wildlife ethics and travelling lightly.
+    body: |
+      - **Temples:** cover shoulders and knees, and remove shoes and hats. Never
+        pose with your back to a Buddha statue. Cover up any Buddha tattoos.
+        Visitors have been refused entry or deported over them.
+      - **Poya days:** every full moon is a public holiday. Alcohol isn't sold.
+      - **Wildlife:** skip elephant rides and research "orphanages" and turtle
+        hatcheries carefully. Choose safari drivers who don't crowd animals.
+      - **Tea estates:** they were built on the labour of the Malaiyaha Tamil
+        community, who still face hardship. Ask before photographing pickers, and
+        avoid staged "plucking" photo ops.
+      - **Trains:** don't hang out of carriage doors for photos. It's dangerous and
+        has caused deaths.
+    sources:
+      - https://www.gov.uk/foreign-travel-advice/sri-lanka

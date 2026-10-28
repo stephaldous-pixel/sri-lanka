@@ -1,0 +1,52 @@
+slug: kitulgala
+name: Kitulgala
+region: hill-country
+coordinates: { lat: 6.989, lng: 80.418 }
+summary: Sri Lanka's adventure hub. White-water rafting, waterfall abseiling and jungle walks by the river.
+description: |
+  Kitulgala sits in steep, forested hills along the **Kelani River**, and it's the
+  place for an adrenaline fix. Raft the river's rapids, abseil down waterfalls,
+  go canyoning or explore caves, then cool off in natural pools.
+
+  Quieter days are spent on birding walks in the lowland rainforest, which is
+  home to many of Sri Lanka's endemic species. *The Bridge on the River Kwai* was
+  filmed here.
+interests:
+  adventure-sports: 3
+  birdwatching: 2
+  hiking: 2
+  off-the-beaten-path: 2
+nights: { min: 1, ideal: 1, max: 2 }
+months: [good, good, good, mixed, mixed, good, good, good, good, good, good, good]
+monthsNote: Rafting is best in the wetter months (June to December). Birding is best January to March.
+highlights:
+  - name: White-water rafting
+    summary: Half-day trip through grade 2–3 rapids on the Kelani River.
+    interests: [adventure-sports]
+    cost: [15000, 20000]
+    costNote: About US$50–60 per person.
+  - name: Waterfall abseiling & canyoning
+    summary: Rope down waterfalls and slide through natural rock chutes.
+    interests: [adventure-sports]
+  - name: Rainforest birding walk
+    summary: Guided walk looking for endemic birds and butterflies.
+    interests: [birdwatching, hiking]
+solo:
+  social: 2
+  socialNotes: >-
+    Rafting is done in groups, so it's easy to join others. Evenings are quiet.
+  safety:
+    - Use operators with proper safety kit and qualified guides.
+    - The river level changes fast after heavy rain; trips may be cancelled.
+  tips:
+    - A good stop between Colombo and the hills, or Colombo and Adam's Peak.
+    - Leeches are common in the forest. Leech socks help.
+stay:
+  budget: [3500, 7000]
+  mid: [9000, 18000]
+  comfort: [25000, 45000]
+gettingAround: >-
+  On the Colombo–Hatton bus route. Operators collect you from your guesthouse.
+sources:
+  - https://www.seat61.com/SriLanka
+lastChecked: "2026-10-28"

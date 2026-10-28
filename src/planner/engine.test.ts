@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
-import { ARRIVAL, bestPositionFor, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
+import { ARRIVAL, bestPositionFor, firstNightOptions, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
 import type { PlannerInput } from "./types";
 
 const data = toPlannerData(loadCountry("sri-lanka"), loadInterests());
@@ -232,6 +232,33 @@ describe("keeping the trip length fixed while editing", () => {
     const tight = { arrivalNights: 1, stops: [{ slug: "galle", nights: 1 }, { slug: "unawatuna", nights: 1 }] };
     const short = { ...base, days: 4 };
     expect(fitToDays(data, short, { ...tight, stops: [{ slug: "galle", nights: 2 }, { slug: "unawatuna", nights: 1 }] }, "galle")).toBeNull();
+  });
+});
+
+describe("choosing where to spend the first night", () => {
+  const plan = generatePlan(data, base);
+  const edits = toEditedRoute(plan);
+
+  it("lists places nearest the airport first, starting with the airport town", () => {
+    const options = firstNightOptions(data, base);
+    expect(options[0].slug).toBe("negombo");
+    expect(options.findIndex((o) => o.slug === "colombo")).toBeLessThan(options.findIndex((o) => o.slug === "jaffna"));
+  });
+
+  it("starts the trip in the chosen town and keeps the dates", () => {
+    const fitted = fitToDays(data, base, { ...edits, arrivalSlug: "colombo" })!;
+    const rebuilt = planFromStops(data, base, fitted);
+    expect(rebuilt.stops[0]).toMatchObject({ role: "arrival" });
+    expect(rebuilt.stops[0].destination.slug).toBe("colombo");
+    expect(rebuilt.stops[0].reasons[0]).toMatch(/Your choice/);
+    expect(rebuilt.days[0].detail).toMatch(/Colombo/);
+    expect(rebuilt.days).toHaveLength(14);
+  });
+
+  it("doesn't visit the first-night town twice", () => {
+    const withGalle = fitToDays(data, base, { ...edits, arrivalSlug: "galle" })!;
+    const rebuilt = planFromStops(data, base, withGalle);
+    expect(rebuilt.stops.filter((s) => s.destination.slug === "galle")).toHaveLength(1);
   });
 });
 

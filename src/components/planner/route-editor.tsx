@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Grip, NightsStepper } from "./controls";
+import { FirstNightPicker, Grip, NightsStepper } from "./controls";
 import { SortableList } from "./sortable-list";
 import { Photo } from "@/components/photo";
 import { button, card } from "@/lib/ui";
-import { ARRIVAL, bestPositionFor, suggestedNights, type EditedRoute } from "@/planner/engine";
+import { ARRIVAL, bestPositionFor, firstNightOptions, suggestedNights, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerDestination, PlannerInput } from "@/planner/types";
 
 /** Drag to reorder, change nights, remove and add places. Changes apply straight away. */
@@ -34,13 +34,14 @@ export function RouteEditor({
 }) {
   const bySlug = useMemo(() => new Map(data.destinations.map((d) => [d.slug, d])), [data]);
   const gateway = bySlug.get(data.country.gateways[0].destination)!;
+  const firstNight = bySlug.get(edits.arrivalSlug ?? gateway.slug) ?? gateway;
   const [message, setMessage] = useState<string | null>(null);
   const name = (slug: string | number) => bySlug.get(String(slug))?.name ?? String(slug);
 
   const tooFew = "Every other stop is already down to 1 night. Remove a stop to make room, or change your dates.";
 
   function update(stops: EditedRoute["stops"], protect?: string, arrivalNights = edits.arrivalNights): boolean {
-    const ok = onChange({ arrivalNights, stops }, protect);
+    const ok = onChange({ ...edits, arrivalNights, stops }, protect);
     if (!ok) setMessage(tooFew);
     return ok;
   }
@@ -68,7 +69,7 @@ export function RouteEditor({
     const suggested = suggestedNights(data, input, slug);
     const added = onChange({ ...edits, stops: withNights(suggested) }, slug) || (suggested > 1 && onChange({ ...edits, stops: withNights(1) }, slug));
     if (!added) return setMessage(`No room for ${name(slug)}. ${tooFew}`);
-    const after = index === 0 ? gateway.name : name(edits.stops[index - 1].slug);
+    const after = index === 0 ? firstNight.name : name(edits.stops[index - 1].slug);
     setMessage(`Added ${name(slug)} after ${after}, where it adds the least travel. Nights taken from other stops to keep your ${days} days.`);
   }
 
@@ -93,13 +94,23 @@ export function RouteEditor({
       </p>
 
       <ol className="space-y-2">
-        <li className={`${card} flex items-center gap-3 p-3`}>
+        <li className={`${card} flex flex-wrap items-center gap-3 p-3`}>
           <span className="w-8 shrink-0 text-center text-xs text-muted" aria-hidden="true">
             ✈
           </span>
-          <StopLabel destination={gateway} note="Arrival" />
-          <NightsStepper nights={edits.arrivalNights} name={gateway.name} onChange={(n) => update(edits.stops, ARRIVAL, n) && setMessage(`${gateway.name}: ${n} night${n === 1 ? "" : "s"}. Other stops adjusted to keep your ${days} days.`)} />
+          <StopLabel destination={firstNight} note="Arrival" />
+          <NightsStepper nights={edits.arrivalNights} name={firstNight.name} onChange={(n) => update(edits.stops, ARRIVAL, n) && setMessage(`${firstNight.name}: ${n} night${n === 1 ? "" : "s"}. Other stops adjusted to keep your ${days} days.`)} />
           <span className="w-9 shrink-0" />
+          <div className="w-full pl-11">
+            <FirstNightPicker
+              options={firstNightOptions(data, input)}
+              value={firstNight.slug}
+              onChange={(slug) => {
+                const ok = onChange({ ...edits, arrivalSlug: slug, stops: edits.stops.filter((s) => s.slug !== slug) }, ARRIVAL);
+                setMessage(ok ? `First night now in ${name(slug)}. Other stops adjusted to keep your ${days} days.` : tooFew);
+              }}
+            />
+          </div>
         </li>
       </ol>
 
@@ -141,7 +152,7 @@ export function RouteEditor({
         {message}
       </p>
 
-      <AddPlace data={data} exclude={new Set([gateway.slug, ...edits.stops.map((s) => s.slug)])} onAdd={add} />
+      <AddPlace data={data} exclude={new Set([gateway.slug, firstNight.slug, ...edits.stops.map((s) => s.slug)])} onAdd={add} />
     </div>
   );
 }

@@ -311,6 +311,42 @@ describe("starting at the airport", () => {
   });
 });
 
+describe("preferring trains", () => {
+  const trains = { ...base, preferTrains: true };
+  const galleFirst = { arrivalSlug: "galle", arrivalNights: 3, stops: [{ slug: "mirissa", nights: 3 }, { slug: "ella", nights: 3 }] };
+
+  it("takes the train where it runs, even if a bus is quicker", () => {
+    const usual = planFromStops(data, base, galleFirst);
+    const scenic = planFromStops(data, trains, galleFirst);
+    expect(usual.startHop.modes).not.toContain("train");
+    expect(scenic.startHop.modes).toContain("train");
+  });
+
+  it("gets from the airport to the station by taxi", () => {
+    const scenic = planFromStops(data, trains, galleFirst);
+    expect(scenic.startHop.modes[0]).toBe("taxi");
+    expect(scenic.startHop.path).toContain("colombo");
+  });
+
+  it("reports real journey times, not the preference weighting", () => {
+    const scenic = planFromStops(data, trains, galleFirst);
+    // Taxi to Colombo (0.75) + train to Galle (3).
+    expect(scenic.startHop.hours).toBeCloseTo(3.75, 1);
+  });
+
+  it("still never uses a suspended train", () => {
+    const plan = planFromStops(data, trains, { arrivalSlug: "kandy", arrivalNights: 2, stops: [{ slug: "ella", nights: 3 }] });
+    for (const hop of [plan.startHop, ...plan.hops]) {
+      hop.modes.forEach((mode, i) => {
+        if (mode !== "train") return;
+        const [a, b] = [hop.path[i], hop.path[i + 1]];
+        const leg = data.legs.find((l) => (l.from === a && l.to === b) || (l.from === b && l.to === a));
+        expect(leg?.options.find((o) => o.mode === "train")?.status, `${a} → ${b}`).not.toBe("suspended");
+      });
+    }
+  });
+});
+
 function modeKey(name: string) {
   return name === "tuk tuk" ? "tuk-tuk" : name;
 }

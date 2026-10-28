@@ -217,6 +217,7 @@ export function PlannerForm({
                   <span className="text-muted">
                     {label(PACES, input.pace)} · {label(BUDGETS, input.budget)} · {label(TRANSPORT, input.transport)}
                     {input.meetPeople ? " · Meet people" : ""}
+                    {input.preferTrains ? " · Trains" : ""}
                   </span>
                 </span>
                 <span className="flex items-center gap-1 text-sm font-medium">
@@ -230,6 +231,10 @@ export function PlannerForm({
                 <label className="flex items-center gap-3 text-sm">
                   <input type="checkbox" checked={input.meetPeople} onChange={(e) => set("meetPeople", e.target.checked)} className="size-4 accent-[var(--accent)]" />
                   Prefer sociable places where it&apos;s easy to meet other travellers
+                </label>
+                <label className="flex items-center gap-3 text-sm">
+                  <input type="checkbox" checked={!!input.preferTrains} onChange={(e) => set("preferTrains", e.target.checked)} className="size-4 accent-[var(--accent)]" />
+                  Prefer trains where they run: slower, but scenic
                 </label>
               </div>
             </details>

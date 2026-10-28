@@ -21,6 +21,7 @@ export function PlanResultView({
   onEdit,
   onNights,
   notice,
+  onPreferTrains,
   edited = false,
 }: {
   data: PlannerData;
@@ -33,6 +34,8 @@ export function PlanResultView({
   onNights?: (index: number, nights: number) => void;
   /** Feedback after a quick change, announced to screen readers. */
   notice?: string | null;
+  /** Switch between fastest options and trains where they run. */
+  onPreferTrains?: (prefer: boolean) => void;
   edited?: boolean;
 }) {
   const { symbol, code } = data.country.currency;
@@ -150,6 +153,25 @@ export function PlanResultView({
                   </button>
                 )}
               </div>
+              {onPreferTrains && (
+                <label className="mb-3 flex min-h-10 cursor-pointer items-center justify-between gap-3 rounded-xl bg-surface-sunken px-3 py-2 text-sm">
+                  <span>
+                    <span className="font-medium">Prefer trains</span>
+                    <span className="block text-xs text-muted">Slower, but scenic, where they run</span>
+                  </span>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    checked={!!input.preferTrains}
+                    onChange={(e) => onPreferTrains(e.target.checked)}
+                    className="peer sr-only"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="relative h-6 w-11 shrink-0 rounded-full bg-line transition peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-accent after:absolute after:top-0.5 after:left-0.5 after:size-5 after:rounded-full after:bg-white after:shadow after:transition peer-checked:after:translate-x-5"
+                  />
+                </label>
+              )}
               <p aria-live="polite" className="mb-3 text-sm text-muted empty:hidden">
                 {notice}
               </p>

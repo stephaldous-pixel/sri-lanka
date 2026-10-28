@@ -19,6 +19,8 @@ export type PlannerInput = {
   budget: Budget;
   transport: TransportPreference;
   meetPeople: boolean;
+  /** Choose trains where they run, even when a bus or car is a little quicker. */
+  preferTrains?: boolean;
 };
 
 /** The slice of country content the planner needs. Small enough to send to the browser. */

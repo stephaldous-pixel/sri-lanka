@@ -4,7 +4,8 @@ import type { Hop, TransportPreference } from "./types";
 
 type Option = TravelLeg["options"][number];
 
-type Edge = { to: string; hours: number; option: Option; outsidePreference: boolean };
+/** `hours` is the real journey time; `weight` is what route-finding minimises (preferences applied). */
+type Edge = { to: string; hours: number; weight: number; option: Option; outsidePreference: boolean };
 
 const PUBLIC_MODES = new Set(["train", "bus", "tuk-tuk", "ferry"]);
 const DRIVER_MODES = new Set(["car", "ferry"]);
@@ -20,8 +21,14 @@ const MODE_NAMES: Record<string, string> = {
   flight: "flight",
 };
 
-/** Best way to travel one leg given the traveller's preference, or null if nothing runs. */
-export function pickOption(options: Option[], preference: TransportPreference) {
+/**
+ * When a traveller prefers trains, a running train counts as this fraction of its
+ * real time, so a scenic train wins over a somewhat quicker bus or car.
+ */
+const TRAIN_PREFERENCE = 0.6;
+
+/** Best way to travel one leg given the traveller's preferences, or null if nothing runs. */
+export function pickOption(options: Option[], preference: TransportPreference, preferTrains = false) {
   const running = options.filter((o) => o.status !== "suspended");
   if (running.length === 0) return null;
   const preferred = running.filter((o) =>
@@ -32,9 +39,15 @@ export function pickOption(options: Option[], preference: TransportPreference) {
         : true,
   );
   const pool = preferred.length > 0 ? preferred : running;
-  const cost = (o: Option) => o.hours + (o.status === "disrupted" ? DISRUPTION_PENALTY_HOURS : 0);
-  const option = pool.reduce((best, o) => (cost(o) < cost(best) ? o : best));
-  return { option, outsidePreference: preferred.length === 0 };
+  // Trains are always allowed when preferred, even for travellers who'd otherwise take a car.
+  const candidates = preferTrains ? [...new Set([...pool, ...running.filter((o) => o.mode === "train")])] : pool;
+  const option = candidates.reduce((best, o) => (optionWeight(o, preferTrains) < optionWeight(best, preferTrains) ? o : best));
+  return { option, outsidePreference: preferred.length === 0 && option.mode !== "train", weight: optionWeight(option, preferTrains) };
+}
+
+function optionWeight(o: Option, preferTrains: boolean): number {
+  const base = o.hours + (o.status === "disrupted" ? DISRUPTION_PENALTY_HOURS : 0);
+  return preferTrains && o.mode === "train" && o.status === "running" ? base * TRAIN_PREFERENCE : base;
 }
 
 export type TravelGraph = {
@@ -42,14 +55,14 @@ export type TravelGraph = {
   hop(from: string, to: string): Hop;
 };
 
-export function buildGraph(legs: TravelLeg[], places: string[], preference: TransportPreference): TravelGraph {
+export function buildGraph(legs: TravelLeg[], places: string[], preference: TransportPreference, preferTrains = false): TravelGraph {
   const edges = new Map<string, Edge[]>(places.map((p) => [p, []]));
   for (const leg of legs) {
-    const picked = pickOption(leg.options, preference);
+    const picked = pickOption(leg.options, preference, preferTrains);
     if (!picked) continue;
-    const { option, outsidePreference } = picked;
-    edges.get(leg.from)?.push({ to: leg.to, hours: option.hours, option, outsidePreference });
-    edges.get(leg.to)?.push({ to: leg.from, hours: option.hours, option, outsidePreference });
+    const { option, outsidePreference, weight } = picked;
+    edges.get(leg.from)?.push({ to: leg.to, hours: option.hours, weight, option, outsidePreference });
+    edges.get(leg.to)?.push({ to: leg.from, hours: option.hours, weight, option, outsidePreference });
   }
 
   // Dijkstra from every place; small graphs, so a simple scan is plenty fast.
@@ -66,7 +79,7 @@ export function buildGraph(legs: TravelLeg[], places: string[], preference: Tran
       if (current === undefined) break;
       done.add(current);
       for (const edge of edges.get(current) ?? []) {
-        const next = dist.get(current)! + edge.hours;
+        const next = dist.get(current)! + edge.weight;
         if (next < (dist.get(edge.to) ?? Infinity)) {
           dist.set(edge.to, next);
           prev.set(edge.to, { from: current, edge });
@@ -78,7 +91,16 @@ export function buildGraph(legs: TravelLeg[], places: string[], preference: Tran
 
   return {
     hours(from, to) {
-      return from === to ? 0 : (shortest.get(from)?.dist.get(to) ?? Infinity);
+      if (from === to) return 0;
+      const found = shortest.get(from);
+      if (!found?.dist.has(to)) return Infinity;
+      let total = 0;
+      for (let node = to; node !== from; ) {
+        const step = found.prev.get(node)!;
+        total += step.edge.hours;
+        node = step.from;
+      }
+      return total;
     },
     hop(from, to) {
       const path = [to];

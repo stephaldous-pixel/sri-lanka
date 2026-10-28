@@ -154,6 +154,10 @@ export function Planner({ data }: { data: PlannerData }) {
         edited={!!edits}
         onEdit={() => setState({ ...state, editing: true })}
         onNights={changeNights}
+        onPreferTrains={(prefer) => {
+          build({ ...input, preferTrains: prefer }, true, edits);
+          setNotice(prefer ? "Using trains where they run." : "Using the quickest option for each journey.");
+        }}
         notice={editing ? undefined : notice}
         editor={
           editing ? (

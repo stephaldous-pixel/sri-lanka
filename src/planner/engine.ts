@@ -54,7 +54,7 @@ export function generatePlan(data: PlannerData, input: PlannerInput): PlanResult
   const gatewaySlug = data.country.gateways[0].destination;
   const bySlug = new Map(data.destinations.map((d) => [d.slug, d]));
   const gateway = bySlug.get(gatewaySlug)!;
-  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
   const months = monthsCovered(input);
   const budgetNights = input.days - 1;
 
@@ -144,7 +144,7 @@ export function toEditedRoute(plan: PlanResult): EditedRoute {
 export function planFromStops(data: PlannerData, input: PlannerInput, edits: EditedRoute): PlanResult {
   const gatewaySlug = data.country.gateways[0].destination;
   const bySlug = new Map(data.destinations.map((d) => [d.slug, d]));
-  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
   const clampNights = (n: number) => Math.min(60, Math.max(1, Math.round(n) || 1));
   const arrival = (edits.arrivalSlug && bySlug.get(edits.arrivalSlug)) || bySlug.get(gatewaySlug)!;
   const route: Stop[] = edits.stops
@@ -171,7 +171,7 @@ export function planFromStops(data: PlannerData, input: PlannerInput, edits: Edi
 /** Where in the list a new place adds the least travel (an index to insert at). */
 export function bestPositionFor(data: PlannerData, input: PlannerInput, slugs: string[], slug: string): number {
   const gateway = data.country.gateways[0].destination;
-  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
   const loop = (list: string[]) => {
     const all = [gateway, ...list, gateway];
     return all.slice(1).reduce((sum, s, i) => sum + graph.hours(all[i], s), 0);
@@ -200,7 +200,7 @@ export const ARRIVAL = "@arrival";
  */
 export function fitToDays(data: PlannerData, input: PlannerInput, edits: EditedRoute, protect?: string): EditedRoute | null {
   const gateway = data.country.gateways[0].destination;
-  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
   const ideal = new Map(data.destinations.map((d) => [d.slug, d.nights]));
   const stops = edits.stops.map((s) => ({ ...s, nights: Math.max(1, Math.round(s.nights)) }));
   let arrival = Math.max(1, Math.round(edits.arrivalNights));
@@ -452,6 +452,18 @@ function assemble(
   // The airport is ~10km from the gateway town, so journeys from it start there (≥ ~25 min).
   const startHop = graph.hop(gateway.slug, arrival.slug);
   startHop.from = "airport";
+  // Trains don't serve the airport conveniently: if the journey starts with one,
+  // take a taxi for that first step instead (e.g. taxi to Colombo, then the train).
+  if (input.preferTrains && startHop.modes[0] === "train" && startHop.path.length > 1) {
+    const [a, b] = startHop.path;
+    const leg = data.legs.find((l) => (l.from === a && l.to === b) || (l.from === b && l.to === a));
+    const car = leg?.options.find((o) => o.mode === "car" && o.status !== "suspended");
+    const train = leg?.options.find((o) => o.mode === "train");
+    if (car && train) {
+      startHop.modes[0] = "taxi";
+      startHop.hours += car.hours - train.hours;
+    }
+  }
   startHop.hours = Math.max(0.4, startHop.hours);
   const fromAirport = startHop.hours;
   stops.push({

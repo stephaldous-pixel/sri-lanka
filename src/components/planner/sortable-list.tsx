@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import { card } from "@/lib/ui";
-import { Grip } from "./route-editor";
+import { Grip } from "./controls";
 
 type Drag = { from: number; over: number; startY: number; dy: number; mids: number[]; step: number };
 

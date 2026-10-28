@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Chevron, Disclosure } from "@/components/disclosure";
 import { Photo } from "@/components/photo";
 import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
+import { NightsStepper } from "./controls";
 import { RouteMap } from "./route-map";
 
 const BUDGET_LABELS = { budget: "budget", mid: "mid-range", comfort: "comfort" } as const;
@@ -18,6 +19,7 @@ export function PlanResultView({
   plan,
   editor,
   onEdit,
+  onNights,
   edited = false,
 }: {
   data: PlannerData;
@@ -26,6 +28,8 @@ export function PlanResultView({
   /** Shown in place of the route list while editing. */
   editor?: ReactNode;
   onEdit?: () => void;
+  /** Change the nights at stop `index` (in plan.stops) without opening the editor. */
+  onNights?: (index: number, nights: number) => void;
   edited?: boolean;
 }) {
   const { symbol, code } = data.country.currency;
@@ -93,7 +97,11 @@ export function PlanResultView({
               <ol>
                 {plan.stops.map((stop, i) => (
                   <li key={`${stop.destination.slug}-${i}`}>
-                    <StopCard stop={stop} countrySlug={data.country.slug} />
+                    <StopCard
+                      stop={stop}
+                      countrySlug={data.country.slug}
+                      onNights={onNights && stop.role !== "departure" ? (n) => onNights(i, n) : undefined}
+                    />
                     <HopLine hop={plan.hops[i]} names={names} final={i === plan.stops.length - 1} />
                   </li>
                 ))}
@@ -149,37 +157,67 @@ export function PlanResultView({
   );
 }
 
-function StopCard({ stop, countrySlug }: { stop: PlannedStop; countrySlug: string }) {
+function StopCard({
+  stop,
+  countrySlug,
+  onNights,
+}: {
+  stop: PlannedStop;
+  countrySlug: string;
+  /** When given, the stay length can be changed right here. */
+  onNights?: (nights: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
   const days = stop.nights <= 1 ? `Day ${stop.arriveDay}` : `Days ${stop.arriveDay}–${stop.arriveDay + stop.nights - 1}`;
   return (
-    <details className={`group ${card} overflow-hidden`}>
-      <summary className="flex cursor-pointer list-none items-center gap-4 p-3 pr-4 [&::-webkit-details-marker]:hidden">
-        <Photo photo={stop.destination.photo} sizes="64px" showCredit={false} className="size-14 shrink-0 rounded-xl sm:size-16" />
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium text-muted">
-            {days} · {stop.nights} night{stop.nights === 1 ? "" : "s"}
+    <div className={`${card} overflow-hidden`}>
+      <div className="flex items-center gap-3 p-3">
+        <Photo photo={stop.destination.photo} sizes="64px" showCredit={false} className="hidden size-14 shrink-0 rounded-xl sm:block sm:size-16" />
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen(!open)}
+          className="group min-w-0 flex-1 text-left"
+        >
+          <span className="block text-xs font-medium text-muted">
+            {days}
+            {!onNights && ` · ${stop.nights} night${stop.nights === 1 ? "" : "s"}`}
             {stop.warnings.length > 0 && <span className="ml-1.5 text-warning" title="See details">⚠</span>}
-          </p>
-          <h3 className="truncate font-semibold">{stop.destination.name}</h3>
-        </div>
-        <Chevron />
-      </summary>
-      <div className="space-y-3 border-t border-line px-4 py-4 text-sm">
-        <ul className="space-y-1 text-muted">
-          {stop.reasons.map((r) => (
-            <li key={r}>· {r}</li>
-          ))}
-        </ul>
-        {stop.warnings.map((w) => (
-          <p key={w} className="text-warning">
-            ⚠ {w}
-          </p>
-        ))}
-        <Link href={`/${countrySlug}/places/${stop.destination.slug}`} className="inline-block font-medium text-accent hover:underline">
-          About {stop.destination.name} →
-        </Link>
+          </span>
+          <span className="block truncate font-semibold">{stop.destination.name}</span>
+          <span className="sr-only">{open ? ", hide details" : ", show details"}</span>
+        </button>
+        {onNights && <NightsStepper nights={stop.nights} name={stop.destination.name} onChange={onNights} />}
+        <button
+          type="button"
+          aria-hidden="true"
+          tabIndex={-1}
+          onClick={() => setOpen(!open)}
+          className={`shrink-0 ${open ? "[&>svg]:rotate-180" : ""}`}
+        >
+          <Chevron />
+        </button>
       </div>
-    </details>
+      {open && (
+        <div id={panelId} className="space-y-3 border-t border-line px-4 py-4 text-sm">
+          <ul className="space-y-1 text-muted">
+            {stop.reasons.map((r) => (
+              <li key={r}>· {r}</li>
+            ))}
+          </ul>
+          {stop.warnings.map((w) => (
+            <p key={w} className="text-warning">
+              ⚠ {w}
+            </p>
+          ))}
+          <Link href={`/${countrySlug}/places/${stop.destination.slug}`} className="inline-block font-medium text-accent hover:underline">
+            About {stop.destination.name} →
+          </Link>
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -82,9 +82,17 @@ export function Planner({ data }: { data: PlannerData }) {
       ? `in ${MONTHS[input.month]}`
       : "";
 
-  function applyEdits(next: EditedRoute) {
+  function applyEdits(next: EditedRoute, keepEditing = true) {
     const plan = planFromStops(data, input, next);
-    setState({ view: "result", input, plan, edits: next, editing: true, saved: savePlan(country, input, next) });
+    setState({ view: "result", input, plan, edits: next, editing: keepEditing, saved: savePlan(country, input, next) });
+  }
+
+  /** Quick change from the route list: index is a position in plan.stops. */
+  function changeNights(index: number, nights: number) {
+    const current = edits ?? toEditedRoute(plan);
+    const stop = plan.stops[index];
+    if (stop.role === "arrival") return applyEdits({ ...current, arrivalNights: nights }, false);
+    applyEdits({ ...current, stops: current.stops.map((s) => (s.slug === stop.destination.slug ? { ...s, nights } : s)) }, false);
   }
 
   function resetEdits() {
@@ -123,6 +131,7 @@ export function Planner({ data }: { data: PlannerData }) {
         plan={plan}
         edited={!!edits}
         onEdit={() => setState({ ...state, editing: true })}
+        onNights={changeNights}
         editor={
           editing ? (
             <RouteEditor

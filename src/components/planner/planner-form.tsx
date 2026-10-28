@@ -102,7 +102,7 @@ export function PlannerForm({
   const label = (options: Option<string>[], value: string) => options.find((o) => o.value === value)?.label;
 
   return (
-    <form onSubmit={next} noValidate className={`${card} mt-8 p-5 sm:p-8`}>
+    <form onSubmit={next} noValidate className={`${card} mt-6 px-4 pt-5 sm:mt-8 sm:p-8`}>
       <div className="flex items-center justify-between text-xs font-medium text-muted">
         <span>
           Step {step + 1} of {STEPS.length}
@@ -113,7 +113,7 @@ export function PlannerForm({
         <div className="h-full rounded-full bg-accent transition-all duration-300" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
       </div>
 
-      <div className="mt-8 min-h-64">
+      <div className="mt-6 min-h-64 sm:mt-8">
         {step === 0 && (
           <Question heading={heading} title="When are you going?">
             <Segmented
@@ -240,7 +240,8 @@ export function PlannerForm({
       <p aria-live="polite" className="mt-4 min-h-5 text-sm text-danger">
         {error}
       </p>
-      <div className="mt-2 flex items-center justify-between gap-3">
+      {/* On phones the buttons stick to the bottom of the screen, within thumb reach. */}
+      <div className="sticky bottom-0 -mx-4 mt-2 flex items-center justify-between gap-3 rounded-b-2xl border-t border-line bg-surface/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
         {step > 0 ? (
           <button type="button" onClick={() => (setError(null), setStep(step - 1))} className={button.quiet}>
             ← Back
@@ -250,7 +251,7 @@ export function PlannerForm({
         )}
         <div className="flex items-center gap-4">
           {step === 2 && input.regions.length === 0 && <span className="hidden text-sm text-muted sm:inline">No preference</span>}
-          <button type="submit" className={button.primary}>
+          <button type="submit" className={`${button.primary} min-h-12 px-6 text-base sm:min-h-0 sm:px-5 sm:text-sm`}>
             {step === STEPS.length - 1 ? "Build my route" : "Continue"}
           </button>
         </div>
@@ -321,7 +322,7 @@ function Chip({ checked, onChange, title, children }: { checked: boolean; onChan
   return (
     <label
       title={title}
-      className={`cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent ${
+      className={`cursor-pointer rounded-full px-4 py-2.5 text-[0.9375rem] font-medium transition sm:py-2 sm:text-sm has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent ${
         checked ? "bg-accent text-on-accent shadow-sm" : "bg-surface-sunken hover:bg-line"
       }`}
     >

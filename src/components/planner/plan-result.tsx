@@ -43,8 +43,40 @@ export function PlanResultView({
   const hopWarnings = [...new Set(plan.hops.flatMap((h) => h.warnings))];
   const notes = plan.warnings.length + stopWarnings + hopWarnings.length;
 
+  const [tab, setTab] = useState<Tab>("route");
+  // On phones one panel shows at a time; from lg up everything is visible.
+  const panel = (name: Tab) => (tab === name ? "" : "hidden lg:block");
+
+  const daysList = (
+          <ol className="divide-y divide-line text-sm">
+            {plan.days.map((d) => (
+              <li key={d.day} className="grid grid-cols-[5.5rem_1fr] gap-3 py-3">
+                <div className="text-muted">
+                  <span className="font-medium text-foreground">Day {d.day}</span>
+                  {d.date && <span className="block text-xs">{formatDay(d.date)}</span>}
+                </div>
+                <div>
+                  <p className="font-medium">{d.title}</p>
+                  {d.detail && <p className="text-muted">{d.detail}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+  );
+  const costBody = (
+    <>
+          <dl className="space-y-2 text-sm">
+            <Row label="Places to stay" value={money(plan.estimate.stay)} />
+            <Row label="Food, local transport & activities" value={money(plan.estimate.daily)} />
+          </dl>
+          <p className="mt-3 text-xs text-muted">
+            A ballpark from typical prices. Excludes flights, visas and big extras like Sigiriya or safaris.
+          </p>
+    </>
+  );
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
         <li>
           <span className="font-semibold text-foreground">{places}</span> places
@@ -81,10 +113,14 @@ export function PlanResultView({
         </Disclosure>
       )}
 
+      <TabBar tab={tab} onChange={setTab} days={plan.days.length} />
+
       {/* minmax(0, …) columns stop the map's canvas from stretching the page on phones. */}
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-        <RouteMap data={data} plan={plan} className="h-72 lg:sticky lg:top-20 lg:order-last lg:h-[34rem]" />
-        <section aria-labelledby="route-heading">
+        <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" className={`${panel("map")} lg:sticky lg:top-20 lg:order-last`}>
+          <RouteMap data={data} plan={plan} className="h-[60vh] max-h-[34rem] min-h-80 lg:h-[34rem]" />
+        </div>
+        <section id="panel-route" role="tabpanel" aria-labelledby="tab-route" className={panel("route")}>
           {editor ?? (
             <>
               <div className="mb-3 flex items-center justify-between gap-3">
@@ -123,24 +159,23 @@ export function PlanResultView({
         </section>
       </div>
 
-      <div className="space-y-3">
-        <Disclosure tone="card" summary={`Day-by-day plan (${plan.days.length} days)`}>
-          <ol className="divide-y divide-line text-sm">
-            {plan.days.map((d) => (
-              <li key={d.day} className="grid grid-cols-[5.5rem_1fr] gap-3 py-3">
-                <div className="text-muted">
-                  <span className="font-medium text-foreground">Day {d.day}</span>
-                  {d.date && <span className="block text-xs">{formatDay(d.date)}</span>}
-                </div>
-                <div>
-                  <p className="font-medium">{d.title}</p>
-                  {d.detail && <p className="text-muted">{d.detail}</p>}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Disclosure>
+      <div id="panel-days" role="tabpanel" aria-labelledby="tab-days" className={`${panel("days")} lg:hidden`}>
+        <div className={`${card} px-4`}>{daysList}</div>
+      </div>
+      <div id="panel-cost" role="tabpanel" aria-labelledby="tab-cost" className={`${panel("cost")} lg:hidden`}>
+        <div className={`${card} p-5`}>
+          <p className="mb-3 font-semibold">
+            Rough cost: {money(plan.estimate.total)}
+            <span className="ml-2 text-sm font-normal text-muted">{BUDGET_LABELS[input.budget]}, one person</span>
+          </p>
+          {costBody}
+        </div>
+      </div>
 
+      <div className="hidden space-y-3 lg:block">
+        <Disclosure tone="card" summary={`Day-by-day plan (${plan.days.length} days)`}>
+          {daysList}
+        </Disclosure>
         <Disclosure
           tone="card"
           summary={
@@ -150,16 +185,51 @@ export function PlanResultView({
             </>
           }
         >
-          <dl className="space-y-2 text-sm">
-            <Row label="Places to stay" value={money(plan.estimate.stay)} />
-            <Row label="Food, local transport & activities" value={money(plan.estimate.daily)} />
-          </dl>
-          <p className="mt-3 text-xs text-muted">
-            A ballpark from typical prices. Excludes flights, visas and big extras like Sigiriya or safaris.
-          </p>
+          {costBody}
         </Disclosure>
       </div>
     </div>
+  );
+}
+
+type Tab = "route" | "map" | "days" | "cost";
+
+/** Phone-only tabs that stick under the header, so the route is never more than a tap away. */
+function TabBar({ tab, onChange, days }: { tab: Tab; onChange: (t: Tab) => void; days: number }) {
+  const tabs: [Tab, string][] = [
+    ["route", "Route"],
+    ["map", "Map"],
+    ["days", `${days} days`],
+    ["cost", "Cost"],
+  ];
+  return (
+    <>
+    <div id="tabs-anchor" aria-hidden="true" className="lg:hidden" />
+    <div className="sticky top-14 z-20 -mx-4 bg-background/90 px-4 py-2 backdrop-blur lg:hidden">
+      <div role="tablist" aria-label="Your trip" className="grid grid-cols-4 rounded-full bg-surface-sunken p-1">
+        {tabs.map(([id, label]) => (
+          <button
+            key={id}
+            id={`tab-${id}`}
+            type="button"
+            role="tab"
+            aria-selected={tab === id}
+            aria-controls={`panel-${id}`}
+            onClick={() => {
+              onChange(id);
+              // If the bar has stuck under the header, jump back so the new panel starts at the top.
+              const anchor = document.getElementById("tabs-anchor");
+              const top = anchor ? anchor.getBoundingClientRect().top : 0;
+              if (anchor && top < 56) window.scrollTo({ top: window.scrollY + top - 56, behavior: "instant" as ScrollBehavior });
+            }}
+            className={`min-h-10 rounded-full text-sm font-medium transition ${tab === id ? "bg-surface shadow-sm" : "text-muted"}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+    </>
   );
 }
 
@@ -178,30 +248,34 @@ function StopCard({
   const days = stop.nights <= 1 ? `Day ${stop.arriveDay}` : `Days ${stop.arriveDay}–${stop.arriveDay + stop.nights - 1}`;
   return (
     <div className={`${card} overflow-hidden`}>
-      <div className="flex items-center gap-3 p-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 p-3 sm:flex-nowrap">
         <Photo photo={stop.destination.photo} sizes="64px" showCredit={false} className="hidden size-14 shrink-0 rounded-xl sm:block sm:size-16" />
         <button
           type="button"
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen(!open)}
-          className="group min-w-0 flex-1 text-left"
+          className="group order-1 min-h-10 min-w-0 flex-1 text-left"
         >
           <span className="block text-xs font-medium text-muted">
             {days}
             {!onNights && ` · ${stop.nights} night${stop.nights === 1 ? "" : "s"}`}
             {stop.warnings.length > 0 && <span className="ml-1.5 text-warning" title="See details">⚠</span>}
           </span>
-          <span className="block truncate font-semibold">{stop.destination.name}</span>
+          <span className="line-clamp-2 block font-semibold">{stop.destination.name}</span>
           <span className="sr-only">{open ? ", hide details" : ", show details"}</span>
         </button>
-        {onNights && <NightsStepper nights={stop.nights} name={stop.destination.name} onChange={onNights} />}
+        {onNights && (
+          <div className="order-3 w-full sm:order-2 sm:w-auto">
+            <NightsStepper nights={stop.nights} name={stop.destination.name} onChange={onNights} />
+          </div>
+        )}
         <button
           type="button"
           aria-hidden="true"
           tabIndex={-1}
           onClick={() => setOpen(!open)}
-          className={`shrink-0 ${open ? "[&>svg]:rotate-180" : ""}`}
+          className={`order-2 flex size-10 shrink-0 items-center justify-center sm:order-3 ${open ? "[&>svg]:rotate-180" : ""}`}
         >
           <Chevron />
         </button>

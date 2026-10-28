@@ -54,7 +54,7 @@ export default async function DestinationPage({ params }: PageProps<"/[country]/
   return (
     <main>
       <section className="relative isolate">
-        <Photo photo={d.photo} sizes="100vw" priority className="h-[48vh] min-h-80 w-full" />
+        <Photo photo={d.photo} sizes="100vw" priority className="h-[38vh] min-h-64 w-full sm:h-[48vh] sm:min-h-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto w-full max-w-3xl px-4 pb-8 text-white sm:px-6">
@@ -76,10 +76,10 @@ export default async function DestinationPage({ params }: PageProps<"/[country]/
             { label: d.name },
           ]}
         />
-        <p className="mt-6 text-xl leading-relaxed">{d.summary}</p>
+        <p className="mt-5 text-lg leading-relaxed sm:mt-6 sm:text-xl">{d.summary}</p>
         {topInterests.length > 0 && <p className="mt-3 text-sm text-muted">Great for {topInterests.join(" · ")}</p>}
 
-        <section aria-labelledby="facts-heading" className={`${card} mt-8 p-5 sm:p-6`}>
+        <section aria-labelledby="facts-heading" className={`${card} mt-6 p-4 sm:mt-8 sm:p-6`}>
           <h2 id="facts-heading" className="sr-only">At a glance</h2>
           <dl className="grid gap-5 sm:grid-cols-2">
             <div className="sm:col-span-2">
@@ -114,7 +114,7 @@ export default async function DestinationPage({ params }: PageProps<"/[country]/
           </dl>
         </section>
 
-        <Markdown className="mt-10 text-lg">{d.description}</Markdown>
+        <Markdown className="mt-8 sm:mt-10 sm:text-lg">{d.description}</Markdown>
 
         <section className="mt-12" aria-labelledby="highlights-heading">
           <h2 id="highlights-heading" className="text-2xl font-semibold tracking-tight">Highlights</h2>

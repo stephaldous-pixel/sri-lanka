@@ -24,7 +24,7 @@ export function Disclosure({
   };
   return (
     <details open={defaultOpen} className={`group ${tones[tone]} ${className}`}>
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium [&::-webkit-details-marker]:hidden">
+      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-4 font-medium [&::-webkit-details-marker]:hidden">
         <span className="min-w-0 flex-1">{summary}</span>
         <Chevron />
       </summary>

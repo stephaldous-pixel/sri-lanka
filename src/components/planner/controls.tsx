@@ -4,13 +4,13 @@
 
 /** − n nights + */
 export function NightsStepper({ nights, name, onChange }: { nights: number; name: string; onChange: (n: number) => void }) {
-  const step = "flex size-8 items-center justify-center rounded-full bg-surface-sunken text-lg leading-none hover:bg-line disabled:opacity-30";
+  const step = "flex size-10 items-center sm:size-8 justify-center rounded-full bg-surface-sunken text-lg leading-none hover:bg-line disabled:opacity-30";
   return (
     <div className="flex shrink-0 items-center gap-1.5" role="group" aria-label={`Nights in ${name}`}>
       <button type="button" className={step} onClick={() => onChange(nights - 1)} disabled={nights <= 1} aria-label={`One fewer night in ${name}`}>
         −
       </button>
-      <span className="w-14 text-center text-sm tabular-nums" aria-live="polite">
+      <span className="w-16 text-center text-sm font-medium tabular-nums" aria-live="polite">
         {nights} night{nights === 1 ? "" : "s"}
       </span>
       <button type="button" className={step} onClick={() => onChange(nights + 1)} disabled={nights >= 30} aria-label={`One more night in ${name}`}>

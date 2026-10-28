@@ -17,6 +17,7 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const markers = useRef<Marker[]>([]);
+  const bounds = useRef<[[number, number], [number, number]] | null>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -66,6 +67,17 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
         instance.on("error", () => {
           if (!loaded) setFailed(true);
         });
+        let wasHidden = true;
+        const observer = new ResizeObserver(([entry]) => {
+          const hidden = entry.contentRect.width === 0 || entry.contentRect.height === 0;
+          if (!hidden) {
+            instance.resize();
+            if (wasHidden && bounds.current) instance.fitBounds(bounds.current, { padding: 48, maxZoom: 9, duration: 0 });
+          }
+          wasHidden = hidden;
+        });
+        observer.observe(container.current);
+        instance.once("remove", () => observer.disconnect());
         map.current = instance;
       })
       .catch(() => setFailed(true));
@@ -101,9 +113,10 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
         return new maplibregl.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(instance);
       });
       if (pts.length > 0) {
-        const bounds = new maplibregl.LngLatBounds();
-        pts.forEach((p) => bounds.extend([p.lng, p.lat]));
-        instance.fitBounds(bounds, { padding: 48, maxZoom: 9, duration: 600 });
+        const box = new maplibregl.LngLatBounds();
+        pts.forEach((p) => box.extend([p.lng, p.lat]));
+        bounds.current = box.toArray() as [[number, number], [number, number]];
+        if (instance.getContainer().clientWidth > 0) instance.fitBounds(box, { padding: 48, maxZoom: 9, duration: 600 });
       }
     });
     return () => {

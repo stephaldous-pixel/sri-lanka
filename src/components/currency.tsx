@@ -90,7 +90,7 @@ export function CurrencyPicker({ className = "" }: { className?: string }) {
   // The native select stays invisible on top, so it opens the phone's own picker,
   // while the visible pill shows just the short code.
   return (
-    <label className={`relative inline-flex items-center rounded-full bg-surface-sunken py-1.5 pr-6 pl-3 text-sm font-medium ring-1 ring-line hover:bg-line has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${className}`}>
+    <label className={`relative inline-flex h-10 items-center rounded-full bg-surface-sunken pr-6 pl-3 text-sm font-medium ring-1 ring-line hover:bg-line has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent ${className}`}>
       <span aria-hidden="true">{home}</span>
       <span aria-hidden="true" className="pointer-events-none absolute right-2.5 text-xs text-muted">
         ▾

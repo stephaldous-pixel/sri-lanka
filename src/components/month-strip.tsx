@@ -61,7 +61,7 @@ export function MonthStrip({
       <ol aria-label={label} className="grid grid-cols-12 gap-0.5">
         {months.map((rating, i) => {
           const name = `${monthName(i)}: ${LABELS[rating]}`;
-          const cell = `flex w-full flex-col items-center justify-center rounded-sm ${compact ? "h-7" : "h-11"} ${STYLES[rating]}`;
+          const cell = `flex w-full flex-col items-center justify-center rounded-sm ${compact ? "h-9" : "h-11"} ${STYLES[rating]}`;
           const text = (
             <>
               <span className={`font-medium ${compact ? "text-[0.65rem]" : "text-xs"}`} aria-hidden="true">

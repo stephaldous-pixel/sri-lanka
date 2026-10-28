@@ -151,3 +151,19 @@ details[open]::details-content {
 .prose th {
   font-weight: 600;
 }
+
+/* On phones, the planner's intro gives way to the route once there is one.
+   The heading stays for screen readers, visually hidden. */
+@media (width < 64rem) {
+  main:has([data-plan-result]) .plan-intro > :not(h1) {
+    display: none;
+  }
+  main:has([data-plan-result]) .plan-intro > h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

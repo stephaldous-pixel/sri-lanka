@@ -10,16 +10,16 @@ export function DestinationCard({ countrySlug, destination, best }: { countrySlu
     <Link href={`/${countrySlug}/places/${destination.slug}`} className="group block focus-visible:outline-none">
       <Photo
         photo={destination.photo}
-        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        className="aspect-[4/3] w-full rounded-2xl transition duration-300 group-hover:opacity-90 group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2"
+        sizes="(min-width: 1024px) 33vw, 50vw"
+        className="aspect-square w-full rounded-xl transition duration-300 sm:aspect-[4/3] sm:rounded-2xl group-hover:opacity-90 group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2"
         showCredit={false}
       />
-      <div className="mt-3">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-semibold group-hover:text-accent">{destination.name}</h3>
-          {best && <span className="shrink-0 text-xs text-muted">Best {best}</span>}
+      <div className="mt-2 sm:mt-3">
+        <div className="sm:flex sm:items-baseline sm:justify-between sm:gap-3">
+          <h3 className="text-[0.9375rem] font-semibold leading-snug group-hover:text-accent sm:text-base">{destination.name}</h3>
+          {best && <span className="mt-0.5 block text-xs text-muted sm:mt-0 sm:shrink-0">Best {best}</span>}
         </div>
-        <p className="mt-1 line-clamp-2 text-sm text-muted">{destination.summary}</p>
+        <p className="mt-1 hidden text-sm text-muted sm:line-clamp-2">{destination.summary}</p>
       </div>
     </Link>
   );
@@ -27,7 +27,7 @@ export function DestinationCard({ countrySlug, destination, best }: { countrySlu
 
 export function DestinationGrid({ content, destinations }: { content: CountryContent; destinations: Destination[] }) {
   return (
-    <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3">
       {destinations.map((d) => (
         <DestinationCard
           key={d.slug}

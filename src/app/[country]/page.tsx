@@ -21,7 +21,7 @@ export default async function CountryPage({ params }: PageProps<"/[country]">) {
   return (
     <main>
       <section className="relative isolate">
-        <Photo photo={country.photo} sizes="100vw" priority className="h-[62vh] min-h-96 w-full" />
+        <Photo photo={country.photo} sizes="100vw" priority className="h-[52vh] min-h-80 w-full sm:h-[62vh] sm:min-h-96" />
         <div className="absolute inset-0 -z-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto w-full max-w-6xl px-4 pb-10 text-white sm:px-6 sm:pb-14">
@@ -44,23 +44,23 @@ export default async function CountryPage({ params }: PageProps<"/[country]">) {
       </section>
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <section className="mt-16" aria-labelledby="regions-heading">
+        <section className="mt-10 sm:mt-16" aria-labelledby="regions-heading">
           <h2 id="regions-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Explore by region
           </h2>
           <p className="mt-2 text-muted">{content.destinations.length} places in {regions.length} regions.</p>
-          <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 sm:mt-8 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
             {regions.map((region) => {
               const places = destinationsInRegion(content, region.id);
               const cover = places.find((d) => d.photo)?.photo;
               return (
                 <Link key={region.id} href={`/${country.slug}/regions/${region.id}`} className="group block">
-                  <Photo photo={cover} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" showCredit={false} className="aspect-[4/3] w-full rounded-2xl transition group-hover:opacity-90" />
-                  <div className="mt-3 flex items-baseline justify-between gap-3">
-                    <h3 className="font-semibold group-hover:text-accent">{region.name}</h3>
-                    <span className="shrink-0 text-xs text-muted">Best {bestMonthsLabel(region.months)}</span>
+                  <Photo photo={cover} sizes="(min-width: 1024px) 25vw, 50vw" showCredit={false} className="aspect-square w-full rounded-xl transition group-hover:opacity-90 sm:aspect-[4/3] sm:rounded-2xl" />
+                  <div className="mt-2 sm:mt-3 sm:flex sm:items-baseline sm:justify-between sm:gap-3">
+                    <h3 className="text-[0.9375rem] font-semibold leading-snug group-hover:text-accent sm:text-base">{region.name}</h3>
+                    <span className="mt-0.5 block text-xs text-muted sm:mt-0 sm:shrink-0">Best {bestMonthsLabel(region.months)}</span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-sm text-muted">{region.summary}</p>
+                  <p className="mt-1 hidden text-sm text-muted sm:line-clamp-2">{region.summary}</p>
                 </Link>
               );
             })}

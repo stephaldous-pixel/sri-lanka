@@ -118,14 +118,17 @@ export function Planner({ data }: { data: PlannerData }) {
   }
 
   return (
-    <div ref={resultTop} className="mt-10 scroll-mt-20 space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div ref={resultTop} data-plan-result className="scroll-mt-20 space-y-6 lg:mt-10">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">
             Your {days}-day route {when}
           </h2>
           <p className="mt-1 text-sm text-muted">
             {saved ? "Saved on this device." : "Couldn't save on this device (private browsing?)."}{" "}
+            <button type="button" onClick={() => setState({ view: "form", input })} className={`${button.quiet} mr-3 sm:hidden`}>
+              Change answers
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -138,9 +141,11 @@ export function Planner({ data }: { data: PlannerData }) {
             </button>
           </p>
         </div>
-        <button type="button" onClick={() => setState({ view: "form", input })} className={button.secondary}>
-          Change answers
-        </button>
+        <div className="hidden sm:block">
+          <button type="button" onClick={() => setState({ view: "form", input })} className={button.secondary}>
+            Change answers
+          </button>
+        </div>
       </div>
       <PlanResultView
         data={data}

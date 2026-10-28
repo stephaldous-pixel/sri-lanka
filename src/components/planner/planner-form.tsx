@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type RefObject } from "react";
 import { Chevron } from "@/components/disclosure";
+import { addDays, daysInclusive, formatRange, toIso } from "@/lib/dates";
 import { button, card } from "@/lib/ui";
 import type { Budget, Pace, PlannerData, PlannerInput, TransportPreference } from "@/planner/types";
+import { DateRangePicker, MAX_DAYS, MIN_DAYS } from "./date-range-picker";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -49,7 +51,15 @@ export function PlannerForm({
 }) {
   const [input, setInput] = useState<PlannerInput>(initial);
   const [step, setStep] = useState(initial.interests.length > 0 ? STEPS.length - 1 : 0);
-  const [dateMode, setDateMode] = useState<"date" | "month">(initial.startDate ? "date" : "month");
+  const [dateMode, setDateMode] = useState<"date" | "month">(initial.month !== undefined && !initial.startDate ? "month" : "date");
+  // The form only renders in the browser (after the saved plan is checked), so "today" is safe to read here.
+  const [today] = useState(() => {
+    const now = new Date();
+    return toIso(now.getFullYear(), now.getMonth(), now.getDate());
+  });
+  const [endDate, setEndDate] = useState<string | undefined>(
+    initial.startDate ? addDays(initial.startDate, initial.days - 1) : undefined,
+  );
   const [error, setError] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -72,9 +82,9 @@ export function PlannerForm({
 
   function problem(at: number): string | null {
     if (at === 0) {
-      if (dateMode === "date" && !input.startDate) return "Choose your arrival date, or pick a month instead.";
+      if (dateMode === "date" && (!input.startDate || !endDate)) return "Tap your first and last days, or choose “Not sure yet”.";
       if (dateMode === "month" && input.month === undefined) return "Choose the month you're travelling.";
-      if (!Number.isInteger(input.days) || input.days < 3 || input.days > 60) return "Choose a trip length between 3 and 60 days.";
+      if (!Number.isInteger(input.days) || input.days < MIN_DAYS || input.days > MAX_DAYS) return `Choose a trip length between ${MIN_DAYS} and ${MAX_DAYS} days.`;
     }
     if (at === 1 && input.interests.length === 0) return "Pick at least one thing you'd like to do.";
     return null;
@@ -109,44 +119,53 @@ export function PlannerForm({
             <Segmented
               label="How to choose dates"
               value={dateMode}
-              onChange={setDateMode}
+              onChange={(mode) => (setError(null), setDateMode(mode))}
               options={[
-                { value: "month", label: "Just the month" },
-                { value: "date", label: "Exact dates" },
+                { value: "date", label: "Pick dates" },
+                { value: "month", label: "Not sure yet" },
               ]}
             />
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <div className="mt-6">
               {dateMode === "date" ? (
-                <Field label="Arrival date">
-                  <input type="date" value={input.startDate ?? ""} onChange={(e) => set("startDate", e.target.value || undefined)} className={inputClass} />
-                </Field>
-              ) : (
-                <Field label="Month">
-                  <select
-                    value={input.month ?? ""}
-                    onChange={(e) => set("month", e.target.value === "" ? undefined : Number(e.target.value))}
-                    className={inputClass}
-                  >
-                    <option value="">Choose a month</option>
-                    {MONTHS.map((m, i) => (
-                      <option key={m} value={i}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
-              )}
-              <Field label="Number of days" hint="Including arrival and departure">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={3}
-                  max={60}
-                  value={Number.isNaN(input.days) ? "" : input.days}
-                  onChange={(e) => set("days", e.target.valueAsNumber)}
-                  className={inputClass}
+                <DateRangePicker
+                  start={input.startDate}
+                  end={endDate}
+                  today={today}
+                  onChange={(start, end) => {
+                    setError(null);
+                    setEndDate(end);
+                    setInput((prev) => ({ ...prev, startDate: start, days: start && end ? daysInclusive(start, end) : prev.days }));
+                  }}
                 />
-              </Field>
+              ) : (
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="Month">
+                    <select
+                      value={input.month ?? ""}
+                      onChange={(e) => set("month", e.target.value === "" ? undefined : Number(e.target.value))}
+                      className={inputClass}
+                    >
+                      <option value="">Choose a month</option>
+                      {MONTHS.map((m, i) => (
+                        <option key={m} value={i}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Number of days" hint="Including arrival and departure">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      min={MIN_DAYS}
+                      max={MAX_DAYS}
+                      value={Number.isNaN(input.days) ? "" : input.days}
+                      onChange={(e) => set("days", e.target.valueAsNumber)}
+                      className={inputClass}
+                    />
+                  </Field>
+                </div>
+              )}
             </div>
           </Question>
         )}
@@ -179,12 +198,9 @@ export function PlannerForm({
           <Question heading={heading} title="Ready to build your route">
             <dl className="divide-y divide-line text-sm">
               <ReviewRow label="When" onEdit={() => setStep(0)}>
-                {input.days} days{" "}
-                {dateMode === "date" && input.startDate
-                  ? `from ${new Date(`${input.startDate}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}`
-                  : input.month !== undefined
-                    ? `in ${MONTHS[input.month]}`
-                    : ""}
+                {dateMode === "date" && input.startDate && endDate
+                  ? `${formatRange(input.startDate, endDate)} · ${input.days} days`
+                  : `${input.days} days${input.month !== undefined ? ` in ${MONTHS[input.month]}` : ""}`}
               </ReviewRow>
               <ReviewRow label="Interests" onEdit={() => setStep(1)}>
                 {input.interests.map((id) => data.interests.find((i) => i.id === id)?.name).join(", ")}

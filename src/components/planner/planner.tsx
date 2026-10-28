@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { addDays, formatRange } from "@/lib/dates";
 import { button } from "@/lib/ui";
 import { generatePlan, PlannerError } from "@/planner/engine";
 import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
@@ -66,7 +67,7 @@ export function Planner({ data }: { data: PlannerData }) {
 
   const { input, plan, saved } = state;
   const when = input.startDate
-    ? `from ${new Date(`${input.startDate}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", timeZone: "UTC" })}`
+    ? `· ${formatRange(input.startDate, addDays(input.startDate, input.days - 1))}`
     : input.month !== undefined
       ? `in ${MONTHS[input.month]}`
       : "";

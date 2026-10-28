@@ -90,6 +90,27 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Smoothly reveal <details> content where supported. */
+details::details-content {
+  transition: content-visibility 0.2s allow-discrete, opacity 0.2s;
+  opacity: 0;
+}
+details[open]::details-content {
+  opacity: 1;
+}
+
 /* Long-form text from content files. */
 .prose {
   line-height: 1.7;

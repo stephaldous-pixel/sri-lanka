@@ -68,8 +68,29 @@ export const CountrySchema = z.object({
   lastChecked: isoDate,
 });
 
+export const ClimateMonthSchema = z.object({
+  /** Average daily high and low, °C. */
+  high: z.number(),
+  low: z.number(),
+  /** Average monthly rainfall, mm, and days with rain. */
+  rainMm: z.number().nonnegative(),
+  rainDays: z.number().nonnegative(),
+});
+
+export const ClimateStationSchema = z.object({
+  id: slug,
+  name: z.string(),
+  elevationM: z.number(),
+  basis: z.string(),
+  source: url,
+  months: z.array(ClimateMonthSchema).length(12),
+});
+export const ClimateFileSchema = z.object({ stations: z.array(ClimateStationSchema).min(1) });
+
 export const RegionSchema = z.object({
   id: slug,
+  /** Weather station whose averages represent the region. */
+  climateStation: slug,
   name: z.string(),
   summary: z.string(),
   months: twelveMonths,
@@ -81,6 +102,8 @@ export const DestinationSchema = z.object({
   slug,
   name: z.string(),
   region: slug,
+  /** A closer weather station than the region's, when the region's would mislead (e.g. hill towns). */
+  climateStation: slug.optional(),
   coordinates: z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) }),
   summary: z.string().max(180),
   description: z.string(), // Markdown, original writing only
@@ -140,6 +163,8 @@ export const TravelLegsFileSchema = z.object({
 });
 
 export type Photo = z.infer<typeof PhotoSchema>;
+export type ClimateStation = z.infer<typeof ClimateStationSchema>;
+export type ClimateMonth = z.infer<typeof ClimateMonthSchema>;
 export type Interest = z.infer<typeof InterestSchema>;
 export type Country = z.infer<typeof CountrySchema>;
 export type Region = z.infer<typeof RegionSchema>;

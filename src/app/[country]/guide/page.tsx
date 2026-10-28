@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Chevron } from "@/components/disclosure";
 import { Markdown } from "@/components/markdown";
 import { getCountry } from "@/content";
 import { formatDate } from "@/lib/format";
@@ -16,36 +17,26 @@ export default async function GuidePage({ params }: PageProps<"/[country]/guide"
   const { country } = content;
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
       <Breadcrumbs items={[{ href: `/${country.slug}`, label: country.name }, { label: "Practical guide" }]} />
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{country.name}: the practical stuff</h1>
-      <p className="mt-2 text-muted">Last checked {formatDate(country.lastChecked)}.</p>
+      <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">The practical stuff</h1>
+      <p className="mt-3 text-lg text-muted">
+        Everything you need to know before travelling {country.name} on your own. Checked {formatDate(country.lastChecked)}.
+      </p>
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-[14rem_1fr]">
-        <nav aria-label="On this page" className="lg:sticky lg:top-6 lg:self-start">
-          <ul className="flex flex-wrap gap-2 text-sm lg:flex-col lg:gap-1">
-            {country.guide.map((section) => (
-              <li key={section.id}>
-                <a
-                  href={`#${section.id}`}
-                  className="block rounded-md border border-line px-3 py-1.5 hover:bg-surface-sunken lg:border-0 lg:px-2 lg:py-1"
-                >
-                  {section.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="min-w-0 space-y-12">
-          {country.guide.map((section) => (
-            <section key={section.id} id={section.id} className="scroll-mt-6" aria-labelledby={`${section.id}-heading`}>
-              <h2 id={`${section.id}-heading`} className="text-2xl font-semibold tracking-tight">
-                {section.title}
-              </h2>
-              <p className="mt-1 text-muted">{section.summary}</p>
-              <Markdown className="mt-4 max-w-3xl">{section.body}</Markdown>
-              <details className="mt-4 text-sm text-muted">
+      <div className="mt-10 border-t border-line">
+        {country.guide.map((section) => (
+          <details key={section.id} id={section.id} className="group scroll-mt-20 border-b border-line">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+              <span>
+                <span className="block text-lg font-semibold">{section.title}</span>
+                <span className="block text-sm text-muted">{section.summary}</span>
+              </span>
+              <Chevron />
+            </summary>
+            <div className="pb-8">
+              <Markdown>{section.body}</Markdown>
+              <details className="mt-5 text-xs text-muted">
                 <summary className="cursor-pointer">Sources</summary>
                 <ul className="mt-2 space-y-1">
                   {section.sources.map((source) => (
@@ -57,10 +48,17 @@ export default async function GuidePage({ params }: PageProps<"/[country]/guide"
                   ))}
                 </ul>
               </details>
-            </section>
-          ))}
-        </div>
+            </div>
+          </details>
+        ))}
       </div>
+      <OpenFromHash />
     </main>
   );
+}
+
+/** Opens the section named in the URL (e.g. /guide#visas) so links from other pages land on open content. */
+function OpenFromHash() {
+  const script = `(()=>{const o=()=>{const el=location.hash&&document.getElementById(decodeURIComponent(location.hash.slice(1)));if(el&&el.tagName==="DETAILS"){el.open=true;el.scrollIntoView();}};o();addEventListener("hashchange",o);})();`;
+  return <script dangerouslySetInnerHTML={{ __html: script }} />;
 }

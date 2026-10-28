@@ -1,36 +1,40 @@
 import Link from "next/link";
+import type { CountryContent } from "@/content/load";
+import { monthsFor } from "@/content";
 import type { Destination } from "@/content/schema";
+import { bestMonthsLabel } from "@/lib/format";
 import { Photo } from "./photo";
-import { SocialBadge } from "./social-badge";
 
-export function DestinationCard({ countrySlug, destination }: { countrySlug: string; destination: Destination }) {
+export function DestinationCard({ countrySlug, destination, best }: { countrySlug: string; destination: Destination; best: string }) {
   return (
-    <Link
-      href={`/${countrySlug}/places/${destination.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-line bg-surface transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-accent"
-    >
+    <Link href={`/${countrySlug}/places/${destination.slug}`} className="group block focus-visible:outline-none">
       <Photo
         photo={destination.photo}
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        className="aspect-[3/2] w-full"
+        className="aspect-[4/3] w-full rounded-2xl transition duration-300 group-hover:opacity-90 group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2"
         showCredit={false}
       />
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-semibold group-hover:text-accent">{destination.name}</h3>
-        <p className="text-sm text-muted">{destination.summary}</p>
-        <div className="mt-auto pt-2">
-          <SocialBadge level={destination.solo.social} />
+      <div className="mt-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="font-semibold group-hover:text-accent">{destination.name}</h3>
+          {best && <span className="shrink-0 text-xs text-muted">Best {best}</span>}
         </div>
+        <p className="mt-1 line-clamp-2 text-sm text-muted">{destination.summary}</p>
       </div>
     </Link>
   );
 }
 
-export function DestinationGrid({ countrySlug, destinations }: { countrySlug: string; destinations: Destination[] }) {
+export function DestinationGrid({ content, destinations }: { content: CountryContent; destinations: Destination[] }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {destinations.map((d) => (
-        <DestinationCard key={d.slug} countrySlug={countrySlug} destination={d} />
+        <DestinationCard
+          key={d.slug}
+          countrySlug={content.country.slug}
+          destination={d}
+          best={bestMonthsLabel(monthsFor(content, d).months)}
+        />
       ))}
     </div>
   );

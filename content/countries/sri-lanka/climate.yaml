@@ -1,0 +1,220 @@
+# Typical monthly weather at weather stations, used by the clickable month charts.
+# Long-term averages copied from each town's Wikipedia climate table; most come from
+# WMO/NOAA climate normals (Kandy's from Weather2Travel). Values: °C and mm.
+stations:
+  - id: colombo
+    name: Colombo
+    elevationM: 7
+    basis: WMO/NOAA climate normals
+    source: https://en.wikipedia.org/wiki/Colombo#Climate
+    months:
+      - { high: 31.4, low: 23.1, rainMm: 80, rainDays: 4.9 }
+      - { high: 31.6, low: 23.6, rainMm: 77, rainDays: 5.1 }
+      - { high: 32.0, low: 24.8, rainMm: 103, rainDays: 7.7 }
+      - { high: 32.0, low: 25.3, rainMm: 249, rainDays: 12.6 }
+      - { high: 31.5, low: 26.2, rainMm: 314, rainDays: 16.6 }
+      - { high: 30.7, low: 26.1, rainMm: 197, rainDays: 15.2 }
+      - { high: 30.3, low: 25.9, rainMm: 123, rainDays: 10.0 }
+      - { high: 30.3, low: 25.9, rainMm: 116, rainDays: 10.2 }
+      - { high: 30.4, low: 25.4, rainMm: 264, rainDays: 15.2 }
+      - { high: 30.4, low: 24.7, rainMm: 359, rainDays: 18.6 }
+      - { high: 30.6, low: 23.9, rainMm: 346, rainDays: 16.0 }
+      - { high: 30.9, low: 23.5, rainMm: 171, rainDays: 9.0 }
+  - id: galle
+    name: Galle
+    elevationM: 12
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Galle#Climate
+    months:
+      - { high: 29.9, low: 23.4, rainMm: 87, rainDays: 6.6 }
+      - { high: 30.7, low: 23.7, rainMm: 71, rainDays: 5.8 }
+      - { high: 31.6, low: 24.6, rainMm: 90, rainDays: 6.9 }
+      - { high: 31.4, low: 25.3, rainMm: 202, rainDays: 11.8 }
+      - { high: 30.4, low: 26.0, rainMm: 316, rainDays: 17.2 }
+      - { high: 29.4, low: 25.7, rainMm: 184, rainDays: 16.6 }
+      - { high: 29.0, low: 25.4, rainMm: 173, rainDays: 15.1 }
+      - { high: 29.0, low: 25.4, rainMm: 162, rainDays: 14.2 }
+      - { high: 29.2, low: 25.2, rainMm: 261, rainDays: 17.1 }
+      - { high: 29.4, low: 24.8, rainMm: 344, rainDays: 18.2 }
+      - { high: 29.9, low: 24.2, rainMm: 283, rainDays: 14.9 }
+      - { high: 29.9, low: 23.7, rainMm: 176, rainDays: 11.2 }
+  - id: kandy
+    name: Kandy
+    elevationM: 500
+    basis: Weather2Travel
+    source: https://en.wikipedia.org/wiki/Kandy#Climate
+    months:
+      - { high: 27.0, low: 18.0, rainMm: 79, rainDays: 6.0 }
+      - { high: 28.0, low: 18.0, rainMm: 74, rainDays: 5.0 }
+      - { high: 30.0, low: 18.0, rainMm: 71, rainDays: 8.0 }
+      - { high: 30.0, low: 20.0, rainMm: 188, rainDays: 14.0 }
+      - { high: 29.0, low: 20.0, rainMm: 144, rainDays: 11.0 }
+      - { high: 28.0, low: 20.0, rainMm: 132, rainDays: 15.0 }
+      - { high: 27.0, low: 20.0, rainMm: 128, rainDays: 14.0 }
+      - { high: 28.0, low: 19.0, rainMm: 113, rainDays: 13.0 }
+      - { high: 28.0, low: 19.0, rainMm: 155, rainDays: 13.0 }
+      - { high: 28.0, low: 19.0, rainMm: 264, rainDays: 17.0 }
+      - { high: 27.0, low: 19.0, rainMm: 296, rainDays: 16.0 }
+      - { high: 27.0, low: 18.0, rainMm: 196, rainDays: 14.0 }
+  - id: nuwara-eliya
+    name: Nuwara Eliya
+    elevationM: 1895
+    basis: WMO/NOAA climate normals
+    source: https://en.wikipedia.org/wiki/Nuwara_Eliya#Climate
+    months:
+      - { high: 19.9, low: 10.4, rainMm: 116, rainDays: 9.5 }
+      - { high: 21.0, low: 10.2, rainMm: 73, rainDays: 6.7 }
+      - { high: 22.3, low: 10.8, rainMm: 72, rainDays: 7.1 }
+      - { high: 22.5, low: 11.9, rainMm: 134, rainDays: 12.6 }
+      - { high: 21.5, low: 13.4, rainMm: 172, rainDays: 13.4 }
+      - { high: 19.2, low: 13.8, rainMm: 168, rainDays: 15.1 }
+      - { high: 18.6, low: 13.5, rainMm: 155, rainDays: 16.0 }
+      - { high: 19.0, low: 13.3, rainMm: 132, rainDays: 13.9 }
+      - { high: 19.5, low: 12.9, rainMm: 161, rainDays: 14.5 }
+      - { high: 19.7, low: 12.6, rainMm: 247, rainDays: 18.9 }
+      - { high: 19.8, low: 12.3, rainMm: 226, rainDays: 17.6 }
+      - { high: 19.4, low: 11.5, rainMm: 183, rainDays: 14.9 }
+  - id: badulla
+    name: Badulla
+    elevationM: 670
+    basis: WMO/NOAA climate normals
+    source: https://en.wikipedia.org/wiki/Badulla#Climate
+    months:
+      - { high: 25.5, low: 17.7, rainMm: 184, rainDays: 11.7 }
+      - { high: 27.2, low: 17.5, rainMm: 102, rainDays: 8.1 }
+      - { high: 29.7, low: 17.7, rainMm: 88, rainDays: 7.2 }
+      - { high: 30.6, low: 19.3, rainMm: 184, rainDays: 12.8 }
+      - { high: 31.1, low: 19.6, rainMm: 120, rainDays: 10.1 }
+      - { high: 31.1, low: 19.2, rainMm: 52, rainDays: 5.0 }
+      - { high: 31.1, low: 18.9, rainMm: 54, rainDays: 4.9 }
+      - { high: 31.2, low: 18.7, rainMm: 72, rainDays: 6.4 }
+      - { high: 30.7, low: 18.7, rainMm: 107, rainDays: 8.8 }
+      - { high: 29.2, low: 18.9, rainMm: 242, rainDays: 15.1 }
+      - { high: 27.2, low: 19.1, rainMm: 286, rainDays: 18.7 }
+      - { high: 25.6, low: 18.6, rainMm: 270, rainDays: 17.0 }
+  - id: anuradhapura
+    name: Anuradhapura
+    elevationM: 93
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Anuradhapura#Climate
+    months:
+      - { high: 30.4, low: 21.8, rainMm: 86, rainDays: 6.4 }
+      - { high: 32.2, low: 22.2, rainMm: 60, rainDays: 4.3 }
+      - { high: 34.8, low: 23.5, rainMm: 62, rainDays: 5.0 }
+      - { high: 34.7, low: 24.6, rainMm: 180, rainDays: 11.0 }
+      - { high: 33.7, low: 25.4, rainMm: 94, rainDays: 5.9 }
+      - { high: 33.2, low: 25.4, rainMm: 15, rainDays: 2.5 }
+      - { high: 33.5, low: 25.2, rainMm: 24, rainDays: 2.5 }
+      - { high: 33.8, low: 25.0, rainMm: 43, rainDays: 4.4 }
+      - { high: 33.9, low: 24.7, rainMm: 66, rainDays: 5.1 }
+      - { high: 32.5, low: 24.0, rainMm: 259, rainDays: 13.8 }
+      - { high: 30.8, low: 23.3, rainMm: 281, rainDays: 17.2 }
+      - { high: 29.8, low: 22.6, rainMm: 225, rainDays: 12.2 }
+  - id: trincomalee
+    name: Trincomalee
+    elevationM: 7
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Trincomalee#Climate
+    months:
+      - { high: 28.9, low: 24.0, rainMm: 152, rainDays: 8.4 }
+      - { high: 30.1, low: 24.3, rainMm: 96, rainDays: 4.7 }
+      - { high: 31.7, low: 24.8, rainMm: 72, rainDays: 4.0 }
+      - { high: 33.4, low: 25.5, rainMm: 55, rainDays: 4.2 }
+      - { high: 35.2, low: 26.2, rainMm: 48, rainDays: 4.2 }
+      - { high: 35.4, low: 26.3, rainMm: 26, rainDays: 1.9 }
+      - { high: 35.3, low: 25.8, rainMm: 51, rainDays: 3.4 }
+      - { high: 35.3, low: 25.5, rainMm: 67, rainDays: 4.2 }
+      - { high: 34.8, low: 25.1, rainMm: 113, rainDays: 5.7 }
+      - { high: 32.4, low: 24.5, rainMm: 216, rainDays: 12.8 }
+      - { high: 29.8, low: 24.0, rainMm: 376, rainDays: 17.9 }
+      - { high: 28.8, low: 23.8, rainMm: 339, rainDays: 15.0 }
+  - id: batticaloa
+    name: Batticaloa
+    elevationM: 8
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Batticaloa#Climate
+    months:
+      - { high: 28.4, low: 23.7, rainMm: 269, rainDays: 11.1 }
+      - { high: 29.3, low: 23.9, rainMm: 148, rainDays: 6.6 }
+      - { high: 30.8, low: 24.5, rainMm: 70, rainDays: 4.7 }
+      - { high: 32.4, low: 25.6, rainMm: 53, rainDays: 4.1 }
+      - { high: 33.5, low: 26.1, rainMm: 52, rainDays: 3.8 }
+      - { high: 34.5, low: 25.9, rainMm: 32, rainDays: 3.1 }
+      - { high: 34.4, low: 25.7, rainMm: 31, rainDays: 2.7 }
+      - { high: 33.8, low: 25.5, rainMm: 52, rainDays: 3.4 }
+      - { high: 33.0, low: 25.3, rainMm: 69, rainDays: 4.4 }
+      - { high: 31.6, low: 24.8, rainMm: 187, rainDays: 10.5 }
+      - { high: 29.7, low: 24.3, rainMm: 419, rainDays: 17.2 }
+      - { high: 28.6, low: 23.9, rainMm: 469, rainDays: 16.8 }
+  - id: jaffna
+    name: Jaffna
+    elevationM: 5
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Jaffna#Climate
+    months:
+      - { high: 29.3, low: 21.7, rainMm: 44, rainDays: 3.9 }
+      - { high: 30.7, low: 21.7, rainMm: 26, rainDays: 2.3 }
+      - { high: 32.8, low: 23.4, rainMm: 42, rainDays: 3.9 }
+      - { high: 33.8, low: 26.2, rainMm: 65, rainDays: 5.6 }
+      - { high: 32.9, low: 27.8, rainMm: 66, rainDays: 3.7 }
+      - { high: 32.5, low: 27.7, rainMm: 18, rainDays: 1.6 }
+      - { high: 32.6, low: 27.2, rainMm: 23, rainDays: 2.5 }
+      - { high: 32.2, low: 26.7, rainMm: 57, rainDays: 4.2 }
+      - { high: 31.8, low: 26.5, rainMm: 81, rainDays: 4.7 }
+      - { high: 31.2, low: 25.3, rainMm: 235, rainDays: 12.4 }
+      - { high: 29.8, low: 23.7, rainMm: 437, rainDays: 17.1 }
+      - { high: 28.9, low: 23.0, rainMm: 274, rainDays: 11.9 }
+  - id: puttalam
+    name: Puttalam
+    elevationM: 2
+    basis: WMO climate normals, 1991–2020
+    source: https://en.wikipedia.org/wiki/Puttalam#Climate
+    months:
+      - { high: 30.7, low: 21.4, rainMm: 50, rainDays: 5.6 }
+      - { high: 32.3, low: 21.7, rainMm: 42, rainDays: 4.2 }
+      - { high: 33.5, low: 23.4, rainMm: 57, rainDays: 4.5 }
+      - { high: 33.2, low: 24.7, rainMm: 154, rainDays: 9.5 }
+      - { high: 32.5, low: 26.5, rainMm: 102, rainDays: 6.5 }
+      - { high: 31.7, low: 26.7, rainMm: 32, rainDays: 4.2 }
+      - { high: 31.5, low: 26.3, rainMm: 24, rainDays: 2.1 }
+      - { high: 31.7, low: 26.2, rainMm: 23, rainDays: 3.4 }
+      - { high: 31.8, low: 25.9, rainMm: 69, rainDays: 5.8 }
+      - { high: 31.3, low: 24.7, rainMm: 231, rainDays: 12.8 }
+      - { high: 30.7, low: 23.5, rainMm: 255, rainDays: 15.3 }
+      - { high: 30.0, low: 22.6, rainMm: 144, rainDays: 10.8 }
+  - id: hambantota
+    name: Hambantota
+    elevationM: 20
+    basis: WMO/NOAA climate normals
+    source: https://en.wikipedia.org/wiki/Hambantota#Climate
+    months:
+      - { high: 30.9, low: 23.3, rainMm: 68, rainDays: 5.3 }
+      - { high: 31.5, low: 23.6, rainMm: 47, rainDays: 4.0 }
+      - { high: 31.9, low: 24.3, rainMm: 47, rainDays: 4.0 }
+      - { high: 31.9, low: 25.3, rainMm: 92, rainDays: 6.8 }
+      - { high: 31.2, low: 26.0, rainMm: 73, rainDays: 6.9 }
+      - { high: 31.2, low: 25.6, rainMm: 41, rainDays: 5.6 }
+      - { high: 31.6, low: 25.2, rainMm: 31, rainDays: 4.3 }
+      - { high: 30.9, low: 25.0, rainMm: 59, rainDays: 6.3 }
+      - { high: 30.5, low: 24.9, rainMm: 100, rainDays: 8.3 }
+      - { high: 30.7, low: 24.6, rainMm: 128, rainDays: 10.1 }
+      - { high: 30.6, low: 24.1, rainMm: 222, rainDays: 13.0 }
+      - { high: 30.4, low: 23.7, rainMm: 132, rainDays: 9.4 }
+  - id: ratnapura
+    name: Ratnapura
+    elevationM: 34
+    basis: WMO/NOAA climate normals
+    source: https://en.wikipedia.org/wiki/Ratnapura#Climate
+    months:
+      - { high: 32.4, low: 21.9, rainMm: 125, rainDays: 8.2 }
+      - { high: 33.7, low: 22.2, rainMm: 137, rainDays: 8.5 }
+      - { high: 34.2, low: 22.8, rainMm: 204, rainDays: 12.3 }
+      - { high: 33.5, low: 23.4, rainMm: 366, rainDays: 19.0 }
+      - { high: 32.0, low: 24.1, rainMm: 468, rainDays: 20.3 }
+      - { high: 30.9, low: 24.0, rainMm: 382, rainDays: 21.1 }
+      - { high: 30.6, low: 23.9, rainMm: 282, rainDays: 18.9 }
+      - { high: 30.7, low: 23.6, rainMm: 305, rainDays: 18.6 }
+      - { high: 31.1, low: 23.2, rainMm: 372, rainDays: 19.1 }
+      - { high: 31.3, low: 23.0, rainMm: 468, rainDays: 21.2 }
+      - { high: 31.4, low: 22.8, rainMm: 368, rainDays: 17.9 }
+      - { high: 31.4, low: 22.4, rainMm: 212, rainDays: 12.9 }

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DestinationGrid } from "@/components/destination-card";
+import { Disclosure } from "@/components/disclosure";
 import { MonthLegend, MonthStrip } from "@/components/month-strip";
 import { Photo } from "@/components/photo";
-import { destinationsInRegion, getCountry } from "@/content";
+import { climateFor, destinationsInRegion, getCountry } from "@/content";
+import { bestMonthsLabel } from "@/lib/format";
+import { button } from "@/lib/ui";
 
 export async function generateMetadata({ params }: PageProps<"/[country]">): Promise<Metadata> {
   const content = getCountry((await params).country);
@@ -18,90 +20,91 @@ export default async function CountryPage({ params }: PageProps<"/[country]">) {
 
   return (
     <main>
-      <section className="relative">
-        <Photo photo={country.photo} sizes="100vw" priority className="h-64 w-full sm:h-96" />
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <div className="-mt-16 relative max-w-2xl rounded-2xl border border-line bg-surface p-6 shadow-sm sm:-mt-24 sm:p-8">
-            <p className="text-sm font-medium uppercase tracking-wide text-accent">Solo travel guide</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">{country.name}</h1>
-            <p className="mt-3 text-lg text-muted">{country.tagline}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href={`/${country.slug}/plan`}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-on-accent hover:opacity-90"
-              >
+      <section className="relative isolate">
+        <Photo photo={country.photo} sizes="100vw" priority className="h-[62vh] min-h-96 w-full" />
+        <div className="absolute inset-0 -z-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-10 text-white sm:px-6 sm:pb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/80">Solo travel guide</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-6xl">{country.name}</h1>
+            <p className="mt-3 max-w-xl text-lg text-white/90">{country.tagline}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href={`/${country.slug}/plan`} className={button.primary}>
                 Plan my route
               </Link>
               <Link
                 href={`/${country.slug}/guide`}
-                className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-sunken"
+                className="inline-flex items-center rounded-full bg-white/15 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25"
               >
                 Practical guide
               </Link>
-              <a href="#regions" className="rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-sunken">
-                Browse {content.destinations.length} destinations
-              </a>
             </div>
           </div>
         </div>
       </section>
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <section className="mt-12" aria-labelledby="when-heading">
-          <h2 id="when-heading" className="text-2xl font-semibold tracking-tight">When to go</h2>
+        <section className="mt-16" aria-labelledby="regions-heading">
+          <h2 id="regions-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Explore by region
+          </h2>
+          <p className="mt-2 text-muted">{content.destinations.length} places in {regions.length} regions.</p>
+          <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {regions.map((region) => {
+              const places = destinationsInRegion(content, region.id);
+              const cover = places.find((d) => d.photo)?.photo;
+              return (
+                <Link key={region.id} href={`/${country.slug}/regions/${region.id}`} className="group block">
+                  <Photo photo={cover} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" showCredit={false} className="aspect-[4/3] w-full rounded-2xl transition group-hover:opacity-90" />
+                  <div className="mt-3 flex items-baseline justify-between gap-3">
+                    <h3 className="font-semibold group-hover:text-accent">{region.name}</h3>
+                    <span className="shrink-0 text-xs text-muted">Best {bestMonthsLabel(region.months)}</span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-sm text-muted">{region.summary}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-20" aria-labelledby="when-heading">
+          <h2 id="when-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">When to go</h2>
           <p className="mt-2 max-w-2xl text-muted">
-            Two monsoons hit opposite sides of the island, so somewhere is always in season.
+            Two monsoons hit opposite sides of the island, so somewhere is always in season. December to
+            April suits the south, west and hills; May to September suits the east and north.
           </p>
-          <div className="mt-5 overflow-hidden rounded-xl border border-line bg-surface">
-            <ul className="divide-y divide-line">
+          <Disclosure className="mt-4 border-t" summary="Month by month for every region">
+            <ul className="space-y-3">
               {regions.map((region) => (
-                <li key={region.id} className="grid gap-2 p-4 sm:grid-cols-[12rem_1fr] sm:items-center">
-                  <Link href={`/${country.slug}/regions/${region.id}`} className="font-medium hover:text-accent hover:underline">
-                    {region.name}
-                  </Link>
-                  <MonthStrip months={region.months} label={`Best months for ${region.name}`} compact />
+                <li key={region.id} className="grid gap-1.5 sm:grid-cols-[11rem_1fr] sm:items-start">
+                  <span className="text-sm font-medium">{region.name}</span>
+                  <MonthStrip months={region.months} label={`Best months for ${region.name}`} climate={climateFor(content, region)} compact />
                 </li>
               ))}
             </ul>
-          </div>
-          <div className="mt-3">
-            <MonthLegend />
-          </div>
+            <div className="mt-4">
+              <MonthLegend />
+            </div>
+          </Disclosure>
         </section>
 
-        <section id="regions" className="mt-14 scroll-mt-6" aria-labelledby="regions-heading">
-          <h2 id="regions-heading" className="text-2xl font-semibold tracking-tight">Where to go</h2>
-          {regions.map((region) => (
-            <section key={region.id} className="mt-10" aria-labelledby={`region-${region.id}`}>
-              <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-                <div>
-                  <h3 id={`region-${region.id}`} className="text-xl font-semibold">
-                    <Link href={`/${country.slug}/regions/${region.id}`} className="hover:text-accent hover:underline">
-                      {region.name}
-                    </Link>
-                  </h3>
-                  <p className="text-muted">{region.summary}</p>
-                </div>
-              </div>
-              <DestinationGrid countrySlug={country.slug} destinations={destinationsInRegion(content, region.id)} />
-            </section>
-          ))}
-        </section>
-
-        <section className="mt-14" aria-labelledby="guide-heading">
-          <h2 id="guide-heading" className="text-2xl font-semibold tracking-tight">Before you go</h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mt-20" aria-labelledby="guide-heading">
+          <h2 id="guide-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">Before you go</h2>
+          <ul className="mt-6 grid gap-x-10 sm:grid-cols-2">
             {country.guide.map((section) => (
-              <Link
-                key={section.id}
-                href={`/${country.slug}/guide#${section.id}`}
-                className="rounded-xl border border-line bg-surface p-4 hover:shadow-md"
-              >
-                <h3 className="font-semibold">{section.title}</h3>
-                <p className="mt-1 text-sm text-muted">{section.summary}</p>
-              </Link>
+              <li key={section.id} className="border-b border-line">
+                <Link href={`/${country.slug}/guide#${section.id}`} className="group flex items-center justify-between gap-4 py-4">
+                  <span>
+                    <span className="font-medium group-hover:text-accent">{section.title}</span>
+                    <span className="block text-sm text-muted">{section.summary}</span>
+                  </span>
+                  <span aria-hidden="true" className="text-muted transition group-hover:translate-x-0.5">
+                    →
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       </div>
     </main>

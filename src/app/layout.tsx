@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { CurrencyProvider } from "@/components/currency";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 import { isSitePublic } from "@/lib/site-access";
@@ -20,9 +21,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">{children}</div>
-        <SiteFooter />
+        <CurrencyProvider>
+          <SiteHeader />
+          <div className="flex flex-1 flex-col">{children}</div>
+          <SiteFooter />
+        </CurrencyProvider>
       </body>
     </html>
   );

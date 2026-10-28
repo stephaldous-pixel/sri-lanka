@@ -4,6 +4,34 @@ export function monthName(index: number): string {
   return MONTH_NAMES[index] ?? "";
 }
 
+/**
+ * Turns twelve month ratings into a short "best time" label such as "Dec–Apr"
+ * or "Jan–Mar, Aug–Sep". Uses "great" months, or "good" ones if none are great.
+ */
+export function bestMonthsLabel(months: readonly string[]): string {
+  if (months.length !== 12) return "";
+  const target = months.includes("great") ? "great" : "good";
+  const best = months.map((m) => m === target);
+  if (best.every(Boolean)) return "All year";
+  if (!best.some(Boolean)) return "";
+  // Start just after a non-best month so ranges that wrap past December stay whole.
+  const start = (best.findIndex((b) => !b) + 1) % 12;
+  const ranges: [number, number][] = [];
+  for (let i = 0; i < 12; i++) {
+    const m = (start + i) % 12;
+    if (!best[m]) continue;
+    const last = ranges.at(-1);
+    if (last && (last[1] + 1) % 12 === m) last[1] = m;
+    else ranges.push([m, m]);
+  }
+  // Calendar order; a range wrapping past December (e.g. Dec–Mar) counts as starting the year.
+  const order = ([a, b]: [number, number]) => (a > b ? a - 12 : a);
+  return ranges
+    .sort((x, y) => order(x) - order(y))
+    .map(([a, b]) => (a === b ? monthName(a) : `${monthName(a)}–${monthName(b)}`))
+    .join(", ");
+}
+
 export function formatPrice(amount: number, symbol: string): string {
   return `${symbol} ${Math.round(amount).toLocaleString("en-GB")}`;
 }

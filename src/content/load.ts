@@ -5,11 +5,13 @@ import path from "node:path";
 import { parse } from "yaml";
 import type { z } from "zod";
 import {
+  ClimateFileSchema,
   CountrySchema,
   DestinationSchema,
   InterestsFileSchema,
   RegionsFileSchema,
   TravelLegsFileSchema,
+  type ClimateStation,
   type Country,
   type Destination,
   type Interest,
@@ -25,6 +27,7 @@ export type CountryContent = {
   destinations: Destination[];
   legs: TravelLeg[];
   legsLastChecked: string;
+  climate: ClimateStation[];
 };
 
 function readYaml<S extends z.ZodType>(file: string, schema: S): z.infer<S> {
@@ -63,13 +66,15 @@ export function loadCountry(slug: string): CountryContent {
       .map((f) => readYaml(path.join(destDir, f), DestinationSchema)),
     legs: legsFile.legs,
     legsLastChecked: legsFile.lastChecked,
+    climate: readYaml(path.join(dir, "climate.yaml"), ClimateFileSchema).stations,
   };
 }
 
 /** Checks that content files point at each other correctly. Returns problems found. */
 export function crossCheck(content: CountryContent, interests: Interest[]): string[] {
   const problems: string[] = [];
-  const { country, regions, destinations, legs } = content;
+  const { country, regions, destinations, legs, climate } = content;
+  const stationIds = new Set(climate.map((s) => s.id));
   const interestIds = new Set(interests.map((i) => i.id));
   const regionIds = new Set(regions.map((r) => r.id));
   const destSlugs = new Set(destinations.map((d) => d.slug));
@@ -81,8 +86,12 @@ export function crossCheck(content: CountryContent, interests: Interest[]): stri
   for (const g of country.gateways) {
     if (!destSlugs.has(g.destination)) problems.push(`gateway ${g.code} → unknown destination "${g.destination}"`);
   }
+  for (const r of regions) {
+    if (!stationIds.has(r.climateStation)) problems.push(`region "${r.id}": unknown climate station "${r.climateStation}"`);
+  }
   for (const d of destinations) {
     if (!regionIds.has(d.region)) problems.push(`${d.slug}: unknown region "${d.region}"`);
+    if (d.climateStation && !stationIds.has(d.climateStation)) problems.push(`${d.slug}: unknown climate station "${d.climateStation}"`);
     for (const id of Object.keys(d.interests)) {
       if (!interestIds.has(id)) problems.push(`${d.slug}: unknown interest "${id}"`);
     }

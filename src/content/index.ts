@@ -1,6 +1,6 @@
 // What pages use to read content. Files are read once per server process.
 import { listCountrySlugs, loadCountry, loadInterests, type CountryContent } from "./load";
-import type { Destination, Interest, Region, TravelLeg } from "./schema";
+import type { ClimateStation, Destination, Interest, Region, TravelLeg } from "./schema";
 
 const countries = new Map<string, CountryContent>();
 let interests: Interest[] | undefined;
@@ -43,6 +43,15 @@ export function monthsFor(content: CountryContent, destination: Destination) {
     months: destination.months ?? region?.months ?? [],
     note: destination.monthsNote ?? region?.monthsNote,
   };
+}
+
+/** The weather station that best represents a destination or region. */
+export function climateFor(content: CountryContent, place: Destination | Region): ClimateStation | undefined {
+  const id =
+    "climateStation" in place && place.climateStation
+      ? place.climateStation
+      : getRegion(content, (place as Destination).region)?.climateStation;
+  return content.climate.find((s) => s.id === id);
 }
 
 export type Connection = { destination: Destination; leg: TravelLeg };

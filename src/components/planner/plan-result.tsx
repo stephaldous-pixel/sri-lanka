@@ -20,6 +20,7 @@ export function PlanResultView({
   editor,
   onEdit,
   onNights,
+  notice,
   edited = false,
 }: {
   data: PlannerData;
@@ -30,6 +31,8 @@ export function PlanResultView({
   onEdit?: () => void;
   /** Change the nights at stop `index` (in plan.stops) without opening the editor. */
   onNights?: (index: number, nights: number) => void;
+  /** Feedback after a quick change, announced to screen readers. */
+  notice?: string | null;
   edited?: boolean;
 }) {
   const { symbol, code } = data.country.currency;
@@ -94,6 +97,9 @@ export function PlanResultView({
                   </button>
                 )}
               </div>
+              <p aria-live="polite" className="mb-3 text-sm text-muted empty:hidden">
+                {notice}
+              </p>
               <ol>
                 {plan.stops.map((stop, i) => (
                   <li key={`${stop.destination.slug}-${i}`}>

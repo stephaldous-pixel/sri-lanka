@@ -92,10 +92,10 @@ Status: ✅ built · 🔜 planned · 💭 later.
 ### 6.3 Editing and the map
 | ID | Requirement | Priority | Status |
 |---|---|---|---|
-| E1 | Change nights at any stop directly from the route | P0 | ✅ |
+| E1 | Change nights at any stop directly from the route; the trip stays the length of the traveller's dates, with nights moved to or from other stops (refused with an explanation if every other stop is at 1 night) | P0 | ✅ |
 | E2 | Reorder stops by drag (mouse or touch) and by keyboard (↑ / ↓ on the handle), with screen reader announcements | P0 | ✅ |
 | E3 | Remove stops; add places from a searchable list, inserted where they add the least travel | P0 | ✅ |
-| E4 | Instant recalculation of journeys, dates, warnings, costs and day plan; "Reset" to the suggested route | P0 | ✅ |
+| E4 | Instant recalculation of journeys, warnings, costs and day plan; adding or removing places rebalances nights so total days stay fixed; "Reset" to the suggested route | P0 | ✅ |
 | E5 | Automatically add a night near the airport when the last stop is far away | P1 | ✅ |
 | E6 | Map with numbered stops and the route line; two-finger panning on phones; free tiles | P1 | ✅ |
 | E7 | Routes and edits saved on the device | P0 | ✅ |
@@ -226,3 +226,4 @@ Guidebooks may be used to check facts, but their text is never copied.
 | 28 Oct 2026 | Progressive disclosure: key facts first, detail on demand |
 | 28 Oct 2026 | Exact travel dates via calendar; climate figures per weather station |
 | 28 Oct 2026 | Code repository made public; the site itself stays private |
+| 28 Oct 2026 | Editing keeps the trip to the traveller's dates: nights are rebalanced between stops rather than extending the trip |

@@ -183,6 +183,52 @@ export function bestPositionFor(data: PlannerData, input: PlannerInput, slugs: s
   return best;
 }
 
+/** Marks the arrival night when protecting it from rebalancing. */
+export const ARRIVAL = "@arrival";
+
+/**
+ * Moves nights between stops so the trip fills exactly `input.days`, keeping
+ * the traveller's dates fixed. The stop named in `protect` (a slug, or
+ * ARRIVAL) keeps the nights it was just given. Nights are taken first from
+ * stops furthest above their ideal stay, and given first to stops furthest
+ * below it. Returns null if it can't fit (every other stop is down to 1 night).
+ */
+export function fitToDays(data: PlannerData, input: PlannerInput, edits: EditedRoute, protect?: string): EditedRoute | null {
+  const gateway = data.country.gateways[0].destination;
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const ideal = new Map(data.destinations.map((d) => [d.slug, d.nights]));
+  const stops = edits.stops.map((s) => ({ ...s, nights: Math.max(1, Math.round(s.nights)) }));
+  let arrival = Math.max(1, Math.round(edits.arrivalNights));
+
+  const last = stops.at(-1);
+  const lastNight = last && graph.hours(last.slug, gateway) > LAST_NIGHT_NEAR_AIRPORT_HOURS ? 1 : 0;
+  let diff = input.days - 1 - lastNight - (arrival + stops.reduce((sum, s) => sum + s.nights, 0));
+
+  const free = stops.filter((s) => s.slug !== protect);
+  const target = (s: (typeof stops)[number]) => ideal.get(s.slug)?.ideal ?? 2;
+  const max = (s: (typeof stops)[number]) => ideal.get(s.slug)?.max ?? 30;
+
+  while (diff > 0) {
+    // Give a night to the stop furthest below its ideal (then with most room before its max).
+    const pick = [...free].sort((a, b) => target(b) - b.nights - (target(a) - a.nights) || max(b) - b.nights - (max(a) - a.nights))[0];
+    if (pick) pick.nights++;
+    else if (protect !== ARRIVAL) arrival++;
+    else return null;
+    diff--;
+  }
+  while (diff < 0) {
+    // Take a night from the stop furthest above its ideal (then with the most nights).
+    const pick = [...free]
+      .filter((s) => s.nights > 1)
+      .sort((a, b) => b.nights - target(b) - (a.nights - target(a)) || b.nights - a.nights)[0];
+    if (pick) pick.nights--;
+    else if (protect !== ARRIVAL && arrival > 1) arrival--;
+    else return null;
+    diff++;
+  }
+  return { arrivalNights: arrival, stops };
+}
+
 /** Nights we'd suggest for a place at this pace. */
 export function suggestedNights(data: PlannerData, input: PlannerInput, slug: string): number {
   const d = data.destinations.find((x) => x.slug === slug);

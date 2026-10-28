@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
-import { bestPositionFor, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
+import { ARRIVAL, bestPositionFor, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
 import type { PlannerInput } from "./types";
 
 const data = toPlannerData(loadCountry("sri-lanka"), loadInterests());
@@ -181,6 +181,57 @@ describe("editing a route", () => {
     // Galle → Unawatuna → Ella: Mirissa belongs between Unawatuna and Ella, not at either end.
     const index = bestPositionFor(data, base, ["galle", "unawatuna", "ella"], "mirissa");
     expect(index).toBe(2);
+  });
+});
+
+describe("keeping the trip length fixed while editing", () => {
+  const plan = generatePlan(data, base); // 14 days
+  const edits = toEditedRoute(plan);
+  const days = (e: ReturnType<typeof toEditedRoute>) => planFromStops(data, base, e).days.length;
+  const nightsOf = (e: ReturnType<typeof toEditedRoute>, slug: string) => e.stops.find((s) => s.slug === slug)?.nights;
+
+  it("takes a night from elsewhere when one stop gets more", () => {
+    const slug = edits.stops[0].slug;
+    const bumped = { ...edits, stops: edits.stops.map((s) => (s.slug === slug ? { ...s, nights: s.nights + 2 } : s)) };
+    const fitted = fitToDays(data, base, bumped, slug)!;
+    expect(days(fitted)).toBe(14);
+    expect(nightsOf(fitted, slug)).toBe(edits.stops[0].nights + 2);
+  });
+
+  it("gives nights to other stops when one stop gets fewer or is removed", () => {
+    const removed = fitToDays(data, base, { ...edits, stops: edits.stops.slice(1) })!;
+    expect(days(removed)).toBe(14);
+    const slug = edits.stops.find((s) => s.nights > 1)!.slug;
+    const cut = { ...edits, stops: edits.stops.map((s) => (s.slug === slug ? { ...s, nights: 1 } : s)) };
+    const fitted = fitToDays(data, base, cut, slug)!;
+    expect(days(fitted)).toBe(14);
+    expect(nightsOf(fitted, slug)).toBe(1);
+  });
+
+  it("makes room for an added place", () => {
+    const added = fitToDays(data, base, { ...edits, stops: [...edits.stops, { slug: "kandy", nights: 2 }] }, "kandy")!;
+    expect(days(added)).toBe(14);
+    expect(nightsOf(added, "kandy")).toBe(2);
+  });
+
+  it("allows for a night near the airport when the order changes", () => {
+    const farLast = { ...edits, stops: [...edits.stops.filter((s) => s.slug !== "ella"), edits.stops.find((s) => s.slug === "ella")!] };
+    const fitted = fitToDays(data, base, farLast)!;
+    const rebuilt = planFromStops(data, base, fitted);
+    expect(rebuilt.days).toHaveLength(14);
+    expect(rebuilt.stops.at(-1)?.role).toBe("departure");
+  });
+
+  it("can change the arrival night too", () => {
+    const fitted = fitToDays(data, base, { ...edits, arrivalNights: 3 }, ARRIVAL)!;
+    expect(fitted.arrivalNights).toBe(3);
+    expect(days(fitted)).toBe(14);
+  });
+
+  it("refuses when every other stop is already down to one night", () => {
+    const tight = { arrivalNights: 1, stops: [{ slug: "galle", nights: 1 }, { slug: "unawatuna", nights: 1 }] };
+    const short = { ...base, days: 4 };
+    expect(fitToDays(data, short, { ...tight, stops: [{ slug: "galle", nights: 2 }, { slug: "unawatuna", nights: 1 }] }, "galle")).toBeNull();
   });
 });
 

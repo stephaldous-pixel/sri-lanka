@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { addDays, formatRange } from "@/lib/dates";
 import { button } from "@/lib/ui";
-import { generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
+import { ARRIVAL, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { PlanResultView } from "./plan-result";
 import { DEFAULT_INPUT, PlannerForm } from "./planner-form";
@@ -29,10 +29,12 @@ export function Planner({ data }: { data: PlannerData }) {
   const country = data.country.slug;
   const [state, setState] = useState<State>({ view: "loading" });
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const resultTop = useRef<HTMLDivElement>(null);
 
   function build(input: PlannerInput, save: boolean, edits?: EditedRoute) {
     try {
+      if (edits) edits = fitToDays(data, input, edits) ?? edits;
       const plan = edits ? planFromStops(data, input, edits) : generatePlan(data, input);
       setError(null);
       setState({ view: "result", input, plan, edits, editing: false, saved: save ? savePlan(country, input, edits) : true });
@@ -82,17 +84,32 @@ export function Planner({ data }: { data: PlannerData }) {
       ? `in ${MONTHS[input.month]}`
       : "";
 
-  function applyEdits(next: EditedRoute, keepEditing = true) {
-    const plan = planFromStops(data, input, next);
-    setState({ view: "result", input, plan, edits: next, editing: keepEditing, saved: savePlan(country, input, next) });
+  /**
+   * Applies an edit while keeping the trip to the traveller's dates: nights are
+   * moved between other stops. Returns false if it can't fit.
+   */
+  function applyEdits(next: EditedRoute, protect?: string, keepEditing = true): boolean {
+    const fitted = fitToDays(data, input, next, protect);
+    if (!fitted) return false;
+    const plan = planFromStops(data, input, fitted);
+    setState({ view: "result", input, plan, edits: fitted, editing: keepEditing, saved: savePlan(country, input, fitted) });
+    return true;
   }
 
   /** Quick change from the route list: index is a position in plan.stops. */
   function changeNights(index: number, nights: number) {
     const current = edits ?? toEditedRoute(plan);
     const stop = plan.stops[index];
-    if (stop.role === "arrival") return applyEdits({ ...current, arrivalNights: nights }, false);
-    applyEdits({ ...current, stops: current.stops.map((s) => (s.slug === stop.destination.slug ? { ...s, nights } : s)) }, false);
+    const slug = stop.destination.slug;
+    const ok =
+      stop.role === "arrival"
+        ? applyEdits({ ...current, arrivalNights: nights }, ARRIVAL, false)
+        : applyEdits({ ...current, stops: current.stops.map((s) => (s.slug === slug ? { ...s, nights } : s)) }, slug, false);
+    setNotice(
+      ok
+        ? `${stop.destination.name}: ${nights} night${nights === 1 ? "" : "s"}. Other stops adjusted to keep your ${input.days} days.`
+        : "Every other stop is already down to 1 night. Remove a stop to make room, or change your dates.",
+    );
   }
 
   function resetEdits() {
@@ -132,6 +149,7 @@ export function Planner({ data }: { data: PlannerData }) {
         edited={!!edits}
         onEdit={() => setState({ ...state, editing: true })}
         onNights={changeNights}
+        notice={editing ? undefined : notice}
         editor={
           editing ? (
             <RouteEditor
@@ -139,8 +157,7 @@ export function Planner({ data }: { data: PlannerData }) {
               input={input}
               edits={edits ?? toEditedRoute(plan)}
               days={days}
-              originalDays={input.days}
-              onChange={applyEdits}
+              onChange={(next, protect) => applyEdits(next, protect)}
               onDone={() => setState({ ...state, editing: false })}
               onReset={resetEdits}
             />

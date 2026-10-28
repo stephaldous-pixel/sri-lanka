@@ -5,7 +5,7 @@ import { Grip, NightsStepper } from "./controls";
 import { SortableList } from "./sortable-list";
 import { Photo } from "@/components/photo";
 import { button, card } from "@/lib/ui";
-import { bestPositionFor, suggestedNights, type EditedRoute } from "@/planner/engine";
+import { ARRIVAL, bestPositionFor, suggestedNights, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerDestination, PlannerInput } from "@/planner/types";
 
 /** Drag to reorder, change nights, remove and add places. Changes apply straight away. */
@@ -14,7 +14,6 @@ export function RouteEditor({
   input,
   edits,
   days,
-  originalDays,
   onChange,
   onDone,
   onReset,
@@ -24,9 +23,12 @@ export function RouteEditor({
   edits: EditedRoute;
   /** Trip length with these edits, including any last night near the airport. */
   days: number;
-  /** Trip length the traveller first asked for, to show the difference. */
-  originalDays: number;
-  onChange: (edits: EditedRoute) => void;
+  /**
+   * Apply a change. The trip length stays fixed, so nights are moved between
+   * other stops; `protect` (a slug or ARRIVAL) keeps the nights it was given.
+   * Returns false if it can't fit.
+   */
+  onChange: (edits: EditedRoute, protect?: string) => boolean;
   onDone: () => void;
   onReset: () => void;
 }) {
@@ -35,27 +37,39 @@ export function RouteEditor({
   const [message, setMessage] = useState<string | null>(null);
   const name = (slug: string | number) => bySlug.get(String(slug))?.name ?? String(slug);
 
-  const diff = days - originalDays;
+  const tooFew = "Every other stop is already down to 1 night. Remove a stop to make room, or change your dates.";
 
-  function update(stops: EditedRoute["stops"], arrivalNights = edits.arrivalNights) {
-    onChange({ arrivalNights, stops });
+  function update(stops: EditedRoute["stops"], protect?: string, arrivalNights = edits.arrivalNights): boolean {
+    const ok = onChange({ arrivalNights, stops }, protect);
+    if (!ok) setMessage(tooFew);
+    return ok;
+  }
+
+  function setNights(slug: string, nights: number) {
+    if (update(edits.stops.map((s) => (s.slug === slug ? { ...s, nights } : s)), slug)) {
+      setMessage(`${name(slug)}: ${nights} night${nights === 1 ? "" : "s"}. Other stops adjusted to keep your ${days} days.`);
+    }
   }
 
   function move(from: number, to: number) {
     const stops = [...edits.stops];
     const [moved] = stops.splice(from, 1);
     stops.splice(to, 0, moved);
-    update(stops);
-    setMessage(`Moved ${name(moved.slug)} ${to < from ? "up" : "down"}: now stop ${to + 1} of ${stops.length}.`);
+    if (update(stops)) setMessage(`Moved ${name(moved.slug)} ${to < from ? "up" : "down"}: now stop ${to + 1} of ${stops.length}.`);
   }
 
   function add(slug: string) {
     const index = bestPositionFor(data, input, edits.stops.map((s) => s.slug), slug);
-    const stops = [...edits.stops];
-    stops.splice(index, 0, { slug, nights: suggestedNights(data, input, slug) });
-    update(stops);
-    const after = index === 0 ? gateway.name : name(stops[index - 1].slug);
-    setMessage(`Added ${name(slug)} after ${after}, where it adds the least travel. Drag to move it.`);
+    const withNights = (nights: number) => {
+      const stops = [...edits.stops];
+      stops.splice(index, 0, { slug, nights });
+      return stops;
+    };
+    const suggested = suggestedNights(data, input, slug);
+    const added = onChange({ ...edits, stops: withNights(suggested) }, slug) || (suggested > 1 && onChange({ ...edits, stops: withNights(1) }, slug));
+    if (!added) return setMessage(`No room for ${name(slug)}. ${tooFew}`);
+    const after = index === 0 ? gateway.name : name(edits.stops[index - 1].slug);
+    setMessage(`Added ${name(slug)} after ${after}, where it adds the least travel. Nights taken from other stops to keep your ${days} days.`);
   }
 
   return (
@@ -63,12 +77,7 @@ export function RouteEditor({
       <div className={`${card} flex flex-wrap items-center justify-between gap-3 p-4`}>
         <p className="text-sm">
           <span className="font-semibold">{days} days</span>
-          {diff !== 0 && (
-            <span className="text-muted">
-              {" "}
-              · {Math.abs(diff)} {diff > 0 ? "more" : "fewer"} than you planned
-            </span>
-          )}
+          <span className="text-muted"> · fixed to your dates</span>
         </p>
         <div className="flex items-center gap-3">
           <button type="button" onClick={onReset} className={button.quiet}>
@@ -80,7 +89,7 @@ export function RouteEditor({
         </div>
       </div>
       <p className="text-sm text-muted">
-        Drag <Grip /> to reorder, or focus it and use the ↑ ↓ keys. We&apos;ll add a night near the airport if your last stop is far away.
+        Drag <Grip /> to reorder, or focus it and use the ↑ ↓ keys. Your trip stays {days} days: changing one stop moves nights to or from the others. We&apos;ll add a night near the airport if your last stop is far away.
       </p>
 
       <ol className="space-y-2">
@@ -89,7 +98,7 @@ export function RouteEditor({
             ✈
           </span>
           <StopLabel destination={gateway} note="Arrival" />
-          <NightsStepper nights={edits.arrivalNights} name={gateway.name} onChange={(n) => update(edits.stops, n)} />
+          <NightsStepper nights={edits.arrivalNights} name={gateway.name} onChange={(n) => update(edits.stops, ARRIVAL, n) && setMessage(`${gateway.name}: ${n} night${n === 1 ? "" : "s"}. Other stops adjusted to keep your ${days} days.`)} />
           <span className="w-9 shrink-0" />
         </li>
       </ol>
@@ -108,13 +117,14 @@ export function RouteEditor({
               <NightsStepper
                 nights={stop.nights}
                 name={destination.name}
-                onChange={(n) => update(edits.stops.map((s, j) => (j === i ? { ...s, nights: n } : s)))}
+                onChange={(n) => setNights(slug, n)}
               />
               <button
                 type="button"
                 onClick={() => {
-                  update(edits.stops.filter((_, j) => j !== i));
-                  setMessage(`Removed ${destination.name}.`);
+                  if (update(edits.stops.filter((_, j) => j !== i))) {
+                    setMessage(`Removed ${destination.name}. Its nights went to other stops.`);
+                  }
                 }}
                 aria-label={`Remove ${destination.name}`}
                 className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted hover:bg-surface-sunken hover:text-danger"

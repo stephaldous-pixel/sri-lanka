@@ -8,7 +8,7 @@ import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
-import { FirstNightPicker, NightsStepper } from "./controls";
+import { NightsStepper } from "./controls";
 import { RouteMap } from "./route-map";
 
 const BUDGET_LABELS = { budget: "budget", mid: "mid-range", comfort: "comfort" } as const;
@@ -20,7 +20,6 @@ export function PlanResultView({
   editor,
   onEdit,
   onNights,
-  firstNight,
   notice,
   edited = false,
 }: {
@@ -32,8 +31,6 @@ export function PlanResultView({
   onEdit?: () => void;
   /** Change the nights at stop `index` (in plan.stops) without opening the editor. */
   onNights?: (index: number, nights: number) => void;
-  /** Choose where the first night is spent. */
-  firstNight?: { options: { slug: string; name: string; hours: number }[]; onChange: (slug: string) => void };
   /** Feedback after a quick change, announced to screen readers. */
   notice?: string | null;
   edited?: boolean;
@@ -146,7 +143,6 @@ export function PlanResultView({
                       stop={stop}
                       countrySlug={data.country.slug}
                       onNights={onNights && stop.role !== "departure" ? (n) => onNights(i, n) : undefined}
-                      firstNight={stop.role === "arrival" ? firstNight : undefined}
                     />
                     <HopLine hop={plan.hops[i]} names={names} final={i === plan.stops.length - 1} />
                   </li>
@@ -241,14 +237,11 @@ function StopCard({
   stop,
   countrySlug,
   onNights,
-  firstNight,
 }: {
   stop: PlannedStop;
   countrySlug: string;
   /** When given, the stay length can be changed right here. */
   onNights?: (nights: number) => void;
-  /** On the arrival stop: choose where the first night is spent. */
-  firstNight?: { options: { slug: string; name: string; hours: number }[]; onChange: (slug: string) => void };
 }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -275,11 +268,6 @@ function StopCard({
         {onNights && (
           <div className="order-3 w-full sm:order-2 sm:w-auto">
             <NightsStepper nights={stop.nights} name={stop.destination.name} onChange={onNights} />
-          </div>
-        )}
-        {firstNight && (
-          <div className="order-4 w-full sm:pl-[4.75rem]">
-            <FirstNightPicker options={firstNight.options} value={stop.destination.slug} onChange={firstNight.onChange} />
           </div>
         )}
         <button

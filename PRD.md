@@ -97,7 +97,7 @@ Status: ✅ built · 🔜 planned · 💭 later.
 | E3 | Remove stops; add places from a searchable list, inserted where they add the least travel | P0 | ✅ |
 | E4 | Instant recalculation of journeys, warnings, costs and day plan; adding or removing places rebalances nights so total days stay fixed; "Reset" to the suggested route | P0 | ✅ |
 | E5 | Automatically add a night near the airport when the last stop is far away | P1 | ✅ |
-| E8 | Choose where to spend the first night (any place, nearest the airport first, with travel time); nights rebalance to keep the dates | P1 | ✅ |
+| E8 | The first night is an ordinary stop: delete it, drag any stop to the top, or add a place there; the top stop is where the first night is spent, and nights rebalance to keep the dates | P1 | ✅ |
 | E6 | Map with numbered stops and the route line; two-finger panning on phones; free tiles | P1 | ✅ |
 | E7 | Routes and edits saved on the device | P0 | ✅ |
 

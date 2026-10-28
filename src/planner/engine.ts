@@ -148,7 +148,7 @@ export function planFromStops(data: PlannerData, input: PlannerInput, edits: Edi
   const clampNights = (n: number) => Math.min(60, Math.max(1, Math.round(n) || 1));
   const arrival = (edits.arrivalSlug && bySlug.get(edits.arrivalSlug)) || bySlug.get(gatewaySlug)!;
   const route: Stop[] = edits.stops
-    .filter((s) => bySlug.has(s.slug) && s.slug !== gatewaySlug && s.slug !== arrival.slug)
+    .filter((s) => bySlug.has(s.slug) && s.slug !== arrival.slug)
     .map((s) => ({
       candidate: {
         destination: bySlug.get(s.slug)!,
@@ -209,6 +209,7 @@ export function fitToDays(data: PlannerData, input: PlannerInput, edits: EditedR
   const lastNight = lastSlug && lastSlug !== gateway && graph.hours(lastSlug, gateway) > LAST_NIGHT_NEAR_AIRPORT_HOURS ? 1 : 0;
   let diff = input.days - 1 - lastNight - (arrival + stops.reduce((sum, s) => sum + s.nights, 0));
 
+  if (protect && protect === (edits.arrivalSlug ?? gateway)) protect = ARRIVAL;
   const free = stops.filter((s) => s.slug !== protect);
   const target = (s: (typeof stops)[number]) => ideal.get(s.slug)?.ideal ?? 2;
   const max = (s: (typeof stops)[number]) => ideal.get(s.slug)?.max ?? 30;
@@ -234,16 +235,19 @@ export function fitToDays(data: PlannerData, input: PlannerInput, edits: EditedR
   return { ...edits, arrivalNights: arrival, stops };
 }
 
-/** Places to spend the first night, nearest the airport first, with rough travel time. */
-export function firstNightOptions(data: PlannerData, input: PlannerInput): { slug: string; name: string; hours: number }[] {
-  const gateway = data.country.gateways[0].destination;
-  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
-  // The airport is about 10km from the gateway town, so treat journeys as starting there
-  // (at least ~25 minutes for the airport town itself).
-  return data.destinations
-    .map((d) => ({ slug: d.slug, name: d.name, hours: Math.max(0.4, graph.hours(gateway, d.slug)) }))
-    .filter((o) => Number.isFinite(o.hours))
-    .sort((a, b) => a.hours - b.hours || a.name.localeCompare(b.name));
+/** One stop in the editable list. The first one is where the first night is spent. */
+export type ListStop = { slug: string; nights: number; reasons?: string[] };
+
+/** The route as one list, first night included, so every stop is edited the same way. */
+export function toStopList(data: PlannerData, edits: EditedRoute): ListStop[] {
+  return [{ slug: edits.arrivalSlug ?? data.country.gateways[0].destination, nights: edits.arrivalNights }, ...edits.stops];
+}
+
+/** Back from a list to an edited route; null if the list is empty (a trip needs one place). */
+export function fromStopList(list: ListStop[]): EditedRoute | null {
+  if (list.length === 0) return null;
+  const [first, ...rest] = list;
+  return { arrivalSlug: first.slug, arrivalNights: first.nights, stops: rest };
 }
 
 /** Nights we'd suggest for a place at this pace. */

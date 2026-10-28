@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { addDays, formatRange } from "@/lib/dates";
 import { button } from "@/lib/ui";
-import { ARRIVAL, firstNightOptions, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
+import { ARRIVAL, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { PlanResultView } from "./plan-result";
 import { DEFAULT_INPUT, PlannerForm } from "./planner-form";
@@ -112,15 +112,6 @@ export function Planner({ data }: { data: PlannerData }) {
     );
   }
 
-  /** Spend the first night somewhere else; nights rebalance to keep the dates. */
-  function changeFirstNight(slug: string) {
-    const current = edits ?? toEditedRoute(plan);
-    const next = { ...current, arrivalSlug: slug, stops: current.stops.filter((s) => s.slug !== slug) };
-    const ok = applyEdits(next, ARRIVAL, editing);
-    const name = data.destinations.find((d) => d.slug === slug)?.name ?? slug;
-    setNotice(ok ? `First night now in ${name}. Other stops adjusted to keep your ${input.days} days.` : `No room to start in ${name} with these dates.`);
-  }
-
   function resetEdits() {
     const plan = generatePlan(data, input);
     setState({ view: "result", input, plan, edits: undefined, editing: true, saved: savePlan(country, input) });
@@ -163,7 +154,6 @@ export function Planner({ data }: { data: PlannerData }) {
         edited={!!edits}
         onEdit={() => setState({ ...state, editing: true })}
         onNights={changeNights}
-        firstNight={{ options: firstNightOptions(data, input), onChange: changeFirstNight }}
         notice={editing ? undefined : notice}
         editor={
           editing ? (

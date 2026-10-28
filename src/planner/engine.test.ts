@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
-import { ARRIVAL, bestPositionFor, firstNightOptions, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
+import { ARRIVAL, bestPositionFor, fitToDays, fromStopList, generatePlan, planFromStops, PlannerError, toEditedRoute, toStopList } from "./engine";
 import type { PlannerInput } from "./types";
 
 const data = toPlannerData(loadCountry("sri-lanka"), loadInterests());
@@ -239,10 +239,35 @@ describe("choosing where to spend the first night", () => {
   const plan = generatePlan(data, base);
   const edits = toEditedRoute(plan);
 
-  it("lists places nearest the airport first, starting with the airport town", () => {
-    const options = firstNightOptions(data, base);
-    expect(options[0].slug).toBe("negombo");
-    expect(options.findIndex((o) => o.slug === "colombo")).toBeLessThan(options.findIndex((o) => o.slug === "jaffna"));
+  it("treats the first night as an ordinary stop in the editable list", () => {
+    const list = toStopList(data, edits);
+    expect(list[0]).toMatchObject({ slug: "negombo", nights: 1 });
+    expect(fromStopList(list)).toEqual({ ...edits, arrivalSlug: "negombo" });
+    expect(fromStopList([])).toBeNull();
+  });
+
+  it("makes the next stop the first night when the first is deleted", () => {
+    const list = toStopList(data, edits).slice(1);
+    const fitted = fitToDays(data, base, fromStopList(list)!)!;
+    const rebuilt = planFromStops(data, base, fitted);
+    expect(rebuilt.stops[0].destination.slug).toBe(list[0].slug);
+    expect(rebuilt.stops[0].role).toBe("arrival");
+    expect(rebuilt.days).toHaveLength(14);
+  });
+
+  it("protects the first stop's nights when they're changed", () => {
+    const list = toStopList(data, edits);
+    list[0] = { ...list[0], nights: 3 };
+    const fitted = fitToDays(data, base, fromStopList(list)!, list[0].slug)!;
+    expect(fitted.arrivalNights).toBe(3);
+    expect(planFromStops(data, base, fitted).days).toHaveLength(14);
+  });
+
+  it("lets the airport town appear later in the route", () => {
+    const list = [...toStopList(data, edits).slice(1), { slug: "negombo", nights: 1 }];
+    const rebuilt = planFromStops(data, base, fitToDays(data, base, fromStopList(list)!)!);
+    expect(rebuilt.stops.at(-1)?.destination.slug).toBe("negombo");
+    expect(rebuilt.days).toHaveLength(14);
   });
 
   it("starts the trip in the chosen town and keeps the dates", () => {

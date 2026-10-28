@@ -4,6 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MapLibreMap, Marker } from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import type { PlannerData, PlanResult } from "@/planner/types";
+import { stopLabels } from "./stop-labels";
 
 // Free vector tiles from OpenFreeMap (no key needed); the style carries the OpenStreetMap attribution.
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
@@ -12,11 +13,34 @@ const WORKER_URL = "/vendor/maplibre-gl-worker.mjs";
 
 type Point = { slug: string; name: string; label: string; lng: number; lat: number };
 
-/** The route on a map: numbered stops joined along the journeys between them. */
-export function RouteMap({ data, plan, className = "" }: { data: PlannerData; plan: PlanResult; className?: string }) {
+/** Id used for the airport (the starting point) in the list and on the map. */
+export const AIRPORT_ID = "airport";
+
+/**
+ * The route on a map: the airport and numbered stops joined along the journeys
+ * between them. `active` highlights one place (from the list); tapping a marker
+ * calls `onSelect` so the list can highlight it too.
+ */
+export function RouteMap({
+  data,
+  plan,
+  active,
+  onSelect,
+  className = "",
+}: {
+  data: PlannerData;
+  plan: PlanResult;
+  active?: string | null;
+  onSelect?: (slug: string) => void;
+  className?: string;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
-  const markers = useRef<Marker[]>([]);
+  const markers = useRef(new Map<string, Marker>());
+  const select = useRef(onSelect);
+  useEffect(() => {
+    select.current = onSelect;
+  }, [onSelect]);
   const bounds = useRef<[[number, number], [number, number]] | null>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -25,11 +49,12 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
   // One marker per place; the airport town appears once even if it's also the last night.
   const airport = data.country.gateways[0];
   const airportPoint: [number, number] = [airport.coordinates.lng, airport.coordinates.lat];
-  const points: Point[] = [{ slug: "airport", name: `${airport.shortName} (${airport.code})`, label: "✈", lng: airportPoint[0], lat: airportPoint[1] }];
-  plan.stops.forEach((stop) => {
+  const points: Point[] = [{ slug: AIRPORT_ID, name: `${airport.shortName} (${airport.code})`, label: "✈", lng: airportPoint[0], lat: airportPoint[1] }];
+  const labels = stopLabels(plan);
+  plan.stops.forEach((stop, i) => {
     const [lng, lat] = coords.get(stop.destination.slug)!;
     if (points.some((p) => p.slug === stop.destination.slug)) return;
-    points.push({ slug: stop.destination.slug, name: stop.destination.name, label: String(points.length), lng, lat });
+    points.push({ slug: stop.destination.slug, name: stop.destination.name, label: labels[i], lng, lat });
   });
   // Airport → first stop → … → back to the airport. The gateway town stands in for the
   // airport in journey paths, so swap it for the airport's own position at each end.
@@ -61,6 +86,8 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
         // The style (not every tile) is enough to draw the route and markers, so start then.
         instance.once("style.load", () => {
           loaded = true;
+          // Start the credit line collapsed (as an ⓘ button) so it doesn't cover a small map.
+          container.current?.querySelector(".maplibregl-ctrl-attrib")?.classList.remove("maplibregl-compact-show");
           const accent = getComputedStyle(container.current!).getPropertyValue("--accent").trim() || "#b8561b";
           instance.addSource("route", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
           instance.addLayer({
@@ -113,14 +140,21 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
         });
       }
       markers.current.forEach((m) => m.remove());
-      markers.current = pts.map((p) => {
-        const el = document.createElement("div");
-        el.className =
-          "flex size-7 items-center justify-center rounded-full bg-accent text-xs font-semibold text-on-accent shadow-md ring-2 ring-white";
-        el.textContent = p.label;
-        el.title = p.name;
-        return new maplibregl.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(instance);
-      });
+      markers.current = new Map(
+        pts.map((p) => {
+          const el = document.createElement("button");
+          el.type = "button";
+          el.className = markerClass(p.slug === AIRPORT_ID, false);
+          el.textContent = p.label;
+          el.title = p.name;
+          el.setAttribute("aria-label", `${p.label === "✈" ? "Start" : `Stop ${p.label}`}: ${p.name}`);
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            select.current?.(p.slug);
+          });
+          return [p.slug, new maplibregl.Marker({ element: el }).setLngLat([p.lng, p.lat]).addTo(instance)];
+        }),
+      );
       if (pts.length > 0) {
         const box = new maplibregl.LngLatBounds();
         pts.forEach((p) => box.extend([p.lng, p.lat]));
@@ -132,6 +166,24 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
       cancelled = true;
     };
   }, [ready, routeKey]);
+
+  useEffect(() => {
+    const instance = map.current;
+    if (!ready || !instance) return;
+    markers.current.forEach((marker, slug) => {
+      // Only toggle our size classes: MapLibre keeps its own positioning classes on the element.
+      const el = marker.getElement();
+      const on = slug === active;
+      for (const c of ACTIVE_CLASSES) el.classList.toggle(c, on);
+      for (const c of IDLE_CLASSES) el.classList.toggle(c, !on);
+      el.style.zIndex = on ? "2" : "";
+    });
+    const marker = active ? markers.current.get(active) : undefined;
+    if (marker && instance.getContainer().clientWidth > 0) {
+      const target = marker.getLngLat();
+      if (!instance.getBounds().contains(target)) instance.easeTo({ center: target, duration: 500 });
+    }
+  }, [active, ready, routeKey]);
 
   const description = `Map of your route: ${points.map((p) => p.name).join(", ")}.`;
   return (
@@ -145,4 +197,13 @@ export function RouteMap({ data, plan, className = "" }: { data: PlannerData; pl
       )}
     </div>
   );
+}
+
+const ACTIVE_CLASSES = ["size-9", "text-sm", "scale-110", "ring-4", "ring-accent/40"];
+const IDLE_CLASSES = ["size-7", "text-xs", "ring-2", "ring-white"];
+
+function markerClass(isAirport: boolean, isActive: boolean): string {
+  const base = "flex items-center justify-center rounded-full font-semibold shadow-md transition-transform cursor-pointer";
+  const colour = isAirport ? "bg-foreground text-background" : "bg-accent text-on-accent";
+  return `${base} ${colour} ${(isActive ? ACTIVE_CLASSES : IDLE_CLASSES).join(" ")}`;
 }

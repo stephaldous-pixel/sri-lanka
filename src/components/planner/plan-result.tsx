@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useId, useState, type ReactNode } from "react";
 import { Chevron, Disclosure } from "@/components/disclosure";
-import { Photo } from "@/components/photo";
 import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { AirportRow, NightsStepper } from "./controls";
-import { RouteMap } from "./route-map";
+import { AIRPORT_ID, RouteMap } from "./route-map";
+import { stopLabels } from "./stop-labels";
 
 const BUDGET_LABELS = { budget: "budget", mid: "mid-range", comfort: "comfort" } as const;
 
@@ -45,6 +45,20 @@ export function PlanResultView({
   const notes = plan.warnings.length + stopWarnings + hopWarnings.length;
 
   const [tab, setTab] = useState<Tab>("route");
+  // The place highlighted in both the list and the map.
+  const [active, setActive] = useState<string | null>(null);
+  const labels = stopLabels(plan);
+  const fromMap = (slug: string) => {
+    setActive(slug);
+    const card = document.getElementById(`stop-${slug}`);
+    if (!card) return;
+    // Bring the card into view just below whatever stays fixed above it: the map on
+    // phones, or only the header on wide screens where the map sits alongside.
+    const wide = window.matchMedia("(min-width: 64rem)").matches;
+    const mapBottom = document.querySelector("[data-route-map]")?.getBoundingClientRect().bottom ?? 0;
+    const offset = (wide ? 72 : mapBottom) + 12;
+    window.scrollTo({ top: window.scrollY + card.getBoundingClientRect().top - offset, behavior: "smooth" });
+  };
   // On phones one panel shows at a time; from lg up everything is visible.
   const panel = (name: Tab) => (tab === name ? "" : "hidden lg:block");
 
@@ -118,8 +132,10 @@ export function PlanResultView({
 
       {/* minmax(0, …) columns stop the map's canvas from stretching the page on phones. */}
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-        <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" className={`${panel("map")} lg:sticky lg:top-20 lg:order-last`}>
-          <RouteMap data={data} plan={plan} className="h-[60vh] max-h-[34rem] min-h-80 lg:h-[34rem]" />
+        {/* The map stays in view above the list on phones (beside it on wide screens), so
+            names and places are always seen together. */}
+        <div data-route-map className={`${panel("route")} sticky top-[7.25rem] z-10 -mx-4 bg-background/95 px-4 pb-2 backdrop-blur lg:top-20 lg:order-last lg:mx-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none`}>
+          <RouteMap data={data} plan={plan} active={active} onSelect={fromMap} className="h-[30vh] min-h-48 shadow-sm lg:h-[34rem]" />
         </div>
         <section id="panel-route" role="tabpanel" aria-labelledby="tab-route" className={panel("route")}>
           {editor ?? (
@@ -139,13 +155,22 @@ export function PlanResultView({
               </p>
               <ol>
                 <li>
-                  <AirportRow label={`${airport.shortName} (${airport.code})`} note="Day 1 · Start" />
+                  <AirportRow
+                    label={`${airport.shortName} (${airport.code})`}
+                    note="Day 1 · Start"
+                    active={active === AIRPORT_ID}
+                    onSelect={() => setActive(AIRPORT_ID)}
+                  />
                   <HopLine hop={plan.startHop} names={names} final={false} />
                 </li>
                 {plan.stops.map((stop, i) => (
                   <li key={`${stop.destination.slug}-${i}`}>
                     <StopCard
                       stop={stop}
+                      label={labels[i]}
+                      active={active === stop.destination.slug}
+                      onSelect={() => setActive(stop.destination.slug)}
+                      first={labels.indexOf(labels[i]) === i}
                       countrySlug={data.country.slug}
                       onNights={onNights && stop.role !== "departure" ? (n) => onNights(i, n) : undefined}
                     />
@@ -197,13 +222,12 @@ export function PlanResultView({
   );
 }
 
-type Tab = "route" | "map" | "days" | "cost";
+type Tab = "route" | "days" | "cost";
 
 /** Phone-only tabs that stick under the header, so the route is never more than a tap away. */
 function TabBar({ tab, onChange, days }: { tab: Tab; onChange: (t: Tab) => void; days: number }) {
   const tabs: [Tab, string][] = [
     ["route", "Route"],
-    ["map", "Map"],
     ["days", `${days} days`],
     ["cost", "Cost"],
   ];
@@ -211,7 +235,7 @@ function TabBar({ tab, onChange, days }: { tab: Tab; onChange: (t: Tab) => void;
     <>
     <div id="tabs-anchor" aria-hidden="true" className="lg:hidden" />
     <div className="sticky top-14 z-20 -mx-4 bg-background/90 px-4 py-2 backdrop-blur lg:hidden">
-      <div role="tablist" aria-label="Your trip" className="grid grid-cols-4 rounded-full bg-surface-sunken p-1">
+      <div role="tablist" aria-label="Your trip" className="grid grid-cols-3 rounded-full bg-surface-sunken p-1">
         {tabs.map(([id, label]) => (
           <button
             key={id}
@@ -240,10 +264,20 @@ function TabBar({ tab, onChange, days }: { tab: Tab; onChange: (t: Tab) => void;
 
 function StopCard({
   stop,
+  label,
+  active,
+  onSelect,
+  first,
   countrySlug,
   onNights,
 }: {
   stop: PlannedStop;
+  /** Same number as the stop's marker on the map. */
+  label: string;
+  active: boolean;
+  onSelect: () => void;
+  /** First time this place appears (the map scrolls to it). */
+  first: boolean;
   countrySlug: string;
   /** When given, the stay length can be changed right here. */
   onNights?: (nights: number) => void;
@@ -252,14 +286,30 @@ function StopCard({
   const panelId = useId();
   const days = stop.nights <= 1 ? `Day ${stop.arriveDay}` : `Days ${stop.arriveDay}–${stop.arriveDay + stop.nights - 1}`;
   return (
-    <div className={`${card} overflow-hidden`}>
+    <div
+      id={first ? `stop-${stop.destination.slug}` : undefined}
+      onMouseEnter={onSelect}
+      className={`${card} scroll-mt-48 overflow-hidden transition ${active ? "ring-2 ring-accent" : ""}`}
+    >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 p-3 sm:flex-nowrap">
-        <Photo photo={stop.destination.photo} sizes="64px" showCredit={false} className="hidden size-14 shrink-0 rounded-xl sm:block sm:size-16" />
+        <button
+          type="button"
+          onClick={onSelect}
+          aria-label={`Show ${stop.destination.name} on the map`}
+          className={`order-1 flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition ${
+            active ? "bg-accent text-on-accent" : "bg-accent/15 text-accent"
+          }`}
+        >
+          {label}
+        </button>
         <button
           type="button"
           aria-expanded={open}
           aria-controls={panelId}
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setOpen(!open);
+            onSelect();
+          }}
           className="group order-1 min-h-10 min-w-0 flex-1 text-left"
         >
           <span className="block text-xs font-medium text-muted">

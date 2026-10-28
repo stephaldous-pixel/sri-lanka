@@ -30,12 +30,32 @@ export function Grip() {
 }
 
 /** The airport at the start of the route: a starting point, not a stay. */
-export function AirportRow({ label, note }: { label: string; note: string }) {
+export function AirportRow({
+  label,
+  note,
+  active = false,
+  onSelect,
+}: {
+  label: string;
+  note: string;
+  active?: boolean;
+  /** Highlight it on the map. */
+  onSelect?: () => void;
+}) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-dashed border-line px-3 py-3">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground text-sm text-background" aria-hidden="true">
+    <div
+      id="stop-airport"
+      onMouseEnter={onSelect}
+      className={`flex items-center gap-3 rounded-2xl border border-dashed px-3 py-3 transition ${active ? "border-accent bg-accent/5" : "border-line"}`}
+    >
+      <button
+        type="button"
+        onClick={onSelect}
+        aria-label={`Show ${label} on the map`}
+        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground text-sm text-background"
+      >
         ✈
-      </span>
+      </button>
       <div className="min-w-0">
         <p className="text-xs font-medium text-muted">{note}</p>
         <p className="font-semibold">{label}</p>

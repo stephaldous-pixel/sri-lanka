@@ -52,3 +52,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Sri_Pada.JPG/1920px-Sri_Pada.JPG"
+  width: 1920
+  height: 1440
+  alt: "The summit of Sri Pada (Adam's Peak) seen from below"
+  credit: "Bourgeois"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "http://creativecommons.org/licenses/by-sa/3.0/"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Sri_Pada.JPG"

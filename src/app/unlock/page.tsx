@@ -5,7 +5,7 @@ import { isPasswordConfigured } from "@/lib/site-access";
 import { UnlockForm } from "./unlock-form";
 
 export const metadata: Metadata = {
-  title: `Private preview · ${SITE_NAME}`,
+  title: "Private preview",
 };
 
 export default function UnlockPage() {

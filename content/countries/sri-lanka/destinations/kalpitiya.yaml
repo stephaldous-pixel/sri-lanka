@@ -56,3 +56,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Kalpitiya_Beach.jpg/1920px-Kalpitiya_Beach.jpg"
+  width: 1920
+  height: 1272
+  alt: "A sandy beach on the Kalpitiya peninsula"
+  credit: "Raiyans"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Kalpitiya_Beach.jpg"

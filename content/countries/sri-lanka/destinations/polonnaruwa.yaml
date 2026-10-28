@@ -45,3 +45,12 @@ gettingAround: >-
 sources:
   - https://induwara.lk/tools/sri-lanka-cultural-triangle-entry-fee-calculator
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Polonnaruwa_01.jpg/1920px-Polonnaruwa_01.jpg"
+  width: 1920
+  height: 1332
+  alt: "Brick walls of the Royal Palace ruins at Polonnaruwa"
+  credit: "Bernard Gagnon"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Polonnaruwa_01.jpg"

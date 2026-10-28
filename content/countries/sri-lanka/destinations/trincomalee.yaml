@@ -50,3 +50,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Pigeon_Island_National_Park%2C_Trincomalee.jpg/1920px-Pigeon_Island_National_Park%2C_Trincomalee.jpg"
+  width: 1920
+  height: 1152
+  alt: "The main rock of Pigeon Island off Nilaveli"
+  credit: "AntanO"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Pigeon_Island_National_Park,_Trincomalee.jpg"

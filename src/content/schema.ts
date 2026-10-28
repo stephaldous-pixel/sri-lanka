@@ -19,6 +19,18 @@ const priceRange = z.tuple([z.number().nonnegative(), z.number().nonnegative()])
 export const TransportMode = z.enum(["train", "bus", "car", "tuk-tuk", "ferry", "flight"]);
 export const LegStatus = z.enum(["running", "disrupted", "suspended"]);
 
+/** A freely licensed photo, always shown with its credit. */
+export const PhotoSchema = z.object({
+  src: url,
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  alt: z.string(),
+  credit: z.string(),
+  license: z.string(),
+  licenseUrl: url.optional(),
+  sourceUrl: url,
+});
+
 export const InterestSchema = z.object({
   id: slug,
   name: z.string(),
@@ -41,6 +53,7 @@ export const CountrySchema = z.object({
   timezone: z.string(),
   accent: z.object({ light: z.string(), dark: z.string() }),
   tagline: z.string(),
+  photo: PhotoSchema.optional(),
   gateways: z
     .array(
       z.object({
@@ -71,6 +84,7 @@ export const DestinationSchema = z.object({
   coordinates: z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) }),
   summary: z.string().max(180),
   description: z.string(), // Markdown, original writing only
+  photo: PhotoSchema.optional(),
   interests: z.record(slug, strength),
   nights: z
     .object({ min: z.number().int().min(0), ideal: z.number().int().min(1), max: z.number().int().min(1) })
@@ -125,6 +139,7 @@ export const TravelLegsFileSchema = z.object({
   legs: z.array(TravelLegSchema).min(1),
 });
 
+export type Photo = z.infer<typeof PhotoSchema>;
 export type Interest = z.infer<typeof InterestSchema>;
 export type Country = z.infer<typeof CountrySchema>;
 export type Region = z.infer<typeof RegionSchema>;

@@ -52,3 +52,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Hikkaduwa3.JPG/1920px-Hikkaduwa3.JPG"
+  width: 1920
+  height: 1440
+  alt: "The beach at Hikkaduwa"
+  credit: "Astronomyinertia"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Hikkaduwa3.JPG"

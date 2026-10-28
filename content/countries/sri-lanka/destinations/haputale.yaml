@@ -50,3 +50,12 @@ gettingAround: >-
 sources:
   - https://byc.lk/colombo-kandy-ella-train-status-2026
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Haputale%2C_Sri_Lanka%2C_Tea_plantations.jpg/1920px-Haputale%2C_Sri_Lanka%2C_Tea_plantations.jpg"
+  width: 1920
+  height: 1280
+  alt: "Tea plantations covering the hills around Haputale"
+  credit: "Vyacheslav Argenberg"
+  license: "CC BY 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Haputale,_Sri_Lanka,_Tea_plantations.jpg"

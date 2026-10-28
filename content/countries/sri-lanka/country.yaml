@@ -209,3 +209,12 @@ guide:
         has caused deaths.
     sources:
       - https://www.gov.uk/foreign-travel-advice/sri-lanka
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/Nine_Arch_Bridge%2C_Demodara_Ella.jpg/1920px-Nine_Arch_Bridge%2C_Demodara_Ella.jpg"
+  width: 1920
+  height: 1280
+  alt: "The Nine Arch Bridge near Ella, a stone railway viaduct among jungle and tea"
+  credit: "Dr.S.Rajivraja"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Nine_Arch_Bridge,_Demodara_Ella.jpg"

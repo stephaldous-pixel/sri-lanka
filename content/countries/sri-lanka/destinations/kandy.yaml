@@ -55,3 +55,12 @@ sources:
   - https://www.dailyexcelsior.com/sri-lanka-resumes-train-service-on-colombo-kandy-line-after-10-months/
   - https://srilankatravelandtourism.com/temple-of-the-sacred-tooth-relic/
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Kandy_Lake_and_the_Temple_of_the_Sacred_Tooth_Relic%2C_Kandy.jpg/1920px-Kandy_Lake_and_the_Temple_of_the_Sacred_Tooth_Relic%2C_Kandy.jpg"
+  width: 1920
+  height: 1440
+  alt: "Kandy Lake with the Temple of the Sacred Tooth Relic"
+  credit: "Niranjan Ramamurthy"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Kandy_Lake_and_the_Temple_of_the_Sacred_Tooth_Relic,_Kandy.jpg"

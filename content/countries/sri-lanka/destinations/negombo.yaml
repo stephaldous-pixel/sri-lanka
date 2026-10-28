@@ -49,3 +49,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Negombo%2C_Lagoon%2C_2025-08_CN-01.jpg/1920px-Negombo%2C_Lagoon%2C_2025-08_CN-01.jpg"
+  width: 1920
+  height: 1285
+  alt: "Negombo Lagoon seen from Pitipana Bridge"
+  credit: "Steffen Schmitz"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Negombo,_Lagoon,_2025-08_CN-01.jpg"

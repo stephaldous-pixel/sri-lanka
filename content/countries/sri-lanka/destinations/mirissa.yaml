@@ -50,3 +50,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Mirissa-Plage_%283%29.jpg/1920px-Mirissa-Plage_%283%29.jpg"
+  width: 1920
+  height: 1440
+  alt: "Mirissa beach with palm trees"
+  credit: "Ji-Elle"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Mirissa-Plage_(3).jpg"

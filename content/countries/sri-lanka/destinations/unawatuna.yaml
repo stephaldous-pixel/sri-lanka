@@ -46,3 +46,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Unawatuna.jpg/1920px-Unawatuna.jpg"
+  width: 1920
+  height: 1312
+  alt: "The curved bay at Unawatuna"
+  credit: "Bernard Gagnon"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Unawatuna.jpg"

@@ -49,3 +49,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Sri_Lanka%2C_Bentota%2C_beach_%282%29.JPG/1920px-Sri_Lanka%2C_Bentota%2C_beach_%282%29.JPG"
+  width: 1920
+  height: 1276
+  alt: "Palm trees along the beach at Bentota"
+  credit: "Vincent van Zeijst"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Sri_Lanka,_Bentota,_beach_(2).JPG"

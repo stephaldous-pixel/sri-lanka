@@ -52,3 +52,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Weligama_Beach_in_Sri_Lanka.jpg/1920px-Weligama_Beach_in_Sri_Lanka.jpg"
+  width: 1920
+  height: 1440
+  alt: "The long sandy beach at Weligama"
+  credit: "Honeplus"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Weligama_Beach_in_Sri_Lanka.jpg"

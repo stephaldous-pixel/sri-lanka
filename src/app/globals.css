@@ -1,39 +1,86 @@
 @import "tailwindcss";
 
-/* Neutral brand palette. Countries add their own accent later (PLAN.md section 1). */
+/* Neutral brand palette. Country pages swap --accent for their own (see .country-theme). */
 :root {
   --background: #faf8f5;
   --surface: #ffffff;
+  --surface-sunken: #f2eee8;
   --foreground: #1c1b19;
   --muted: #6b6760;
   --line: #e4dfd7;
   --accent: #1f6f5c;
   --on-accent: #ffffff;
   --danger: #b3261e;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3dc;
+
+  /* Season ratings: green → amber → red, with readable text on each. */
+  --season-great: #2f7d4f;
+  --season-great-ink: #ffffff;
+  --season-good: #9fd0a8;
+  --season-good-ink: #143d22;
+  --season-mixed: #f1cf7a;
+  --season-mixed-ink: #4a3500;
+  --season-poor: #e7b4a8;
+  --season-poor-ink: #5c1d12;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #141412;
     --surface: #1d1c1a;
+    --surface-sunken: #252421;
     --foreground: #ecebe8;
     --muted: #a19d95;
     --line: #34322e;
     --accent: #5fbfa3;
     --on-accent: #0d1f1a;
     --danger: #f2a49e;
+    --warning: #f4c96b;
+    --warning-bg: #33280f;
+
+    --season-great: #5fbf86;
+    --season-great-ink: #0b2615;
+    --season-good: #2f5c3c;
+    --season-good-ink: #d7f0dd;
+    --season-mixed: #6b5520;
+    --season-mixed-ink: #fbe7b5;
+    --season-poor: #6b3027;
+    --season-poor-ink: #f8d6ce;
+  }
+}
+
+.country-theme {
+  --accent: var(--country-accent-light);
+  --on-accent: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  .country-theme {
+    --accent: var(--country-accent-dark);
+    --on-accent: #1c1208;
   }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-season-great: var(--season-great);
+  --color-season-great-ink: var(--season-great-ink);
+  --color-season-good: var(--season-good);
+  --color-season-good-ink: var(--season-good-ink);
+  --color-season-mixed: var(--season-mixed);
+  --color-season-mixed-ink: var(--season-mixed-ink);
+  --color-season-poor: var(--season-poor);
+  --color-season-poor-ink: var(--season-poor-ink);
   --font-sans: var(--font-geist-sans);
 }
 
@@ -41,4 +88,45 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Long-form text from content files. */
+.prose {
+  line-height: 1.7;
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose strong {
+  font-weight: 600;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.prose ul {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.25em;
+}
+.prose li + li {
+  margin-top: 0.35em;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.5em 0.75em 0.5em 0;
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
 }

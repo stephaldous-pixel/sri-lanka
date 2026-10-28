@@ -47,3 +47,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Sinharaja_rainforest.jpg/1920px-Sinharaja_rainforest.jpg"
+  width: 1920
+  height: 2880
+  alt: "Dense rainforest at the Pitadeniya entrance to Sinharaja"
+  credit: "Jaygayani"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Sinharaja_rainforest.jpg"

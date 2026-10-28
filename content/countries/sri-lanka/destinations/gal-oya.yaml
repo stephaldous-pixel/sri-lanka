@@ -45,3 +45,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Gal_Oya_National_Park_%28Senanayake_Samudhraya%29.JPG/1920px-Gal_Oya_National_Park_%28Senanayake_Samudhraya%29.JPG"
+  width: 1920
+  height: 1280
+  alt: "Senanayake Samudra reservoir in Gal Oya National Park"
+  credit: "AntanO"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Gal_Oya_National_Park_(Senanayake_Samudhraya).JPG"

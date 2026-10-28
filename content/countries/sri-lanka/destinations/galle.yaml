@@ -49,3 +49,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Galle_Fort.jpg/1920px-Galle_Fort.jpg"
+  width: 1920
+  height: 1438
+  alt: "Galle Fort beside the ocean"
+  credit: "Rovin Shanila"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Galle_Fort.jpg"

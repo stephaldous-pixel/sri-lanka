@@ -46,3 +46,12 @@ gettingAround: >-
 sources:
   - https://www.ttgmedia.com/travel-industry-news/cyclone-ditwah-sri-lanka-stands-ready-welcome-agents-clients-wake-deadly-storm
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Knuckles_Range.JPG/1920px-Knuckles_Range.JPG"
+  width: 1920
+  height: 1331
+  alt: "Ridges of the Knuckles mountain range"
+  credit: "Astronomyinertia"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Knuckles_Range.JPG"

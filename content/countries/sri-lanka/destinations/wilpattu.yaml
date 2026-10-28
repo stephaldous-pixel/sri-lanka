@@ -50,3 +50,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/WilpattuNationalPark-April2014_%283%29.JPG/1920px-WilpattuNationalPark-April2014_%283%29.JPG"
+  width: 1920
+  height: 1079
+  alt: "Forest and open ground in Wilpattu National Park"
+  credit: "Rehman Abubakr"
+  license: "CC BY-SA 4.0"
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:WilpattuNationalPark-April2014_(3).JPG"

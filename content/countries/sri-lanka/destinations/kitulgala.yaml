@@ -50,3 +50,12 @@ gettingAround: >-
 sources:
   - https://www.seat61.com/SriLanka
 lastChecked: "2026-10-28"
+photo:
+  src: "https://upload.wikimedia.org/wikipedia/commons/1/1c/SL01kitulgala.jpg"
+  width: 1600
+  height: 1200
+  alt: "Forested hills at Kitulgala"
+  credit: "Jimfbleak"
+  license: "CC BY-SA 3.0"
+  licenseUrl: "http://creativecommons.org/licenses/by-sa/3.0/"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:SL01kitulgala.jpg"

@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* Neutral brand palette. Countries add their own accent later (PLAN.md section 1). */
+:root {
+  --background: #faf8f5;
+  --surface: #ffffff;
+  --foreground: #1c1b19;
+  --muted: #6b6760;
+  --line: #e4dfd7;
+  --accent: #1f6f5c;
+  --on-accent: #ffffff;
+  --danger: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #141412;
+    --surface: #1d1c1a;
+    --foreground: #ecebe8;
+    --muted: #a19d95;
+    --line: #34322e;
+    --accent: #5fbfa3;
+    --on-accent: #0d1f1a;
+    --danger: #f2a49e;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}

@@ -8,9 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "check:content": "tsx scripts/check-content.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "copy:map-worker": "node scripts/copy-map-worker.mjs",
+    "predev": "npm run copy:map-worker",
+    "prebuild": "npm run copy:map-worker"
   },
   "dependencies": {
+    "maplibre-gl": "^6.16.0",
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",

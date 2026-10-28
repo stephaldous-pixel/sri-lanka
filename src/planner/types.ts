@@ -33,7 +33,7 @@ export type PlannerData = {
   regions: Pick<Region, "id" | "name" | "months">[];
   destinations: (Pick<
     Destination,
-    "slug" | "name" | "region" | "summary" | "interests" | "nights" | "months" | "highlights" | "stay" | "photo"
+    "slug" | "name" | "region" | "summary" | "interests" | "nights" | "months" | "highlights" | "stay" | "photo" | "coordinates"
   > & { social: 1 | 2 | 3 })[];
   legs: TravelLeg[];
 };

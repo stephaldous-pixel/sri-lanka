@@ -120,6 +120,75 @@ export function generatePlan(data: PlannerData, input: PlannerInput): PlanResult
 
 type Stop = { candidate: Scored; nights: number };
 
+/** A route the traveller has edited: the order and nights they chose. */
+export type EditedRoute = {
+  arrivalNights: number;
+  stops: { slug: string; nights: number; reasons?: string[] }[];
+};
+
+/** The editable parts of a generated plan. */
+export function toEditedRoute(plan: PlanResult): EditedRoute {
+  return {
+    arrivalNights: plan.stops[0].nights,
+    stops: plan.stops.filter((s) => s.role === "stop").map((s) => ({ slug: s.destination.slug, nights: s.nights, reasons: s.reasons })),
+  };
+}
+
+/**
+ * Rebuilds a full plan (journeys, days, warnings, costs) from stops the
+ * traveller has arranged. The trip length follows from the nights chosen.
+ */
+export function planFromStops(data: PlannerData, input: PlannerInput, edits: EditedRoute): PlanResult {
+  const gatewaySlug = data.country.gateways[0].destination;
+  const bySlug = new Map(data.destinations.map((d) => [d.slug, d]));
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const clampNights = (n: number) => Math.min(60, Math.max(1, Math.round(n) || 1));
+  const route: Stop[] = edits.stops
+    .filter((s) => bySlug.has(s.slug) && s.slug !== gatewaySlug)
+    .map((s) => ({
+      candidate: {
+        destination: bySlug.get(s.slug)!,
+        score: 0,
+        matches: [],
+        season: 1,
+        social: 0,
+        reasons: s.reasons?.length ? s.reasons : ["Added by you"],
+        forced: false,
+      },
+      nights: clampNights(s.nights),
+    }));
+  const arrivalNights = clampNights(edits.arrivalNights);
+  const days = arrivalNights + nightsUsed(route, graph, gatewaySlug) + 1;
+  const edited = { ...input, days };
+  return assemble(data, edited, graph, bySlug.get(gatewaySlug)!, route, monthsCovered(edited), 0, arrivalNights, true);
+}
+
+/** Where in the list a new place adds the least travel (an index to insert at). */
+export function bestPositionFor(data: PlannerData, input: PlannerInput, slugs: string[], slug: string): number {
+  const gateway = data.country.gateways[0].destination;
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport);
+  const loop = (list: string[]) => {
+    const all = [gateway, ...list, gateway];
+    return all.slice(1).reduce((sum, s, i) => sum + graph.hours(all[i], s), 0);
+  };
+  let best = slugs.length;
+  let bestHours = Infinity;
+  for (let i = 0; i <= slugs.length; i++) {
+    const hours = loop([...slugs.slice(0, i), slug, ...slugs.slice(i)]);
+    if (hours < bestHours) {
+      best = i;
+      bestHours = hours;
+    }
+  }
+  return best;
+}
+
+/** Nights we'd suggest for a place at this pace. */
+export function suggestedNights(data: PlannerData, input: PlannerInput, slug: string): number {
+  const d = data.destinations.find((x) => x.slug === slug);
+  return d ? targetNights(d, input.pace) : 1;
+}
+
 /** Months the trip touches, with how many days fall in each. */
 function monthsCovered(input: PlannerInput): Map<number, number> {
   const counts = new Map<number, number>();
@@ -301,6 +370,8 @@ function assemble(
   route: Stop[],
   months: Map<number, number>,
   freeNights: number,
+  arrivalNights = 1,
+  edited = false,
 ): PlanResult {
   const airport = data.country.gateways[0];
   const lastNight = needsLastNight(route, graph, gateway.slug);
@@ -309,13 +380,13 @@ function assemble(
 
   stops.push({
     destination: gateway,
-    nights: 1,
+    nights: arrivalNights,
     arriveDay: day,
     role: "arrival",
     reasons: [`Close to ${airport.name}, so an easy first night`],
     warnings: [],
   });
-  day += 1;
+  day += arrivalNights;
   for (const { candidate, nights } of route) {
     stops.push({
       destination: candidate.destination,
@@ -341,7 +412,7 @@ function assemble(
 
   // If the route gave the gateway the arrival night only and nothing else fits, the trip is just that.
   const totalNights = stops.reduce((sum, s) => sum + s.nights, 0);
-  if (totalNights < input.days - 1) stops[0].nights += input.days - 1 - totalNights;
+  if (!edited && totalNights < input.days - 1) stops[0].nights += input.days - 1 - totalNights;
 
   const hops = stops.slice(1).map((s, i) => graph.hop(stops[i].destination.slug, s.destination.slug));
   const finalHop = graph.hop(stops.at(-1)!.destination.slug, gateway.slug);
@@ -358,7 +429,7 @@ function assemble(
       `You have ${freeNights} more night${freeNights === 1 ? "" : "s"} than these places need. Try adding interests or regions, or enjoy the slow pace.`,
     );
   }
-  if (route.length === 0) warnings.push("Nothing else fitted your time and choices. Try more days or more interests.");
+  if (route.length === 0 && !edited) warnings.push("Nothing else fitted your time and choices. Try more days or more interests.");
   for (const hop of hops) {
     if (hop.hours > 6) warnings.push(`Long travel day: ${names.get(hop.from)} to ${names.get(hop.to)} takes about ${Math.round(hop.hours)} hours.`);
   }

@@ -18,6 +18,7 @@ export function toPlannerData(content: CountryContent, interests: Interest[]): P
       slug: d.slug,
       name: d.name,
       region: d.region,
+      coordinates: d.coordinates,
       summary: d.summary,
       interests: d.interests,
       nights: d.nights,

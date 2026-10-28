@@ -3,31 +3,39 @@
 import { useEffect, useRef, useState } from "react";
 import { addDays, formatRange } from "@/lib/dates";
 import { button } from "@/lib/ui";
-import { generatePlan, PlannerError } from "@/planner/engine";
+import { generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { PlanResultView } from "./plan-result";
 import { DEFAULT_INPUT, PlannerForm } from "./planner-form";
+import { RouteEditor } from "./route-editor";
 import { clearSavedPlan, loadSavedPlan, savePlan } from "./storage";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-type State =
-  | { view: "loading" }
-  | { view: "form"; input: PlannerInput }
-  | { view: "result"; input: PlannerInput; plan: PlanResult; saved: boolean };
+type Result = {
+  view: "result";
+  input: PlannerInput;
+  plan: PlanResult;
+  saved: boolean;
+  /** The traveller's own arrangement, if they've edited the suggested route. */
+  edits?: EditedRoute;
+  editing: boolean;
+};
 
-/** The route generator: questionnaire, then the suggested route. Everything runs in the browser. */
+type State = { view: "loading" } | { view: "form"; input: PlannerInput } | Result;
+
+/** The route generator: questionnaire, then the suggested route, which can be edited. Everything runs in the browser. */
 export function Planner({ data }: { data: PlannerData }) {
   const country = data.country.slug;
   const [state, setState] = useState<State>({ view: "loading" });
   const [error, setError] = useState<string | null>(null);
   const resultTop = useRef<HTMLDivElement>(null);
 
-  function build(input: PlannerInput, save: boolean) {
+  function build(input: PlannerInput, save: boolean, edits?: EditedRoute) {
     try {
-      const plan = generatePlan(data, input);
+      const plan = edits ? planFromStops(data, input, edits) : generatePlan(data, input);
       setError(null);
-      setState({ view: "result", input, plan, saved: save ? savePlan(country, input) : true });
+      setState({ view: "result", input, plan, edits, editing: false, saved: save ? savePlan(country, input, edits) : true });
       return true;
     } catch (e) {
       setError(e instanceof PlannerError ? e.message : "Something went wrong building your route. Please try again.");
@@ -40,13 +48,14 @@ export function Planner({ data }: { data: PlannerData }) {
   useEffect(() => {
     const saved = loadSavedPlan(country);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reading browser storage after mount
-    if (!saved || !build(saved.input, false)) setState({ view: "form", input: saved?.input ?? DEFAULT_INPUT });
+    if (!saved || !build(saved.input, false, saved.edits)) setState({ view: "form", input: saved?.input ?? DEFAULT_INPUT });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   }, [country]);
 
+  const isResult = state.view === "result";
   useEffect(() => {
-    if (state.view === "result") resultTop.current?.scrollIntoView({ block: "start" });
-  }, [state.view]);
+    if (isResult) resultTop.current?.scrollIntoView({ block: "start" });
+  }, [isResult]);
 
   if (state.view === "loading") {
     return <div className="mt-8 h-96 animate-pulse rounded-2xl bg-surface-sunken" aria-label="Loading" />;
@@ -65,19 +74,30 @@ export function Planner({ data }: { data: PlannerData }) {
     );
   }
 
-  const { input, plan, saved } = state;
+  const { input, plan, saved, edits, editing } = state;
+  const days = plan.days.length;
   const when = input.startDate
-    ? `· ${formatRange(input.startDate, addDays(input.startDate, input.days - 1))}`
+    ? `· ${formatRange(input.startDate, addDays(input.startDate, days - 1))}`
     : input.month !== undefined
       ? `in ${MONTHS[input.month]}`
       : "";
+
+  function applyEdits(next: EditedRoute) {
+    const plan = planFromStops(data, input, next);
+    setState({ view: "result", input, plan, edits: next, editing: true, saved: savePlan(country, input, next) });
+  }
+
+  function resetEdits() {
+    const plan = generatePlan(data, input);
+    setState({ view: "result", input, plan, edits: undefined, editing: true, saved: savePlan(country, input) });
+  }
 
   return (
     <div ref={resultTop} className="mt-10 scroll-mt-20 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">
-            Your {input.days}-day route {when}
+            Your {days}-day route {when}
           </h2>
           <p className="mt-1 text-sm text-muted">
             {saved ? "Saved on this device." : "Couldn't save on this device (private browsing?)."}{" "}
@@ -97,7 +117,27 @@ export function Planner({ data }: { data: PlannerData }) {
           Change answers
         </button>
       </div>
-      <PlanResultView data={data} input={input} plan={plan} />
+      <PlanResultView
+        data={data}
+        input={input}
+        plan={plan}
+        edited={!!edits}
+        onEdit={() => setState({ ...state, editing: true })}
+        editor={
+          editing ? (
+            <RouteEditor
+              data={data}
+              input={input}
+              edits={edits ?? toEditedRoute(plan)}
+              days={days}
+              originalDays={input.days}
+              onChange={applyEdits}
+              onDone={() => setState({ ...state, editing: false })}
+              onReset={resetEdits}
+            />
+          ) : undefined
+        }
+      />
     </div>
   );
 }

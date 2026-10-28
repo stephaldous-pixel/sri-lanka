@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
-import { generatePlan, PlannerError } from "./engine";
+import { bestPositionFor, generatePlan, planFromStops, PlannerError, toEditedRoute } from "./engine";
 import type { PlannerInput } from "./types";
 
 const data = toPlannerData(loadCountry("sri-lanka"), loadInterests());
@@ -127,6 +127,60 @@ describe("generatePlan", () => {
   it("rejects trips that are too short or have no interests", () => {
     expect(() => generatePlan(data, { ...base, days: 1 })).toThrow(PlannerError);
     expect(() => generatePlan(data, { ...base, interests: [] })).toThrow(PlannerError);
+  });
+});
+
+describe("editing a route", () => {
+  const plan = generatePlan(data, base);
+  const edits = toEditedRoute(plan);
+
+  it("rebuilds the same plan when nothing changes", () => {
+    const rebuilt = planFromStops(data, base, edits);
+    expect(rebuilt.stops.map((s) => [s.destination.slug, s.nights, s.arriveDay])).toEqual(
+      plan.stops.map((s) => [s.destination.slug, s.nights, s.arriveDay]),
+    );
+    expect(rebuilt.days).toHaveLength(plan.days.length);
+  });
+
+  it("follows the nights the traveller chooses", () => {
+    const longer = { ...edits, stops: edits.stops.map((s, i) => (i === 0 ? { ...s, nights: s.nights + 2 } : s)) };
+    const rebuilt = planFromStops(data, base, longer);
+    expect(rebuilt.days).toHaveLength(plan.days.length + 2);
+    expect(rebuilt.totalNights).toBe(rebuilt.days.length - 1);
+    expect(rebuilt.days.at(-1)?.date).toBe("2027-02-16");
+  });
+
+  it("reorders, removes and adds stops, recalculating journeys", () => {
+    const reversed = { ...edits, stops: [...edits.stops].reverse() };
+    const rebuilt = planFromStops(data, base, reversed);
+    expect(rebuilt.stops.filter((s) => s.role === "stop").map((s) => s.destination.slug)).toEqual(reversed.stops.map((s) => s.slug));
+    expect(rebuilt.hops).toHaveLength(rebuilt.stops.length);
+
+    const removed = planFromStops(data, base, { ...edits, stops: edits.stops.slice(1) });
+    expect(removed.stops.some((s) => s.destination.slug === edits.stops[0].slug)).toBe(false);
+
+    const added = planFromStops(data, base, { ...edits, stops: [...edits.stops, { slug: "jaffna", nights: 2 }] });
+    const jaffna = added.stops.find((s) => s.destination.slug === "jaffna");
+    expect(jaffna?.reasons).toEqual(["Added by you"]);
+  });
+
+  it("adds a night near the airport when the last stop is far away", () => {
+    const farEnd = planFromStops(data, base, { arrivalNights: 1, stops: [{ slug: "arugam-bay", nights: 4 }] });
+    expect(farEnd.stops.at(-1)?.role).toBe("departure");
+    const nearEnd = planFromStops(data, base, { arrivalNights: 1, stops: [{ slug: "galle", nights: 2 }] });
+    expect(nearEnd.stops.at(-1)?.role).toBe("stop");
+  });
+
+  it("copes with an empty route and ignores unknown places", () => {
+    const empty = planFromStops(data, base, { arrivalNights: 3, stops: [{ slug: "atlantis", nights: 2 }] });
+    expect(empty.stops).toHaveLength(1);
+    expect(empty.days).toHaveLength(4);
+  });
+
+  it("suggests slotting a new place where it adds least travel", () => {
+    // Galle → Unawatuna → Ella: Mirissa belongs between Unawatuna and Ella, not at either end.
+    const index = bestPositionFor(data, base, ["galle", "unawatuna", "ella"], "mirissa");
+    expect(index).toBe(2);
   });
 });
 

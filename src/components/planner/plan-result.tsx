@@ -6,12 +6,28 @@ import { Chevron, Disclosure } from "@/components/disclosure";
 import { Photo } from "@/components/photo";
 import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
-import { card } from "@/lib/ui";
+import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
+import { RouteMap } from "./route-map";
 
 const BUDGET_LABELS = { budget: "budget", mid: "mid-range", comfort: "comfort" } as const;
 
-export function PlanResultView({ data, input, plan }: { data: PlannerData; input: PlannerInput; plan: PlanResult }) {
+export function PlanResultView({
+  data,
+  input,
+  plan,
+  editor,
+  onEdit,
+  edited = false,
+}: {
+  data: PlannerData;
+  input: PlannerInput;
+  plan: PlanResult;
+  /** Shown in place of the route list while editing. */
+  editor?: ReactNode;
+  onEdit?: () => void;
+  edited?: boolean;
+}) {
   const { symbol, code } = data.country.currency;
   const money = (amount: number) => <Price amount={amount} code={code} symbol={symbol} />;
   const names = new Map(data.destinations.map((d) => [d.slug, d.name]));
@@ -58,22 +74,40 @@ export function PlanResultView({ data, input, plan }: { data: PlannerData; input
         </Disclosure>
       )}
 
-      <section aria-label="Your route">
-        <ol>
-          {plan.stops.map((stop, i) => (
-            <li key={`${stop.destination.slug}-${i}`}>
-              <StopCard stop={stop} countrySlug={data.country.slug} />
-              <HopLine hop={plan.hops[i]} names={names} final={i === plan.stops.length - 1} />
-            </li>
-          ))}
-          <li className="flex items-center gap-3 pl-[1.15rem] text-sm font-medium">
-            <span className="flex size-6 items-center justify-center rounded-full bg-foreground text-xs text-background" aria-hidden="true">
-              ✈
-            </span>
-            Fly home · Day {input.days}
-          </li>
-        </ol>
-      </section>
+      {/* minmax(0, …) columns stop the map's canvas from stretching the page on phones. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+        <RouteMap data={data} plan={plan} className="h-72 lg:sticky lg:top-20 lg:order-last lg:h-[34rem]" />
+        <section aria-labelledby="route-heading">
+          {editor ?? (
+            <>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h3 id="route-heading" className="font-semibold">
+                  Your route{edited && <span className="ml-2 text-xs font-normal text-muted">edited</span>}
+                </h3>
+                {onEdit && (
+                  <button type="button" onClick={onEdit} className={`${button.secondary} px-4 py-1.5`}>
+                    Edit route
+                  </button>
+                )}
+              </div>
+              <ol>
+                {plan.stops.map((stop, i) => (
+                  <li key={`${stop.destination.slug}-${i}`}>
+                    <StopCard stop={stop} countrySlug={data.country.slug} />
+                    <HopLine hop={plan.hops[i]} names={names} final={i === plan.stops.length - 1} />
+                  </li>
+                ))}
+                <li className="flex items-center gap-3 pl-[1.15rem] text-sm font-medium">
+                  <span className="flex size-6 items-center justify-center rounded-full bg-foreground text-xs text-background" aria-hidden="true">
+                    ✈
+                  </span>
+                  Fly home · Day {plan.days.length}
+                </li>
+              </ol>
+            </>
+          )}
+        </section>
+      </div>
 
       <div className="space-y-3">
         <Disclosure tone="card" summary={`Day-by-day plan (${plan.days.length} days)`}>

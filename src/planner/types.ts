@@ -21,6 +21,10 @@ export type PlannerInput = {
   meetPeople: boolean;
   /** Choose trains where they run, even when a bus or car is a little quicker. */
   preferTrains?: boolean;
+  /** When the flight in lands, "HH:MM" local time, on the first day. */
+  landingTime?: string;
+  /** When the flight home leaves, "HH:MM" local time, on the last day. */
+  departureTime?: string;
 };
 
 /** The slice of country content the planner needs. Small enough to send to the browser. */
@@ -29,13 +33,14 @@ export type PlannerData = {
     slug: string;
     name: string;
     currency: { code: string; symbol: string };
+    railTimetable?: string;
     gateways: { destination: string; name: string; shortName: string; code: string; coordinates: { lat: number; lng: number } }[];
   };
   interests: Interest[];
   regions: Pick<Region, "id" | "name" | "months">[];
   destinations: (Pick<
     Destination,
-    "slug" | "name" | "region" | "summary" | "interests" | "nights" | "months" | "highlights" | "stay" | "photo" | "coordinates"
+    "slug" | "name" | "region" | "station" | "summary" | "interests" | "nights" | "months" | "highlights" | "stay" | "photo" | "coordinates"
   > & { social: 1 | 2 | 3 })[];
   legs: TravelLeg[];
 };
@@ -52,6 +57,21 @@ export type Hop = {
   /** Mode used for each step of the path. */
   modes: string[];
   warnings: string[];
+  /** Suggested times for this journey, in hours after midnight (may pass 24). */
+  times?: HopTimes;
+  /** Extra advice for the journey, such as where to check train times. */
+  tip?: { text: string; link?: { label: string; href: string } };
+};
+
+export type HopTimes = {
+  leave: number;
+  arrive: number;
+  /** "by": leave no later than this (to make a flight); "around": a comfortable time. */
+  kind: "around" | "by";
+  /** Where the journey starts, for the wording ("Leave Galle around 9am"). */
+  fromName: string;
+  /** Leave the evening before (a flight just after midnight). */
+  eveningBefore?: boolean;
 };
 
 export type PlannedStop = {

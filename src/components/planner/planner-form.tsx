@@ -5,6 +5,7 @@ import { Chevron } from "@/components/disclosure";
 import { addDays, daysInclusive, formatRange, toIso } from "@/lib/dates";
 import { button, card } from "@/lib/ui";
 import type { Budget, Pace, PlannerData, PlannerInput, TransportPreference } from "@/planner/types";
+import { formatClock, parseTime } from "@/planner/timing";
 import { DateRangePicker, MAX_DAYS, MIN_DAYS } from "./date-range-picker";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -167,6 +168,11 @@ export function PlannerForm({
                 </div>
               )}
             </div>
+            <FlightTimes
+              landing={input.landingTime}
+              departure={input.departureTime}
+              onChange={(key, value) => set(key, value)}
+            />
           </Question>
         )}
 
@@ -201,6 +207,9 @@ export function PlannerForm({
                 {dateMode === "date" && input.startDate && endDate
                   ? `${formatRange(input.startDate, endDate)} · ${input.days} days`
                   : `${input.days} days${input.month !== undefined ? ` in ${MONTHS[input.month]}` : ""}`}
+              </ReviewRow>
+              <ReviewRow label="Flights" onEdit={() => setStep(0)}>
+                {flightSummary(input) ?? <span className="text-muted">Not added</span>}
               </ReviewRow>
               <ReviewRow label="Interests" onEdit={() => setStep(1)}>
                 {input.interests.map((id) => data.interests.find((i) => i.id === id)?.name).join(", ")}
@@ -280,6 +289,64 @@ function Question({ heading, title, hint, children }: { heading: RefObject<HTMLH
       <div className="mt-6">{children}</div>
     </fieldset>
   );
+}
+
+/** Optional flight times, so travel days can be timed around them. */
+function FlightTimes({
+  landing,
+  departure,
+  onChange,
+}: {
+  landing?: string;
+  departure?: string;
+  onChange: (key: "landingTime" | "departureTime", value: string | undefined) => void;
+}) {
+  // Start open if times were added before; after that it's the traveller's to open and close.
+  const [open, setOpen] = useState(() => !!(landing || departure));
+  return (
+    <details open={open} onToggle={(e) => setOpen(e.currentTarget.open)} className="group mt-6 rounded-xl bg-surface-sunken px-4">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-3 text-sm [&::-webkit-details-marker]:hidden">
+        <span>
+          <span className="font-medium">Flight times</span>
+          <span className="text-muted"> · optional</span>
+        </span>
+        <span className="flex items-center gap-1 text-sm font-medium">
+          {landing || departure ? "Change" : "Add"} <Chevron />
+        </span>
+      </summary>
+      <div className="pb-5 pt-1">
+        <p className="text-sm text-muted">We&apos;ll time your first and last days around them, and suggest when to set off on each travel day. Use local time.</p>
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <Field label="Flight lands">
+            <input
+              type="time"
+              value={landing ?? ""}
+              onChange={(e) => onChange("landingTime", e.target.value || undefined)}
+              className={inputClass}
+            />
+          </Field>
+          <Field label="Flight home leaves">
+            <input
+              type="time"
+              value={departure ?? ""}
+              onChange={(e) => onChange("departureTime", e.target.value || undefined)}
+              className={inputClass}
+            />
+          </Field>
+        </div>
+      </div>
+    </details>
+  );
+}
+
+function flightSummary(input: PlannerInput): string | undefined {
+  const landing = parseTime(input.landingTime);
+  const departure = parseTime(input.departureTime);
+  const parts = [
+    landing !== undefined && `Land ${formatClock(landing)}`,
+    departure !== undefined && `Fly home ${formatClock(departure)}`,
+  ].filter(Boolean);
+  return parts.length ? parts.join(" · ") : undefined;
 }
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {

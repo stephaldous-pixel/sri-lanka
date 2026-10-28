@@ -2,8 +2,10 @@
 // into the time available, and orders them to keep travel short. Pure and
 // deterministic, so the same answers always give the same route.
 import { buildGraph, type TravelGraph } from "./graph";
+import { ARRIVE_BY, DARK, departureDayTimes, firstDayTimes, formatClock, lastDayTravelLimit, parseTime, timesSentence, travelDayTimes } from "./timing";
 import type {
   Budget,
+  Hop,
   Pace,
   PlanDay,
   PlannedStop,
@@ -21,8 +23,6 @@ const TRAVEL_HOURS_PER_DAY: Record<Pace, number> = { relaxed: 1.5, balanced: 2.2
 const SCORE_PER_TRAVEL_HOUR = 0.025;
 /** Journeys between stops longer than this (an overnight bus) are left out unless the traveller asked for that region. */
 const MAX_HOP_HOURS = 12;
-/** If the last stop is further than this from the airport, spend the final night near it. */
-const LAST_NIGHT_NEAR_AIRPORT_HOURS = 4;
 /** Rough daily spend on food, local transport and activities, in local currency. */
 const DAILY_SPEND: Record<Budget, number> = { budget: 4000, mid: 9000, comfort: 20000 };
 
@@ -57,6 +57,7 @@ export function generatePlan(data: PlannerData, input: PlannerInput): PlanResult
   const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
   const months = monthsCovered(input);
   const budgetNights = input.days - 1;
+  const limit = lastDayTravelLimit(input.departureTime);
 
   const candidates = scoreDestinations(data, input, months).filter((c) => c.destination.slug !== gatewaySlug);
 
@@ -64,7 +65,7 @@ export function generatePlan(data: PlannerData, input: PlannerInput): PlanResult
   // at its cheapest point in the loop, and the best balance of "how well it suits
   // you" against "how much extra travel it adds" wins. Requested regions go first.
   let route: Stop[] = [];
-  const fits = (r: Stop[]) => nightsUsed(r, graph, gatewaySlug) <= budgetNights - 1; // -1 for the arrival night
+  const fits = (r: Stop[]) => nightsUsed(r, graph, gatewaySlug, limit) <= budgetNights - 1; // -1 for the arrival night
   const travelAllowance = input.days * TRAVEL_HOURS_PER_DAY[input.pace];
   const remaining = new Set(candidates);
   const coverage = new Map<string, number>();
@@ -112,8 +113,19 @@ export function generatePlan(data: PlannerData, input: PlannerInput): PlanResult
     }
   }
 
-  route = improveOrder(route, graph, gatewaySlug);
-  const freeNights = spreadSpareNights(route, budgetNights - 1 - nightsUsed(route, graph, gatewaySlug), input.pace);
+  route = improveOrder(route, graph, gatewaySlug, limit);
+  const freeNights = spreadSpareNights(route, budgetNights - 1 - nightsUsed(route, graph, gatewaySlug, limit), input.pace);
+
+  // Landing early enough to reach the first stop before dark? Go straight there
+  // and spend the night near the airport there instead.
+  const landing = parseTime(input.landingTime);
+  const [first, ...rest] = route;
+  if (landing !== undefined && first) {
+    const hop = airportHop(data, input, graph, gateway, first.candidate.destination);
+    if (firstDayTimes(landing, hop.hours).arrive <= ARRIVE_BY) {
+      return assemble(data, input, graph, gateway, rest, months, freeNights, first.nights + 1, false, first.candidate.destination, first.candidate.reasons);
+    }
+  }
 
   return assemble(data, input, graph, gateway, route, months, freeNights);
 }
@@ -162,8 +174,9 @@ export function planFromStops(data: PlannerData, input: PlannerInput, edits: Edi
       nights: clampNights(s.nights),
     }));
   const arrivalNights = clampNights(edits.arrivalNights);
-  const lastNight = route.length === 0 && graph.hours(arrival.slug, gatewaySlug) > LAST_NIGHT_NEAR_AIRPORT_HOURS ? 1 : 0;
-  const days = arrivalNights + nightsUsed(route, graph, gatewaySlug) + lastNight + 1;
+  const limit = lastDayTravelLimit(input.departureTime);
+  const lastNight = route.length === 0 && graph.hours(arrival.slug, gatewaySlug) > limit ? 1 : 0;
+  const days = arrivalNights + nightsUsed(route, graph, gatewaySlug, limit) + lastNight + 1;
   const edited = { ...input, days };
   return assemble(data, edited, graph, bySlug.get(gatewaySlug)!, route, monthsCovered(edited), 0, arrivalNights, true, arrival);
 }
@@ -206,7 +219,7 @@ export function fitToDays(data: PlannerData, input: PlannerInput, edits: EditedR
   let arrival = Math.max(1, Math.round(edits.arrivalNights));
 
   const lastSlug = stops.at(-1)?.slug ?? edits.arrivalSlug;
-  const lastNight = lastSlug && lastSlug !== gateway && graph.hours(lastSlug, gateway) > LAST_NIGHT_NEAR_AIRPORT_HOURS ? 1 : 0;
+  const lastNight = lastSlug && lastSlug !== gateway && graph.hours(lastSlug, gateway) > lastDayTravelLimit(input.departureTime) ? 1 : 0;
   let diff = input.days - 1 - lastNight - (arrival + stops.reduce((sum, s) => sum + s.nights, 0));
 
   if (protect && protect === (edits.arrivalSlug ?? gateway)) protect = ARRIVAL;
@@ -345,14 +358,15 @@ function nightCap(d: PlannerDestination, pace: Pace): number {
 }
 
 /** Nights the route needs after the arrival night, including a last night near the airport if required. */
-function nightsUsed(route: Stop[], graph: TravelGraph, gateway: string): number {
+function nightsUsed(route: Stop[], graph: TravelGraph, gateway: string, limit: number): number {
   const nights = route.reduce((sum, s) => sum + s.nights, 0);
-  return nights + (needsLastNight(route, graph, gateway) ? 1 : 0);
+  return nights + (needsLastNight(route, graph, gateway, limit) ? 1 : 0);
 }
 
-function needsLastNight(route: Stop[], graph: TravelGraph, gateway: string): boolean {
+/** `limit`: the most travel the last day can take (see lastDayTravelLimit). */
+function needsLastNight(route: Stop[], graph: TravelGraph, gateway: string, limit: number): boolean {
   const last = route.at(-1);
-  return !!last && graph.hours(last.candidate.destination.slug, gateway) > LAST_NIGHT_NEAR_AIRPORT_HOURS;
+  return !!last && graph.hours(last.candidate.destination.slug, gateway) > limit;
 }
 
 /** Total travel for the whole loop: from the airport, through every stop and back. */
@@ -384,10 +398,10 @@ function bestInsertion(route: Stop[], stop: Stop, graph: TravelGraph, gateway: s
 }
 
 /** 2-opt: reverse sections of the route while that shortens total travel (without needing more nights). */
-function improveOrder(route: Stop[], graph: TravelGraph, gateway: string): Stop[] {
+function improveOrder(route: Stop[], graph: TravelGraph, gateway: string, limit: number): Stop[] {
   let best = route;
   let bestHours = travelHours(best, graph, gateway);
-  const nightLimit = nightsUsed(route, graph, gateway);
+  const nightLimit = nightsUsed(route, graph, gateway, limit);
   let improved = true;
   while (improved) {
     improved = false;
@@ -395,7 +409,7 @@ function improveOrder(route: Stop[], graph: TravelGraph, gateway: string): Stop[
       for (let j = i + 1; j < best.length; j++) {
         const next = [...best.slice(0, i), ...best.slice(i, j + 1).reverse(), ...best.slice(j + 1)];
         const hours = travelHours(next, graph, gateway);
-        if (hours < bestHours - 0.01 && nightsUsed(next, graph, gateway) <= nightLimit) {
+        if (hours < bestHours - 0.01 && nightsUsed(next, graph, gateway, limit) <= nightLimit) {
           best = next;
           bestHours = hours;
           improved = true;
@@ -440,31 +454,19 @@ function assemble(
   arrivalNights = 1,
   edited = false,
   arrival: PlannerDestination = gateway,
+  /** Why the planner chose the first night's stop, when it isn't the airport town. */
+  arrivalReasons?: string[],
 ): PlanResult {
   const airport = data.country.gateways[0];
+  const limit = lastDayTravelLimit(input.departureTime);
   const lastNight =
     route.length > 0
-      ? needsLastNight(route, graph, gateway.slug)
-      : arrival.slug !== gateway.slug && graph.hours(arrival.slug, gateway.slug) > LAST_NIGHT_NEAR_AIRPORT_HOURS;
+      ? needsLastNight(route, graph, gateway.slug, limit)
+      : arrival.slug !== gateway.slug && graph.hours(arrival.slug, gateway.slug) > limit;
   const stops: PlannedStop[] = [];
   let day = 1;
 
-  // The airport is ~10km from the gateway town, so journeys from it start there (≥ ~25 min).
-  const startHop = graph.hop(gateway.slug, arrival.slug);
-  startHop.from = "airport";
-  // Trains don't serve the airport conveniently: if the journey starts with one,
-  // take a taxi for that first step instead (e.g. taxi to Colombo, then the train).
-  if (input.preferTrains && startHop.modes[0] === "train" && startHop.path.length > 1) {
-    const [a, b] = startHop.path;
-    const leg = data.legs.find((l) => (l.from === a && l.to === b) || (l.from === b && l.to === a));
-    const car = leg?.options.find((o) => o.mode === "car" && o.status !== "suspended");
-    const train = leg?.options.find((o) => o.mode === "train");
-    if (car && train) {
-      startHop.modes[0] = "taxi";
-      startHop.hours += car.hours - train.hours;
-    }
-  }
-  startHop.hours = Math.max(0.4, startHop.hours);
+  const startHop = airportHop(data, input, graph, gateway, arrival);
   const fromAirport = startHop.hours;
   stops.push({
     destination: arrival,
@@ -474,7 +476,9 @@ function assemble(
     reasons:
       arrival.slug === gateway.slug
         ? [`Close to ${airport.name}, so an easy first night`]
-        : [`Your choice for the first night, about ${formatHours(fromAirport)} from ${airport.shortName}`],
+        : arrivalReasons
+          ? [...arrivalReasons, `You land early enough to get here before dark, about ${formatHours(fromAirport)} from ${airport.shortName}`]
+          : [`Your choice for the first night, about ${formatHours(fromAirport)} from ${airport.shortName}`],
     warnings: arrival.slug === gateway.slug ? [] : seasonWarnings(data, arrival, input, day, arrivalNights, months),
   });
   day += arrivalNights;
@@ -510,6 +514,7 @@ function assemble(
   hops.push(finalHop);
 
   const names = new Map(data.destinations.map((d) => [d.slug, d.name]));
+  const timeWarnings = addTimes(data, input, stops, startHop, hops, names);
   const days = buildDays(input, stops, hops, names, airport, startHop);
   const stay = stops.reduce((sum, s) => sum + s.nights * midpoint(s.destination.stay[input.budget]), 0);
   const daily = DAILY_SPEND[input.budget] * input.days;
@@ -520,13 +525,14 @@ function assemble(
       `You have ${freeNights} more night${freeNights === 1 ? "" : "s"} than these places need. Try adding interests or regions, or enjoy the slow pace.`,
     );
   }
-  if (route.length === 0 && !edited) warnings.push("Nothing else fitted your time and choices. Try more days or more interests.");
+  if (route.length === 0 && arrival.slug === gateway.slug && !edited) warnings.push("Nothing else fitted your time and choices. Try more days or more interests.");
   for (const hop of hops) {
     if (hop.hours > 6) warnings.push(`Long travel day: ${names.get(hop.from)} to ${names.get(hop.to)} takes about ${Math.round(hop.hours)} hours.`);
   }
   if (startHop.hours > 6) {
     warnings.push(`Long first day: ${airport.shortName} to ${arrival.name} takes about ${Math.round(startHop.hours)} hours after your flight.`);
   }
+  warnings.push(...timeWarnings);
 
   return {
     startHop,
@@ -539,6 +545,103 @@ function assemble(
     estimate: { stay, daily, total: stay + daily },
     warnings,
   };
+}
+
+/**
+ * The journey from the airport to the first night's stop. The airport is
+ * ~10km from the gateway town, so it starts there (and takes ≥ ~25 min).
+ */
+function airportHop(data: PlannerData, input: PlannerInput, graph: TravelGraph, gateway: PlannerDestination, arrival: PlannerDestination): Hop {
+  const hop = graph.hop(gateway.slug, arrival.slug);
+  hop.from = "airport";
+  // Trains don't serve the airport conveniently: if the journey starts with one,
+  // take a taxi for that first step instead (e.g. taxi to Colombo, then the train).
+  if (input.preferTrains && hop.modes[0] === "train" && hop.path.length > 1) {
+    const [a, b] = hop.path;
+    const leg = data.legs.find((l) => (l.from === a && l.to === b) || (l.from === b && l.to === a));
+    const car = leg?.options.find((o) => o.mode === "car" && o.status !== "suspended");
+    const train = leg?.options.find((o) => o.mode === "train");
+    if (car && train) {
+      hop.modes[0] = "taxi";
+      hop.hours += car.hours - train.hours;
+    }
+  }
+  hop.hours = Math.max(0.4, hop.hours);
+  return hop;
+}
+
+/**
+ * Suggested leaving and arrival times for every journey: from the landing time
+ * on day 1, before dark on ordinary travel days, and in time for the flight
+ * home. Returns warnings about awkward timings.
+ */
+function addTimes(
+  data: PlannerData,
+  input: PlannerInput,
+  stops: PlannedStop[],
+  startHop: Hop,
+  hops: Hop[],
+  names: Map<string, string>,
+): string[] {
+  const airport = data.country.gateways[0];
+  const gateway = names.get(airport.destination)!;
+  const warnings: string[] = [];
+  const landing = parseTime(input.landingTime);
+  const flight = parseTime(input.departureTime);
+  const arrival = stops[0].destination;
+
+  if (landing !== undefined) {
+    const t = firstDayTimes(landing, startHop.hours);
+    startHop.times = { ...t, kind: "around", fromName: airport.shortName };
+    if (t.arrive > DARK && arrival.slug !== airport.destination) {
+      warnings.push(
+        `You land at ${formatClock(landing)}, so you'd reach ${arrival.name} about ${formatClock(t.arrive)}, after dark. Consider a first night near the airport in ${gateway} instead.`,
+      );
+    }
+  }
+  const finalHop = hops.at(-1)!;
+  for (const hop of hops) {
+    if (hop === finalHop) continue;
+    hop.times = { ...travelDayTimes(hop.hours), kind: "around", fromName: names.get(hop.from)! };
+    if (hop.times.arrive > DARK) {
+      warnings.push(`${names.get(hop.from)} to ${names.get(hop.to)} arrives after dark even leaving at ${formatClock(hop.times.leave)}. Consider breaking the journey.`);
+    }
+  }
+  if (flight !== undefined) {
+    const t = departureDayTimes(flight, finalHop.hours);
+    finalHop.times = { leave: t.leave, arrive: t.arrive, kind: "by", fromName: names.get(finalHop.from)!, eveningBefore: t.eveningBefore || undefined };
+    if (!t.eveningBefore && t.leave < 4) {
+      warnings.push(`Very early start: for your ${formatClock(flight)} flight, leave ${names.get(finalHop.from)} by ${formatClock(t.leave)}.`);
+    }
+  }
+  for (const hop of [startHop, ...hops]) hop.tip = trainTip(data, hop);
+  return warnings;
+}
+
+/** When a journey includes a train, which one to aim for and where to check times. */
+function trainTip(data: PlannerData, hop: Hop): Hop["tip"] {
+  const i = hop.modes.indexOf("train");
+  if (i < 0) return undefined;
+  const place = data.destinations.find((d) => d.slug === hop.path[i]);
+  const station = place?.station ?? place?.name ?? hop.path[i];
+  const link = data.country.railTimetable ? { label: "Check train times", href: data.country.railTimetable } : undefined;
+  if (!hop.times || hop.times.kind === "by") {
+    return { text: `Trains run to a timetable, so check times before you go.`, link };
+  }
+  // Allow a little time at the station after any taxi or bus to it.
+  const before = hop.modes.slice(0, i).reduce((sum, mode, j) => sum + stepHours(data, hop.path[j], hop.path[j + 1], mode), 0);
+  const atStation = hop.times.leave + before + (i > 0 ? 0.25 : 0);
+  return {
+    text: `Aim for a train from ${station} around ${formatClock(Math.ceil(atStation * 2) / 2)}, or the next one after. Times shift with the timetable.`,
+    link,
+  };
+}
+
+/** Hours for one step of a journey by the given mode (as named in Hop.modes). */
+function stepHours(data: PlannerData, a: string, b: string, modeName: string): number {
+  const mode = modeName === "taxi" ? "car" : modeName === "tuk tuk" ? "tuk-tuk" : modeName;
+  const leg = data.legs.find((l) => (l.from === a && l.to === b) || (l.from === b && l.to === a));
+  return leg?.options.find((o) => o.mode === mode)?.hours ?? 0;
 }
 
 function seasonWarnings(
@@ -584,6 +687,10 @@ function buildDays(
     const modes = [...new Set(hop.modes)];
     return `About ${formatHours(hop.hours)} by ${listJoin(modes)}${via.length ? `, via ${via.join(" → ")}` : ""}.`;
   };
+  /** Suggested times and any train tip, after the journey itself. */
+  const timing = (hop: PlanResult["hops"][number], to: string) =>
+    [hop.times && timesSentence(hop.times, to), hop.tip?.text].filter(Boolean).join(" ");
+  const withTiming = (text: string, hop: PlanResult["hops"][number], to: string) => [text, timing(hop, to)].filter(Boolean).join(" ");
 
   stops.forEach((stop, i) => {
     const name = stop.destination.name;
@@ -596,10 +703,14 @@ function buildDays(
           date: dateFor(day),
           stop: stop.destination.slug,
           title: `Arrive at ${airport.shortName} (${airport.code}) and travel to ${name}`,
-          detail: startHop.modes.length === 0 ? `A short transfer of about ${formatHours(startHop.hours)}.` : travel(startHop),
+          detail: withTiming(
+            startHop.modes.length === 0 ? `A short transfer of about ${formatHours(startHop.hours)}.` : travel(startHop),
+            startHop,
+            name,
+          ),
         });
       } else if (n === 0) {
-        days.push({ day, date: dateFor(day), stop: stop.destination.slug, title: `Travel to ${name}`, detail: travel(hops[i - 1]) });
+        days.push({ day, date: dateFor(day), stop: stop.destination.slug, title: `Travel to ${name}`, detail: withTiming(travel(hops[i - 1]), hops[i - 1], name) });
       } else {
         const pick = highlights[(n - 1) % Math.max(highlights.length, 1)];
         days.push({ day, date: dateFor(day), stop: stop.destination.slug, title: `Explore ${name}`, detail: pick ? `Idea: ${pick}.` : undefined });
@@ -613,10 +724,13 @@ function buildDays(
     date: dateFor(lastDay),
     stop: stops[0].destination.slug,
     title: "Fly home",
-    detail:
+    detail: withTiming(
       finalHop.modes.length === 0
         ? `A short transfer to ${airport.name}.`
-        : `${travel(finalHop).replace(/\.$/, "")} to ${airport.name}. Leave plenty of time.`,
+        : `${travel(finalHop).replace(/\.$/, "")} to ${airport.name}.${finalHop.times ? "" : " Leave plenty of time."}`,
+      finalHop,
+      airport.name,
+    ),
   });
   return days;
 }

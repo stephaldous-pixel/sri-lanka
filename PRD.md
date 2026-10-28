@@ -87,6 +87,8 @@ Status: ✅ built · 🔜 planned · 💭 later.
 | R8 | Day-by-day plan with dates and an idea for each day | P1 | ✅ |
 | R9 | Rough cost for one person (stays plus daily spend) by budget level | P1 | ✅ |
 | R10 | Same answers always give the same route | P1 | ✅ |
+| R12 | Optional flight times (landing, and the flight home), in local time. An early landing goes straight to the first stop if it can be reached before dark; a late one keeps the first night near the airport (with a warning if the traveller chose somewhere far). The last day gets you to the airport 3 hours before the flight: a late flight allows up to 6 hours' travel that day, an early one adds a night near the airport | P1 | ✅ |
+| R13 | A suggested leaving time for every travel day, aiming to arrive before dark (about 5:30pm), shown on the route and in the day-by-day plan; journeys with a train suggest which train to aim for (e.g. "from Colombo Fort around 11am, or the next one after") and link to Sri Lanka Railways for exact times | P1 | ✅ |
 | R11 | Optional AI-written day descriptions, within a free usage cap | P2 | 💭 |
 
 ### 6.3 Editing and the map
@@ -230,4 +232,5 @@ Guidebooks may be used to check facts, but their text is never copied.
 | 28 Oct 2026 | Exact travel dates via calendar; climate figures per weather station |
 | 28 Oct 2026 | Code repository made public; the site itself stays private |
 | 28 Oct 2026 | Editing keeps the trip to the traveller's dates: nights are rebalanced between stops rather than extending the trip |
+| 28 Oct 2026 | Flight times are optional and drive the first and last days; leaving times are suggestions from journey lengths, never exact train times (timetables change), with a link to check |
 | 28 Oct 2026 | Mobile-first layout: phone tabs (Route · Map · Days · Cost), 40px+ tap targets, sticky planner buttons, two-column cards |

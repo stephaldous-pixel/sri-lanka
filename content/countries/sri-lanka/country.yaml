@@ -8,6 +8,7 @@ currency:
   code: LKR
   symbol: Rs
 timezone: Asia/Colombo
+railTimetable: https://seatreservation.railway.gov.lk/mtktwebslr/
 accent:
   light: "#b8561b"
   dark: "#f2a268"

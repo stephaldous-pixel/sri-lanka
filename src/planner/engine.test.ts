@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
 import { ARRIVAL, bestPositionFor, fitToDays, fromStopList, generatePlan, planFromStops, PlannerError, toEditedRoute, toStopList } from "./engine";
+import { departureDayTimes, formatClock, lastDayTravelLimit, parseTime, travelDayTimes } from "./timing";
 import type { PlannerInput } from "./types";
 
 const data = toPlannerData(loadCountry("sri-lanka"), loadInterests());
@@ -344,6 +345,95 @@ describe("preferring trains", () => {
         expect(leg?.options.find((o) => o.mode === "train")?.status, `${a} → ${b}`).not.toBe("suspended");
       });
     }
+  });
+});
+
+describe("clock times", () => {
+  it("reads and writes times", () => {
+    expect(parseTime("08:30")).toBe(8.5);
+    expect(parseTime("8:30pm")).toBeUndefined();
+    expect(parseTime("25:00")).toBeUndefined();
+    expect(formatClock(8.5)).toBe("8:30am");
+    expect(formatClock(13)).toBe("1pm");
+    expect(formatClock(0)).toBe("12am");
+    expect(formatClock(24.25)).toBe("12:15am");
+  });
+
+  it("leaves after breakfast on short hops and early on long ones, arriving before dark", () => {
+    expect(travelDayTimes(1).leave).toBe(10);
+    expect(travelDayTimes(9).leave).toBe(8);
+    expect(travelDayTimes(9).arrive).toBeLessThanOrEqual(17.5);
+  });
+
+  it("gets you to the airport 3 hours before the flight", () => {
+    const t = departureDayTimes(21, 2.5); // 9pm flight, 2½ hours away
+    expect(t.arrive).toBe(18);
+    expect(t.leave).toBe(15);
+    const late = departureDayTimes(1.5, 0.5); // 1:30am flight
+    expect(late.eveningBefore).toBe(true);
+    expect(late.arrive).toBe(22.5);
+  });
+
+  it("allows a longer last journey before a late flight than an early one", () => {
+    expect(lastDayTravelLimit(undefined)).toBe(4);
+    expect(lastDayTravelLimit("21:00")).toBeGreaterThan(4);
+    expect(lastDayTravelLimit("09:00")).toBeLessThan(1);
+  });
+});
+
+describe("flight times", () => {
+  const galleFirst = { arrivalSlug: "galle", arrivalNights: 3, stops: [{ slug: "mirissa", nights: 3 }, { slug: "ella", nights: 3 }] };
+
+  it("times the first journey from the landing", () => {
+    const plan = planFromStops(data, { ...base, preferTrains: true, landingTime: "08:30" }, galleFirst);
+    // Land 8:30, clear the airport by 10, taxi to Colombo, then the train.
+    expect(plan.startHop.times).toMatchObject({ leave: 10, kind: "around" });
+    expect(plan.startHop.times!.arrive).toBeCloseTo(13.75, 1);
+    expect(plan.startHop.tip?.text).toMatch(/Colombo Fort around 11am/);
+    expect(plan.startHop.tip?.link?.href).toMatch(/railway\.gov\.lk/);
+    expect(plan.days[0].detail).toMatch(/Leave Colombo airport around 10am to reach Galle about 1:45pm/);
+    expect(plan.warnings.join(" ")).not.toMatch(/after dark/);
+  });
+
+  it("warns when a late landing means arriving after dark", () => {
+    const plan = planFromStops(data, { ...base, landingTime: "21:30" }, galleFirst);
+    expect(plan.warnings.join(" ")).toMatch(/after dark.*first night near the airport in Negombo/);
+  });
+
+  it("goes straight to the first stop after an early landing", () => {
+    const early = generatePlan(data, { ...base, landingTime: "07:00" });
+    const late = generatePlan(data, { ...base, landingTime: "22:00" });
+    expect(late.stops[0].destination.slug).toBe("negombo");
+    expect(early.stops[0].destination.slug).not.toBe("negombo");
+    expect(early.startHop.times!.arrive).toBeLessThanOrEqual(17.5);
+    expect(early.totalNights).toBe(base.days - 1);
+    expect(early.days).toHaveLength(base.days);
+  });
+
+  it("suggests a time to leave on every travel day", () => {
+    const plan = generatePlan(data, base);
+    for (const hop of plan.hops.slice(0, -1)) expect(hop.times?.kind).toBe("around");
+    expect(plan.days.filter((d) => d.title.startsWith("Travel to")).every((d) => /Leave .* around/.test(d.detail ?? ""))).toBe(true);
+  });
+
+  it("times the trip to the airport from the flight home", () => {
+    const plan = planFromStops(data, { ...base, departureTime: "21:00" }, { arrivalSlug: "galle", arrivalNights: 3, stops: [{ slug: "mirissa", nights: 3 }] });
+    const final = plan.hops.at(-1)!;
+    expect(final.times).toMatchObject({ kind: "by", arrive: 18 });
+    expect(plan.days.at(-1)!.detail).toMatch(/Leave Mirissa by .* to reach the airport by 6pm, 3 hours before your flight/);
+  });
+
+  it("adds a night near the airport before an early flight, but not before a late one", () => {
+    const edits = { arrivalSlug: "galle", arrivalNights: 3, stops: [{ slug: "mirissa", nights: 3 }] };
+    const early = planFromStops(data, { ...base, departureTime: "08:00" }, edits);
+    const late = planFromStops(data, { ...base, departureTime: "22:00" }, edits);
+    expect(early.stops.at(-1)!.role).toBe("departure");
+    expect(late.stops.at(-1)!.role).not.toBe("departure");
+  });
+
+  it("travels the evening before a flight just after midnight", () => {
+    const plan = planFromStops(data, { ...base, departureTime: "01:30" }, { arrivalSlug: "negombo", arrivalNights: 3, stops: [] });
+    expect(plan.days.at(-1)!.detail).toMatch(/the evening before, by .*pm/);
   });
 });
 

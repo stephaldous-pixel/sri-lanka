@@ -5,6 +5,7 @@ import { useId, useState, type ReactNode } from "react";
 import { Chevron, Disclosure } from "@/components/disclosure";
 import { Price } from "@/components/currency";
 import { formatHours } from "@/lib/format";
+import { formatClock, parseTime } from "@/planner/timing";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { AirportRow, NightsStepper } from "./controls";
@@ -45,6 +46,8 @@ export function PlanResultView({
   const stopWarnings = plan.stops.reduce((n, s) => n + s.warnings.length, 0);
   const hopWarnings = [...new Set([plan.startHop, ...plan.hops].flatMap((h) => h.warnings))];
   const airport = data.country.gateways[0];
+  const landing = parseTime(input.landingTime);
+  const departure = parseTime(input.departureTime);
   const notes = plan.warnings.length + stopWarnings + hopWarnings.length;
 
   const [tab, setTab] = useState<Tab>("route");
@@ -179,7 +182,7 @@ export function PlanResultView({
                 <li>
                   <AirportRow
                     label={`${airport.shortName} (${airport.code})`}
-                    note="Day 1 · Start"
+                    note={`Day 1 · Start${landing !== undefined ? ` · land ${formatClock(landing)}` : ""}`}
                     active={active === AIRPORT_ID}
                     onSelect={() => setActive(AIRPORT_ID)}
                   />
@@ -204,6 +207,7 @@ export function PlanResultView({
                     ✈
                   </span>
                   Fly home from {airport.shortName} · Day {plan.days.length}
+                  {departure !== undefined && ` · ${formatClock(departure)}`}
                 </li>
               </ol>
             </>
@@ -405,6 +409,35 @@ function HopLine({ hop, names, final }: { hop: Hop; names: Map<string, string>; 
         <span className="ml-1.5 text-warning" title={hop.warnings.join(" ")}>
           ⚠ {hop.warnings.length === 1 ? "Check before travelling" : `${hop.warnings.length} notes`}
         </span>
+      )}
+      {hop.times && (
+        <p className="mt-1">
+          <span aria-hidden>🕘 </span>
+          {hop.times.kind === "by" ? (
+            <>
+              Leave{hop.times.eveningBefore ? " the evening before," : ""} by{" "}
+              <span className="font-medium text-foreground">{formatClock(hop.times.leave)}</span> · at the airport by {formatClock(hop.times.arrive)}
+            </>
+          ) : (
+            <>
+              Leave around <span className="font-medium text-foreground">{formatClock(hop.times.leave)}</span> · arrive about{" "}
+              {formatClock(hop.times.arrive)}
+            </>
+          )}
+        </p>
+      )}
+      {hop.tip && (
+        <p className="mt-1">
+          {hop.tip.text}
+          {hop.tip.link && (
+            <>
+              {" "}
+              <a href={hop.tip.link.href} target="_blank" rel="noreferrer" className="font-medium text-accent underline underline-offset-2">
+                {hop.tip.link.label}
+              </a>
+            </>
+          )}
+        </p>
       )}
     </div>
   );

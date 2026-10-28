@@ -67,6 +67,8 @@ export const CountrySchema = z.object({
       }),
     )
     .min(1),
+  /** Where to check train times, for travel-day advice. */
+  railTimetable: z.url().optional(),
   guide: z.array(GuideSectionSchema).min(1),
   lastChecked: isoDate,
 });
@@ -107,6 +109,8 @@ export const DestinationSchema = z.object({
   region: slug,
   /** A closer weather station than the region's, when the region's would mislead (e.g. hill towns). */
   climateStation: slug.optional(),
+  /** Main railway station, when it isn't simply named after the place (e.g. "Colombo Fort"). */
+  station: z.string().optional(),
   coordinates: z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) }),
   summary: z.string().max(180),
   description: z.string(), // Markdown, original writing only

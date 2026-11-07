@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { addDays, formatRange } from "@/lib/dates";
 import { button } from "@/lib/ui";
-import { ARRIVAL, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
+import { ARRIVAL, chooseFirstNight, fitToDays, generatePlan, planFromStops, PlannerError, toEditedRoute, type EditedRoute } from "@/planner/engine";
 import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { PlanResultView } from "./plan-result";
 import { DEFAULT_INPUT, PlannerForm } from "./planner-form";
@@ -112,6 +112,20 @@ export function Planner({ data }: { data: PlannerData }) {
     );
   }
 
+  /** Make `slug` the first night, from the route list or the editor. */
+  function changeFirstNight(slug: string, keepEditing: boolean): boolean {
+    const next = chooseFirstNight(data, input, edits ?? toEditedRoute(plan), slug);
+    // Give it its usual stay if that fits the dates, otherwise one night.
+    const ok = applyEdits(next, slug, keepEditing) || applyEdits({ ...next, arrivalNights: 1 }, slug, keepEditing);
+    const name = data.destinations.find((d) => d.slug === slug)?.name ?? slug;
+    setNotice(
+      ok
+        ? `Your first night is now in ${name}. Other stops adjusted to keep your ${input.days} days.`
+        : `No room for ${name}: every other stop is already down to 1 night. Remove a stop first, or change your dates.`,
+    );
+    return ok;
+  }
+
   function resetEdits() {
     const plan = generatePlan(data, input);
     setState({ view: "result", input, plan, edits: undefined, editing: true, saved: savePlan(country, input) });
@@ -154,6 +168,7 @@ export function Planner({ data }: { data: PlannerData }) {
         edited={!!edits}
         onEdit={() => setState({ ...state, editing: true })}
         onNights={changeNights}
+        onFirstNight={(slug) => changeFirstNight(slug, false)}
         onPreferTrains={(prefer) => {
           build({ ...input, preferTrains: prefer }, true, edits);
           setNotice(prefer ? "Using trains where they run." : "Using the quickest option for each journey.");
@@ -168,6 +183,7 @@ export function Planner({ data }: { data: PlannerData }) {
               edits={edits ?? toEditedRoute(plan)}
               days={days}
               onChange={(next, protect) => applyEdits(next, protect)}
+              onFirstNight={(slug) => changeFirstNight(slug, true)}
               onDone={() => setState({ ...state, editing: false })}
               onReset={resetEdits}
             />

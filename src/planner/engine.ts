@@ -263,6 +263,29 @@ export function fromStopList(list: ListStop[]): EditedRoute | null {
   return { arrivalSlug: first.slug, arrivalNights: first.nights, stops: rest };
 }
 
+/** Travel time from the arrival airport to every place, for choosing where to spend the first night. */
+export function hoursFromAirport(data: PlannerData, input: PlannerInput): Map<string, number> {
+  const gatewaySlug = data.country.gateways[0].destination;
+  const gateway = data.destinations.find((d) => d.slug === gatewaySlug)!;
+  const graph = buildGraph(data.legs, data.destinations.map((d) => d.slug), input.transport, input.preferTrains);
+  return new Map(data.destinations.map((d) => [d.slug, airportHop(data, input, graph, gateway, d).hours]));
+}
+
+/**
+ * Makes `slug` the first night. A place already on the route moves to the top;
+ * a new one is added there. A first night in the airport town (the usual easy
+ * start) is replaced rather than kept, since it would mean doubling back.
+ * Nights still need fitting to the dates (fitToDays).
+ */
+export function chooseFirstNight(data: PlannerData, input: PlannerInput, edits: EditedRoute, slug: string): EditedRoute {
+  const list = toStopList(data, edits);
+  const gateway = data.country.gateways[0].destination;
+  let rest = list.filter((s) => s.slug !== slug);
+  if (list[0].slug === gateway && rest[0]?.slug === gateway) rest = rest.slice(1);
+  const first = list.find((s) => s.slug === slug) ?? { slug, nights: suggestedNights(data, input, slug) };
+  return fromStopList([first, ...rest])!;
+}
+
 /** Nights we'd suggest for a place at this pace. */
 export function suggestedNights(data: PlannerData, input: PlannerInput, slug: string): number {
   const d = data.destinations.find((x) => x.slug === slug);

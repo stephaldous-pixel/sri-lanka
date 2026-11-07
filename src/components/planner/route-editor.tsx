@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AirportRow, Grip, NightsStepper } from "./controls";
+import { FirstNightPicker } from "./first-night-picker";
 import { SortableList } from "./sortable-list";
 import { Photo } from "@/components/photo";
 import { button, card } from "@/lib/ui";
@@ -19,6 +20,7 @@ export function RouteEditor({
   onChange,
   onDone,
   onReset,
+  onFirstNight,
 }: {
   data: PlannerData;
   input: PlannerInput;
@@ -35,6 +37,8 @@ export function RouteEditor({
   onChange: (edits: EditedRoute, protect?: string) => boolean;
   onDone: () => void;
   onReset: () => void;
+  /** Make this place the first night (moving or adding it). Returns false if it can't fit. */
+  onFirstNight: (slug: string) => boolean;
 }) {
   const bySlug = useMemo(() => new Map(data.destinations.map((d) => [d.slug, d])), [data]);
   // Every stop, the first night included, is edited the same way.
@@ -133,6 +137,15 @@ export function RouteEditor({
       <AirportRow
         label={`${data.country.gateways[0].shortName} (${data.country.gateways[0].code})`}
         note="Start · you travel on from here"
+      />
+      <FirstNightPicker
+        data={data}
+        input={input}
+        current={list[0].slug}
+        onChoose={(slug) => {
+          const ok = onFirstNight(slug);
+          setMessage(ok ? `${name(slug)} is now your first night. Other stops adjusted to keep your ${days} days.` : `No room for ${name(slug)}. ${tooFew}`);
+        }}
       />
 
       <SortableList

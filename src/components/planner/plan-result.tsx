@@ -9,6 +9,7 @@ import { formatClock, parseTime } from "@/planner/timing";
 import { button, card } from "@/lib/ui";
 import type { Hop, PlannedStop, PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { AirportRow, NightsStepper } from "./controls";
+import { FirstNightPicker } from "./first-night-picker";
 import { AIRPORT_ID, RouteMap } from "./route-map";
 import { stopLabels } from "./stop-labels";
 
@@ -23,6 +24,7 @@ export function PlanResultView({
   onNights,
   notice,
   onPreferTrains,
+  onFirstNight,
   edited = false,
 }: {
   data: PlannerData;
@@ -37,6 +39,8 @@ export function PlanResultView({
   notice?: string | null;
   /** Switch between fastest options and trains where they run. */
   onPreferTrains?: (prefer: boolean) => void;
+  /** Make this place the first night. */
+  onFirstNight?: (slug: string) => void;
   edited?: boolean;
 }) {
   const { symbol, code } = data.country.currency;
@@ -186,6 +190,9 @@ export function PlanResultView({
                     active={active === AIRPORT_ID}
                     onSelect={() => setActive(AIRPORT_ID)}
                   />
+                  {onFirstNight && (
+                    <FirstNightPicker data={data} input={input} current={plan.stops[0].destination.slug} onChoose={onFirstNight} />
+                  )}
                   <HopLine hop={plan.startHop} names={names} final={false} />
                 </li>
                 {plan.stops.map((stop, i) => (

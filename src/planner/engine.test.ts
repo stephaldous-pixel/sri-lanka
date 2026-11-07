@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadCountry, loadInterests } from "@/content/load";
 import { toPlannerData } from "./data";
-import { ARRIVAL, bestPositionFor, fitToDays, fromStopList, generatePlan, planFromStops, PlannerError, toEditedRoute, toStopList } from "./engine";
+import { ARRIVAL, bestPositionFor, chooseFirstNight, fitToDays, hoursFromAirport, fromStopList, generatePlan, planFromStops, PlannerError, toEditedRoute, toStopList } from "./engine";
 import { departureDayTimes, formatClock, lastDayTravelLimit, parseTime, travelDayTimes } from "./timing";
 import type { PlannerInput } from "./types";
 
@@ -345,6 +345,47 @@ describe("preferring trains", () => {
         expect(leg?.options.find((o) => o.mode === "train")?.status, `${a} → ${b}`).not.toBe("suspended");
       });
     }
+  });
+});
+
+describe("choosing the first night", () => {
+  const plan = generatePlan(data, base);
+  const edits = toEditedRoute(plan);
+
+  it("lists travel times from the airport, with the airport town nearest", () => {
+    const hours = hoursFromAirport(data, base);
+    expect(hours.size).toBe(data.destinations.length);
+    const nearest = [...hours].sort((a, b) => a[1] - b[1])[0][0];
+    expect(nearest).toBe("negombo");
+    expect(hours.get("galle")!).toBeGreaterThan(hours.get("colombo")!);
+  });
+
+  it("uses the train times when trains are preferred", () => {
+    expect(hoursFromAirport(data, { ...base, preferTrains: true }).get("galle")).toBeCloseTo(3.75, 1);
+  });
+
+  it("replaces a first night in the airport town with the chosen place", () => {
+    expect(edits.arrivalSlug).toBe("negombo");
+    const next = chooseFirstNight(data, base, edits, "galle");
+    const slugs = toStopList(data, next).map((s) => s.slug);
+    expect(slugs[0]).toBe("galle");
+    expect(slugs).not.toContain("negombo");
+    expect(slugs.filter((s) => s === "galle")).toHaveLength(1);
+  });
+
+  it("moves a place already on the route to the top and keeps the old first night", () => {
+    const start = { arrivalSlug: "colombo", arrivalNights: 2, stops: [{ slug: "kandy", nights: 3 }, { slug: "ella", nights: 3 }] };
+    const next = chooseFirstNight(data, base, start, "ella");
+    expect(toStopList(data, next).map((s) => s.slug)).toEqual(["ella", "colombo", "kandy"]);
+    expect(next.arrivalNights).toBe(3);
+  });
+
+  it("keeps the trip to the traveller's dates and shows the airport journey", () => {
+    const next = fitToDays(data, base, chooseFirstNight(data, base, edits, "galle"), "galle")!;
+    const result = planFromStops(data, base, next);
+    expect(result.days).toHaveLength(base.days);
+    expect(result.stops[0].destination.slug).toBe("galle");
+    expect(result.startHop.hours).toBeGreaterThan(1.5);
   });
 });
 

@@ -99,7 +99,7 @@ Status: ✅ built · 🔜 planned · 💭 later.
 | E3 | Remove stops; add places from a searchable list, inserted where they add the least travel | P0 | ✅ |
 | E4 | Instant recalculation of journeys, warnings, costs and day plan; adding or removing places rebalances nights so total days stay fixed; "Reset" to the suggested route | P0 | ✅ |
 | E5 | Automatically add a night near the airport when the last stop is far away | P1 | ✅ |
-| E8 | The first night is an ordinary stop: delete it, drag any stop to the top, or add a place there; the top stop is where the first night is spent, and nights rebalance to keep the dates | P1 | ✅ |
+| E8 | The first night is an ordinary stop: delete it, drag any stop to the top, or add a place there; the top stop is where the first night is spent, and nights rebalance to keep the dates. A "First night · Change" chooser under the airport lists every place with its travel time from the airport (nearest first); choosing one replaces an airport-town first night rather than doubling back | P1 | ✅ |
 | E9 | Every route starts at the arrival airport (Colombo airport, CMB) as a starting point, not a stay, with the journey to the first stop shown, counted and warned about if very long; shown on the map | P1 | ✅ |
 | E10 | "Prefer trains" option (in the planner and as a switch on the route): trains are chosen where they run even if a bus or car is quicker; the airport leg becomes taxi to Colombo, then the train; real journey times are always shown | P1 | ✅ |
 | E6 | Map with numbered stops and the route line, always alongside the route (in view above the list on phones); list and map share numbers, and tapping either highlights the place in both; two-finger panning on phones; free tiles | P1 | ✅ |

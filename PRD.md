@@ -121,7 +121,9 @@ Status: ✅ built · 🔜 planned · 💭 later.
 | A2 | Try the planner before signing up; a device-saved trip moves into the account on sign-in | P0 | 🔜 Phase 5 |
 | G1 | Publish a trip to a public gallery; browse by length and interests; copy a trip to edit | P1 | 🔜 Phase 6 |
 | G2 | Report button on published trips, with an admin review page | P1 | 🔜 Phase 6 |
-| G3 | Share a read-only link to a trip (for example with family) | P2 | 💭 |
+| G3 | Share a read-only link to a trip with chosen contacts: route, dates, map and day-by-day plan, with a "Today" panel showing where the traveller should be (in the country's time zone). The trip lives in the link's #fragment, so it never reaches the server; links are validated and damaged ones refused. Trip pages open without the site password; the rest of the site stays private | P1 | ✅ |
+| S1 | "Stay in touch" on every route: step-by-step guides to share live location from the phone (Google Maps, Find My, WhatsApp), which keeps working in the background, unlike a website; a device-only checklist of contacts (who can see your location, who has your route); and the country's emergency numbers as tap-to-call buttons | P1 | ✅ |
+| S2 | One-tap "I'm OK" check-ins with location, shown to chosen contacts on a private page | P2 | 💭 Needs a database (Phase 5) |
 
 ### 6.6 Access and launch
 | ID | Requirement | Priority | Status |
@@ -232,5 +234,6 @@ Guidebooks may be used to check facts, but their text is never copied.
 | 28 Oct 2026 | Exact travel dates via calendar; climate figures per weather station |
 | 28 Oct 2026 | Code repository made public; the site itself stays private |
 | 28 Oct 2026 | Editing keeps the trip to the traveller's dates: nights are rebalanced between stops rather than extending the trip |
+| 13 Nov 2026 | Live location sharing uses the phone's own apps (Google Maps, Find My, WhatsApp) rather than the website, which can only read GPS while it's open on screen; the site guides set-up and shares the route by link |
 | 28 Oct 2026 | Flight times are optional and drive the first and last days; leaving times are suggestions from journey lengths, never exact train times (timetables change), with a link to check |
 | 28 Oct 2026 | Mobile-first layout: phone tabs (Route · Map · Days · Cost), 40px+ tap targets, sticky planner buttons, two-column cards |

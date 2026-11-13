@@ -67,6 +67,8 @@ export const CountrySchema = z.object({
       }),
     )
     .min(1),
+  /** Numbers to call in an emergency, shown with the safety advice on a route. */
+  emergency: z.array(z.object({ label: z.string(), number: z.string() })).optional(),
   /** Where to check train times, for travel-day advice. */
   railTimetable: z.url().optional(),
   guide: z.array(GuideSectionSchema).min(1),

@@ -8,7 +8,7 @@ export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const unlocked = await isValidAccessToken(request.cookies.get(ACCESS_COOKIE)?.value);
 
-  if (!unlocked && pathname !== UNLOCK_PATH) {
+  if (!unlocked && pathname !== UNLOCK_PATH && !isOpenPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = UNLOCK_PATH;
     url.search = "";
@@ -17,6 +17,15 @@ export async function proxy(request: NextRequest) {
   }
 
   return withNoIndex(NextResponse.next());
+}
+
+/**
+ * Open without the password: trip pages travellers share with their contacts
+ * (the trip itself is in the link, never on the server), plus the map worker
+ * and exchange rates those pages load.
+ */
+function isOpenPath(pathname: string) {
+  return /^\/[a-z-]+\/trip\/?$/.test(pathname) || pathname.startsWith("/vendor/") || pathname.startsWith("/api/rates/");
 }
 
 // Keep search engines out while the site is private.

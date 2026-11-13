@@ -8,6 +8,10 @@ currency:
   code: LKR
   symbol: Rs
 timezone: Asia/Colombo
+emergency:
+  - { label: Police, number: "119" }
+  - { label: Ambulance (free), number: "1990" }
+  - { label: Tourist police, number: "1912" }
 railTimetable: https://seatreservation.railway.gov.lk/mtktwebslr/
 accent:
   light: "#b8561b"

@@ -33,6 +33,8 @@ export type PlannerData = {
     slug: string;
     name: string;
     currency: { code: string; symbol: string };
+    timezone: string;
+    emergency: { label: string; number: string }[];
     railTimetable?: string;
     gateways: { destination: string; name: string; shortName: string; code: string; coordinates: { lat: number; lng: number } }[];
   };

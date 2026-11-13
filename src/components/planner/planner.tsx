@@ -8,6 +8,7 @@ import type { PlannerData, PlannerInput, PlanResult } from "@/planner/types";
 import { PlanResultView } from "./plan-result";
 import { DEFAULT_INPUT, PlannerForm } from "./planner-form";
 import { RouteEditor } from "./route-editor";
+import { StayInTouch } from "./stay-in-touch";
 import { clearSavedPlan, loadSavedPlan, savePlan } from "./storage";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -190,6 +191,7 @@ export function Planner({ data }: { data: PlannerData }) {
           ) : undefined
         }
       />
+      {!editing && <StayInTouch data={data} input={input} route={edits ?? toEditedRoute(plan)} />}
     </div>
   );
 }
